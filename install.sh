@@ -293,6 +293,9 @@ gzip_types
 
     client_max_body_size 200M;
 
+    access_log /var/log/nginx/${projectName}-access.log;
+    error_log /var/log/nginx/${projectName}-error.log;
+
     server_name ${DOMAIN};
     listen 443 ssl;
 
@@ -337,7 +340,7 @@ gzip_types
     location / {
         try_files \$uri \$uri/ /index.html =404;
         index index.html index.htm index.nginx-debian.html;
-        root /srv/www/${projectName}/app/clients/angular;
+        root /srv/www/${projectName}/app/clients/angular/dist/saas-product;
     }
 
     ssl_certificate /etc/letsencrypt/live/saas-product.com-0001/fullchain.pem;
