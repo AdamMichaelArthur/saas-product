@@ -1,0 +1,55 @@
+<!-- <div class="container">
+  <div class="d-flex justify-content-end">
+    <div class="bg-danger p-3 rounded position-relative" style="width: 200px; height: 200px; padding-top: 150px;">
+      <button type="btn-button" class="btn-close text-danger position-absolute" style="top: 5px; right: 5px; font-size: 1.5rem;" aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
+ https://img.youtube.com/vi/6VnNtUd1MX4/mqdefault.jpg
+ -->
+
+
+<div *ngIf="isVisible">
+
+<div class="container" style="position: relative;">
+
+<div class="position-absolute" style="top: -17%; right: -2%; 
+
+	background-image: url('https://img.youtube.com/vi/6VnNtUd1MX4/mqdefault.jpg');
+           background-size: cover;
+           background-position: center;">
+
+           
+    <div class="p-3 rounded d-flex justify-content-center align-items-center" style="width: 100px; height: 100px; padding-top: 150px; background-color: rgba(173, 216, 230, 0);">
+     <span class="material-icons" (click)="openModal()" style="font-size: 48px; color: white;">play_circle_outline</span>    
+    </div>    
+    <button type="button" (click)="dismiss()" class="btn-close text-danger position-absolute" style="top: 5px; right: 5px; font-size: 1.5rem;" aria-label="Close"></button>
+  </div>
+</div>
+
+
+
+
+<div #fullPageModal class="modal fade show" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.6);">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{videoTitle}}</h5>
+            <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+		<div class="modal-body d-flex justify-content-center align-items-center vh-100">
+		  <div class="">
+		    <iframe class="embed-responsive-item media-content" [src]="embedded_video" allowfullscreen></iframe>
+		  </div>
+		</div>
+
+
+        </div>
+      </div>
+</div>
+
+</div>

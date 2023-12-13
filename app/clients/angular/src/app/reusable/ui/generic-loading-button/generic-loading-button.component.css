@@ -1,0 +1,112 @@
+
+.button-spacing {
+    margin-right: 3px;
+    margin-top: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+.table-button-spacing {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    min-width:40px;
+  }
+
+
+/* CSS */
+.progress-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes checkboxAnimation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-checkbox {
+  animation: checkboxAnimation 1s ease-in-out; /* Increased duration to 1s */
+}
+
+.animate-error {
+  animation: checkboxAnimation 1s ease-in-out; /* Increased duration to 1s */
+}
+
+.circle {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  border-radius: 50%;
+}
+
+.animate-checkbox {
+  color: white;
+  font-size: 56px;
+  animation: checkboxAnimation 1s ease-in-out;
+  background-color: transparent; /* Set the background color to transparent */
+}
+
+.animate-error {
+  color: red;
+  font-size: 106px;
+  animation: checkboxAnimation 1s ease-in-out;
+  background-color: transparent; /* Set the background color to transparent */
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+}
+
+.button-text {
+  flex-grow: 1; /* Add flex-grow property to make the text expand and push the circle to the left */
+  text-align: center; /* Center the text horizontally */
+}
+
+@keyframes moveToLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-5%));
+  }
+}
+
+.move-to-left-animation {
+  animation: moveToLeft 1s ease-in-out forwards;
+}
+
+.text-limit-width {
+  max-width: 300px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-center {
+  display: flex;
+  justify-content: center;
+}
+
+.text-center-absolute {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

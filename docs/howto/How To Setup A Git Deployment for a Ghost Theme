@@ -1,0 +1,27 @@
+How To Setup A Git Deployment for a Ghost Theme
+
+1.	Login to the target server
+
+	ssh root@www.contentbounty.com
+
+	If you do not have SSH access to the server, contact Adam
+
+2.	In the root directory after login, type 'ls'
+
+3.	See if a file there is called 'project-create.sh'
+
+	IF YES -- then proceed to step 4
+
+	IF NOT -- copy the file project-create.sh to the server.  If you don't know how to do this, see USING SCP
+
+4.	Type 'sh project-create.sh www.contentbounty.com'
+
+	Be sure to replace www.contentbounty.com with the name of the actual website
+
+Your new git remote will be:
+
+	ssh://www.contentbounty.com/srv/git/www.contentbounty.com
+
+5.	Create a new directory on your local machine where you want to work
+
+	mkdir contentbounty-theme

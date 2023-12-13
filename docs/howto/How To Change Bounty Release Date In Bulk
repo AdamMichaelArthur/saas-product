@@ -1,0 +1,11 @@
+In the mongo shell:
+
+use contentbounty-prod
+
+Develop a search query for your bounty
+
+db.bounties.find({"brand_name":"Top 40 Weekly"}).pretty().limit(1)
+
+db.bounties.find({"brand_name":"Top 40 Weekly", "release_for_bounty": { "$gte": "2022-04-18T00:00:00.0" } }).count()
+
+db.bounties.update({"brand_name":"Top 40 Weekly", "release_for_bounty": { "$gte": "2022-04-18T00:00:00.0" } }, { "$set" : { "release_for_bounty" : "2022-04-25T07:00:48.565Z"}}, {multi:false})

@@ -1,0 +1,10 @@
+@media (min-width: 992px) {
+  .media {
+    width: 250%;
+  }
+
+  .media-content {
+    width: 100%;
+    height: auto;
+  }
+}

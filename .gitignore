@@ -1,0 +1,124 @@
+# Demo Project Files
+apiv2/2.0/endpoints/fooddeliveryapp'
+apiv2/2.0/endpoints/yourapp'
+
+**/.env
+**/.package-lock
+# Local Files
+website/
+var/
+static/
+scrap/
+proxy/
+processes/
+postman_export/
+on-page-scripts/
+list-building/
+generators/
+dbbk/
+.angular/
+tools/
+app.saas-product.com
+test.js
+Guidelines.md
+Band Template.txt
+gourmet-burger-ideas.txt
+nichesitexchange.conf
+nichesitexchange.bk.conf
+nichesitexchange.working.conf
+test.data.txt
+upload_instructions.txt
+apple.png
+image.png
+firefox.sh
+opera.sh
+app.yml
+
+
+# Dependency directories
+node_modules/
+
+# Log files and directories
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# MongoDB Data Directory
+/data/
+/data/db/
+/dump/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.sublime-*
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files #
+ehthumbs.db
+Icon?
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files mono_crash.*
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# End of https://www.gitignore.io/api/angular,node,windows,visualstudiocode,jetbrains+all
+

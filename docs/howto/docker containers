@@ -1,0 +1,5 @@
+setup for a new docker container
+
+apt-get update
+apt-get install sudo
+sudo apt install nano

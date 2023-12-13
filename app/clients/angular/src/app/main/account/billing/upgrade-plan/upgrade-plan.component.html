@@ -1,0 +1,82 @@
+
+
+
+<div class="modal-dialog modal-xl">
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title">This feature requires a paid plan to use.&nbsp;</h5>
+         <!--<span _ngcontent-ng-c25424485="" joyridestep="fourthStep" title="See Your Points" text="See how many points you have available here" 
+         class="badge bg-warning d-inline-flex align-items-center" style="margin: 3px;" ng-reflect-name="fourthStep" ng-reflect-title="See Your Points" ng-reflect-text="See how many points you have a"><i _ngcontent-ng-c25424485="" class="material-icons">star</i><span _ngcontent-ng-c25424485="" class="ms-2">1401</span></span>
+         -->
+         <span class="badge bg-warning d-inline-flex align-items-center" [class.d-none]="bIsPaymentMethodAttached" style="color: blue; cursor: pointer; margin: 3px;" (click)="seePlans()">See Plans</span>
+         <span class="badge bg-warning d-inline-flex align-items-center" [class.d-none]="bShowAddCreditCard" style="color: blue; cursor: pointer; margin: 3px;" (click)="addCreditCard()">Add Credit Card</span>
+
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	  <div *ngIf="!bShowAddCreditCard"><br><p *ngIf="bIsPaymentMethodAttached">You must add a credit card before you can select a plan</p><br>
+      	  <span class="badge bg-warning d-inline-flex align-items-center" [class.d-none]="bShowAddCreditCard" style="color: blue; cursor: pointer; margin: 3px;" (click)="addCreditCard()">Add Credit Card</span></div>
+      	  <table-loading-button [class.d-none]="!bIsPaymentMethodAttached" [disabled]=true #stripeloading >&nbsp;</table-loading-button>
+
+	      <div [class.d-none]="bIsPaymentMethodAttached" class="card_element">
+	         <p>Add Credit Card Details</p>
+	         <div class="card_element_input" >
+	            <div #stripeCardElement id="card-element"></div>
+	            <div id="card-errors" class="danger-notify" role="alert"></div>
+	         </div>
+	         <generic-loading-button [disabled]=true #addcard (click)="submit()">Add Card</generic-loading-button>
+	      </div>
+
+         <section [class.d-none]="!bIsPaymentMethodAttached" class="section dashboard">
+            <div class="row">
+               <div class="row">
+                  <!-- Sales Card -->
+                  <div *ngFor="let plan of subscriptionPlans" class="col-xxl-4 col-md-6">
+                     <div class="card info-card sales-card">
+                        <div class="filter">
+                           <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                              <li class="dropdown-header text-start">
+                                 <h6>Filter</h6>
+                              </li>
+                              <li><a class="dropdown-item" href="#">Today</a></li>
+                              <li><a class="dropdown-item" href="#">This Month</a></li>
+                              <li><a class="dropdown-item" href="#">This Year</a></li>
+                           </ul>
+                        </div>
+                        <div class="card-body">
+                           <h5 class="card-title">{{plan.displayName}} <span></span></h5>
+                           <div class="d-flex align-items-center">
+                              <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                 <i class="bi {{plan.icon}}"></i>
+                              </div>
+                              <div class="ps-3">
+                                 <h6>{{plan.displayCost | currency: 'USD'}}</h6>
+                                 <span class="text-success small pt-1 fw-bold">/month</span> <span class="text-muted small pt-2 ps-1">{{plan.shortDescription}}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ps-3">
+                           <div class="activity">
+                              <div class="activity-item d-flex" *ngFor="let feature of plan.features">
+                                 <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+                                 <div class="activity-content">
+                                    {{feature}}
+                                 </div>
+                              </div>
+                              <network-request-button *ngIf="currentPlan != plan.displayName" [disabled]="!bAllowSwitchPlans" (result)="planChanged($event)" [request]='changePlanEndpoint' [payload]="plan['planInfo']" verb="POST">Switch To {{plan.displayName}}</network-request-button>
+                              <network-request-button *ngIf="currentPlan == plan.displayName" [disabled]="true">Current Plan</network-request-button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- End Sales Card -->
+               </div>
+            </div>
+         </section>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,37 @@
+.link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  background-color: blue;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.container {
+	padding: 10px;
+}
+
+.link-button:hover {
+  background-color: darkblue;
+}
+
+.slack-button {
+  background-color: #36c5f0;
+}
+
+.custom-icon {
+  font-family: "Helvetica", sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.network-button {
+  float: left;
+  max-width: 200px;
+  padding:3px;
+}

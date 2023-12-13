@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+}
+
+.element {
+  flex: 1;
+  height: 45px;
+  /* Additional styling for each element */
+}

@@ -1,0 +1,46 @@
+How To Copy The Production Database Into The Copy Database
+
+Sometimes we want to work with production-database data -- which is producing
+real world data on a daily basis.  But obviously we don't want to test
+in the production database.
+
+This process will allow us to copy the production database into
+a new database called "production-copy" and then set the dev.contentbounty.com
+to use the production copy database
+
+Step 1.		Copy the production database locally
+			mkdir dbbk
+			cd dbbk
+			mongodump --host app.contentbounty.com --username adam --password dino --authenticationDatabase=admin --db=contentbounty-prod
+
+			
+Step 2.		Restore it to the server with a new name
+			BE CAREFUL!
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'contentbounty-copy.*' --username adam --password dino --authenticationDatabase=admin --host='app.contentbounty.com' --drop
+			mongorestore --nsFrom 'contentbounty.*' --nsTo 'contentbounty.*' --username adam --password dino --authenticationDatabase=admin --drop
+
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'contentbounty-salma.*' --username adam --password dino --authenticationDatabase=admin --host='app.contentbounty.com' --drop
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'contentbounty-noor.*' --username adam --password dino --authenticationDatabase=admin --host='app.contentbounty.com' --drop
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'contentbounty-imran.*' --username adam --password dino --authenticationDatabase=admin --host='app.contentbounty.com' --drop
+
+Restore Locally
+
+			mongorestore --username adam --password dino --authenticationDatabase=admin --drop
+
+			mongoexport --host=app.contentbounty.com --db=contentbounty-prod --collection=bounties --type=csv --fields=keywords,pipeline --query='{ "brand_name": "Top 40 Weekly" }' --out=data/top40weekly.csv --username adam --password dino --authenticationDatabase=admin
+
+Restore To The Server
+			
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'contentbounty-prod.*' --username adam --password dino --authenticationDatabase=admin --host='app.contentbounty.com' --drop
+			mongorestore --nsFrom 'contentbounty-prod.*' --nsTo 'testdb103.*' --username adam --password dino --authenticationDatabase=admin --host='159.223.2.58' --drop
+
+To Export A Specific Collection
+
+			mongoexport --host=159.223.2.58 --db=contentbounty-prod --collection=traveldomainkeywords --fields=position,title,link,query,keywords --type=csv --query='{ }' --out=data/coffeeexplained.csv --username adam --password dino --authenticationDatabase=admin
+
+			mongoexport --host=159.223.2.58 --db=contentbounty-prod --collection=howtomakegoogleserps --fields=link --type=csv --query='{ }' --out=data/howtomake.csv --username adam --password dino --authenticationDatabase=admin
+
+2023-06-06T17:49:42.438+0300	[#.......................]  testdb103.traveldomainkeywords  76.8MB/1.77GB   (4.2%)
+2023-06-06T17:49:42.438+0300	[##......................]  testdb103.howtomakegoogleserps   28.4MB/235MB  (12.1%)
+2023-06-06T17:49:42.438+0300	[########................]              testdb103.messages   44.7MB/123MB  (36.3%)
+2023-06-06T17:49:42.438+0300	[........................]        testdb103.privateschools  45.8MB/5.23GB   (0.9%)

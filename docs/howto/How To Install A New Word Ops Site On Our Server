@@ -1,0 +1,18 @@
+How To Install A New Word Ops Site On Our Server
+
+Domain Setup
+1.	Navigate to namecheap.com
+2.	Buy domain and setup IP address @ and www to: 164.90.242.24
+
+Login To Server
+1.	ssh root@164.90.242.24
+2.	cd /etc/nginx/sites-enabled
+3.	cp default domain.com
+4.	nano domain.com
+5.	under "listen" add "server_name domain.com"
+6.	we want to redirect the root domain to the www domain
+
+1.	ssh root@www.toocuteforme.com
+2.	wo site list
+3.  https://docs.wordops.net/commands/site/#site-create
+	wo site create site.tld --wprocket

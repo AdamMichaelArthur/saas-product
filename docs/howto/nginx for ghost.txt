@@ -1,0 +1,37 @@
+adduser contentbounty
+usermod -aG sudo contentbounty
+su - contentbounty
+sudo mkdir -p /var/www/contentbounty
+sudo chown contentbounty:contentbounty /var/www/contentbounty
+sudo chmod 775 /var/www/contentbounty
+cd /var/www/contentbounty
+ghost install
+
+cd /etc/nginx/sites-enabled
+sudo nano contentbounty.com.conf 
+
+server {
+	if ($host = contentbounty.com) {
+		return 301 https://www.contentbounty.com
+	} # managed by Certbot
+
+listen 80;
+isten [::]:80;
+server_name streetfoodexplained.com;
+return 404;
+}
+
+sudo nginx -t
+
+server {
+
+        if ($host = contentbounty.com) {
+                return 301 https://www.contentbounty.com
+        }
+
+listen 80;
+isten [::]:80;
+server_name streetfoodexplained.com;
+return 404;
+
+}

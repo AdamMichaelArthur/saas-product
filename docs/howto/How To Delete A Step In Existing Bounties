@@ -1,0 +1,8 @@
+In the mongo shell:
+
+use contentbounty-prod
+
+Develop a search query for your bounty
+
+db.bounties.find({"brand_name":"Top 40 Weekly"})
+

@@ -1,0 +1,116 @@
+/* custom drop down css */
+.custom_dropdown_container_area{
+  width: 100%;
+  height: 200px;
+  background: #e4e4e4;
+  float: left;
+  position: relative;
+  margin: 10px;
+}
+.custom_dropdown_container{
+  /* width: 30% !important; */
+  border-radius: 4px;
+  padding-right: 3px;
+  padding: 0;
+  line-height: 36px;
+  /* margin: 10px; */
+  float: left;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.custom_dropdown_container .dropdown_select_first{
+  width: 40px;
+  height: 24px;
+  background: #fff;
+  float: right;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  position: relative;
+}
+
+/*.custom_dropdown_container .dropdown_select{
+  width: 100%;
+  height: 36px;
+  background: #fff;
+  float: right;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  padding:0 10px;
+}
+*/
+.custom_dropdown_container .dropdown_select_first::after{
+  content: "";
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-color: #4d4d4d transparent transparent transparent;
+  position: absolute;
+  top: 10px;
+  right: 13px;
+}
+.custom_dropdown_container .dropdown_select_first span{
+  width: 12px;
+  height: 12px;
+  background-color: #4caf50;
+  font-size: 8px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 12px;
+  position: absolute;
+  right: -7px;
+  top: -6px;
+  border-radius: 50%;
+  /* opacity: 0; */
+}
+/* .custom_dropdown_container .dropdown_select_first:hover span{
+  opacity: 1;
+} */
+
+.custom_dropdown_container .dropdown_select{
+  width: 100%;
+  height: 36px;
+  background: #fff;
+  float: right;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding:0 10px;
+}
+
+.custom_dropdown_container ul{
+  width: 100%;
+  height: auto;
+  background: #e92727;
+  position: absolute;
+  /* left: 0; */
+  top: 25px;
+  padding: 0;
+  z-index: 9;
+  margin-top: -2px;
+  margin-bottom: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  right: 0;
+  min-width: 100px;
+}
+
+.custom_dropdown_container ul li{
+  width: 100%;
+  min-height: 36px;
+  background-color: white;
+  padding: 0 10px;
+  line-height: 36px;
+}
+.custom_dropdown_container ul li:nth-child(odd){
+  width: 100%;
+  min-height: 36px;
+  background-color: #f3f3f3;
+  padding: 0 10px;
+  line-height: 36px;
+}
+
+.custom_dropdown_container ul li:last-child{
+  border-bottom: 0px;
+}

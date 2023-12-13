@@ -1,0 +1,53 @@
+<div class="component-container">
+  <button mat-icon-button class="upper-right-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <!-- Rest of your component's content -->
+
+<div class="container">
+  <div [hidden]="submitted">
+    <h1>Update Subscription</h1>
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
+      <div class="form-group">
+        <label for="name">Plan Name</label>
+        <input type="text" class="form-control" id="planName" disabled="true"
+               required
+               [(ngModel)]="model.planName" name="planName"
+               #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          Name is required
+        </div>
+      </div>
+  		<br>
+      <div class="form-group">
+        <label for="alterEgo">Monthly Price</label>
+        <input type="text" class="form-control" id="monthlyPrice"
+               [(ngModel)]="model.monthlyPrice" name="monthlyPrice">
+      </div>
+
+      <button type="submit" class="btn btn-success save-button" [disabled]="!heroForm.form.valid">Save</button>
+
+    </form>
+  </div>
+
+  <div [hidden]="!submitted">
+    <h2>You submitted the following:</h2>
+    <div class="row">
+      <div class="col-xs-3">Name</div>
+      <div class="col-xs-9">{{ model.planName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Monthly Price</div>
+      <div class="col-xs-9">{{ model.monthlyPrice }}</div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" (click)="submitted=false">Edit</button>
+  </div>
+</div>
+
+  
+</div>
+
+
+

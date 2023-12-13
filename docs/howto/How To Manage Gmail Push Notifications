@@ -1,0 +1,13 @@
+Goto Google Cloud Home for user "adam@inbrain.space"
+
+https://console.cloud.google.com/home/dashboard?project=content-bounty&authuser=1&folder=&organizationId=&supportedpurview=project
+
+Do a search for "Pub Sub"
+
+Click on the topic "receive-emails"
+
+View the "Subscription"
+https://console.cloud.google.com/cloudpubsub/subscription/detail/receive-emails-sub?authuser=1&project=content-bounty&supportedpurview=project&tab=overview
+
+View the "Topic"
+https://console.cloud.google.com/cloudpubsub/topic/detail/receive-emails?project=content-bounty&authuser=1&supportedpurview=project

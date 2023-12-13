@@ -1,0 +1,38 @@
+/* Mobile view */
+@media (min-width: 767px) {
+  .card {
+    width: 600px;
+    height: 600px;
+  }
+  .carousel-inner img {
+    max-height: 400px; /* Adjust based on your desired image height */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+	.card {
+	    width: 100%;
+	  }
+  }
+}
+
+.carousel-indicators button {
+  background-color: #000; /* Black color */
+  opacity: 1; /* Fully opaque */
+}
+
+.carousel-indicators .active {
+  background-color: #333; /* Darker shade for the active indicator */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(100%); /* Changes the color to black */
+}
+
+/* Optional: Change the color on hover */
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  filter: invert(50%); /* Changes the color to a gray when hovered over */
+}

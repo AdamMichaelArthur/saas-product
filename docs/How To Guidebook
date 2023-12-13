@@ -1,0 +1,12 @@
+Guide
+
+What Do You Want To Do?
+
+## Currently Logged In User
+
+The Content Bounty API carefully manages user data.  By default, all data that is stored or retrieved
+from the API belongs to the user.  There are some instances where you want to get "public" data.
+
+Get Data
+Add Data
+Update Data 

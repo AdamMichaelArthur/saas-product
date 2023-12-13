@@ -1,0 +1,22 @@
+<div class="payment_method_area">
+   <p>Instructions: Cut And Paste the URL that you want to turn into an affiliate link</p>
+   <div class="container">
+<input type="text" [(ngModel)]="links" class="form-control element"><button class="btn btn-primary btn-sm" (click)="getLink()">Create Link</button>
+</div><br><p></p>
+   <div class="payment-methods-area">
+      <table class="table table-striped custom-table">
+         <thead>
+            <tr style="height: 45px;">
+               <th scope="col"></th>
+               <th scope="col">Links</th>
+            </tr>
+         </thead>
+         <tbody>
+            <!-- <tr *ngFor="let subscription of activeDomains; let rowIndex = index"  >
+               <td>{{subscription.domain}}</td>
+               <td><span class="material-icons spacing" (click)="removeDomain($event, subscription._id)">delete</span></td>
+            </tr> -->
+         </tbody>
+      </table>
+   </div>
+</div>

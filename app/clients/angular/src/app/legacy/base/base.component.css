@@ -1,0 +1,31 @@
+
+.iconcontainer {
+	position: absolute; 
+    width:150px;
+    left:0px; 
+    top:0px; 
+    padding: 0px;
+
+}
+
+.iconmenu {
+background-color: #FF4136;
+      opacity:1;
+      border: 20px #000000;
+      background-color:lightgreen;
+      width:175px;
+      
+      z-index:100;
+
+  background-color: #3498DB;
+  color: white;
+  padding: 6px;
+  font-size: 10.5px;
+  border: none;
+  cursor: pointer;
+}
+
+.iconmenu:hover{
+	color:#ffffff;
+    background-color: #000000;
+}

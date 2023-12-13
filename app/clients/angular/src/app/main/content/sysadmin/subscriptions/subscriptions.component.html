@@ -1,0 +1,59 @@
+<mat-drawer-container class="sidebar-container" autosize>
+  <mat-drawer #drawer class="sidebar-sidenav" mode="side">
+    
+    <div #targetDiv><subscription-panel (childVarChange)="closePanel($event)" [panelId]="panelId"></subscription-panel></div>
+
+</mat-drawer>
+
+<app-flextable
+	(headerButtonClicked)='headerButtonClicked($event)'
+	(tableBtnClicked)='tableButtonClicked($event)'
+  (activePanel)='activePanel($event)'
+	[options]="
+		{
+
+			bAllowDeletion: false,
+
+		    datasource: 'accounts',
+
+        noIdAggregate: true,
+
+		    columns: [
+          '_id',
+		    	'totalAccounts'
+		    ],
+
+        iconColumns: [
+          {
+            column: 'icons',
+            icon: 'edit',
+          }
+        ],
+
+        columnNameRewrites: [
+          'Plan', 'Accounts In Plan'
+        ],
+
+			aggregate: [
+  {
+    $group: {
+      _id: '$plan',
+      totalAccounts: { $sum: 1 }
+    }
+  },
+  {
+    $sort: {
+      totalAccounts: -1
+    }
+  },
+  {
+    $match: {
+      _id: { $ne: null }
+    }
+  }
+]
+
+		}"
+></app-flextable>
+
+</mat-drawer-container>

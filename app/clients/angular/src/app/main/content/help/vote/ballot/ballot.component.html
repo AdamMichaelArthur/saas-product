@@ -1,0 +1,38 @@
+<!-- <div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Question:</h5>
+      <p class="card-text">{{question}}</p>
+      <div class="btn-group-vertical">
+        <button class="btn btn-outline-primary" *ngFor="let option of options" (click)="vote(option)">
+          <i class="material-icons">how_to_vote</i> {{option}}
+        </button>
+      </div>
+      <div *ngIf="selectedOption" class="alert alert-success mt-3">
+        <i class="material-icons">done</i> You voted for {{selectedOption}}
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container mt-4">
+  <div class="card">
+		
+    <div class="card-body">
+    	<div class="card-header d-flex justify-content-between align-items-center">
+		  <h5 class="card-title mb-0">{{headline}}</h5> <!-- Empty div to push the button to the right -->
+		  <button class="btn btn-sm btn-danger" (click)="closeQuestion()">X</button>
+		</div>
+<!--       <h5 class="card-title">Question:</h5> --><p></p>
+      <p class="card-text">{{question}}</p>
+      <div class="btn-group-vertical">
+        <button class="btn btn-outline-primary" *ngFor="let option of options" (click)="vote(option)">
+          <i class="material-icons">how_to_vote</i> {{option}}
+        </button>
+      </div>
+      <div *ngIf="selectedOption" class="alert alert-success mt-3">
+        <i class="material-icons">done</i> You voted for {{selectedOption}}
+      </div>
+    </div>
+  </div>
+</div>

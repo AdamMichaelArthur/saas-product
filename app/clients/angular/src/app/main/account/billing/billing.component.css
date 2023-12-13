@@ -1,0 +1,666 @@
+:host ::ng-deep .light-red-row {
+  background-color: #ffcccc; /* or any other desired light red color */
+}
+
+.custom-table tr {
+  height: 65px;
+  vertical-align: middle;
+}
+
+    .card {
+      border:none;
+      padding: 10px 50px;
+    }
+
+    .card::after {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+      -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .card:hover {
+
+
+      transform: scale(1.02, 1.02);
+      -webkit-transform: scale(1.02, 1.02);
+      backface-visibility: hidden; 
+      will-change: transform;
+      box-shadow: 0 1rem 3rem rgba(0,0,0,.75) !important;
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    .card:hover .btn-outline-primary{
+      color:white;
+      background:#007bff;
+    }
+    
+@charset "utf-8";
+/* card input fields styling */
+ .danger-notify {
+     color: #fa755a;
+}
+/* card input fields styling */
+/* styles created by noor */
+ .add-payment-area {
+     padding: 10px;
+     border: 1px solid #e3f2ff;
+     border-radius: 4px;
+     background-color: #ffffff;
+     overflow: hidden;
+}
+ .purple-square-container {
+    /* height: 100%;
+     */
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin-top: 15px;
+}
+ .purple-square {
+     padding: 6px 20px;
+     border: 0;
+     background-color: #00a1ff;
+     color: #ffffff;
+     border-radius: 2px;
+     cursor: pointer;
+     min-width: 130px;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+}
+ .active_card_button {
+     background-color: #00a1ff !important;
+     color: #ffffff !important;
+}
+ .card_area_on{
+     height: 240px;
+     transition: 0.5s ease-in-out;
+}
+ .card_area_off{
+     height: 86px;
+     transition: 0.5s ease-in-out;
+}
+ .purple-square i{
+     margin-right: 6px;
+}
+ .payment-methods-area {
+     width: 100%;
+     float: left;
+     border: 1px solid #e3f2ff;
+     background: #ffffff;
+     border-radius: 4px;
+}
+ .payment-methods-area table{
+     width: 100%;
+}
+ .payment-methods-area table tr{
+}
+ .payment-methods-area table tr th{
+     padding: 10px;
+     border-bottom: 1px solid #e3f2ff;
+     color: #00a1ff;
+     font-size: 14px;
+     font-weight: 700;
+}
+ .payment-methods-area table tr td{
+     padding: 10px;
+     border-bottom: 1px solid #e3f2ff;
+     font-size: 14px;
+}
+ .payment-methods-area table tr:last-child td{
+     border-bottom: 0px;
+}
+ .btn_asdefault{
+     min-width: 150px;
+     margin-right: 10px;
+     background: #e6f6ff;
+     border: 0;
+     font-size: 14px;
+     padding: 5px;
+     color: #00a1ff;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+}
+ .btn_asdefault:hover{
+     background: #00a1ff;
+     color: #ffffff;
+}
+ .btn_remove{
+     background: #fee9ee;
+     width: 100px;
+     border: 0;
+     font-size: 14px;
+     padding: 5px;
+     color: #fa567a;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+}
+ .btn_remove:hover{
+     background: #fa567a;
+     color: #ffffff;
+}
+ .showremoveloader{
+     visibility: visible;
+     width: 35px;
+     display: inline-flex;
+     justify-content: flex-end;
+     align-items: center;
+     line-height: 1;
+     transition: 0.3s ease-in-out;
+}
+ .hideremoveloader{
+     visibility: hidden;
+     width: 0px;
+     display: inline-flex;
+     justify-content: flex-end;
+     align-items: center;
+     line-height: 1;
+     transition: 0.3s ease-in-out;
+}
+ .payment-methods-area ul {
+     width: 100%;
+     display: block;
+     padding: 0;
+     margin: 0;
+     float: left;
+}
+ .payment-methods-area ul li{
+     list-style: none;
+}
+ .payment-methods-area ul li span{
+     font-size: 16px;
+     font-weight: 400;
+     color: #333333;
+     line-height: 16px;
+     text-align: center;
+     width: 100%;
+     float: left;
+     padding: 30px;
+}
+ .payment-methods-area ul li span:last-child{
+     cursor: pointer;
+}
+ .payment-methods-area ul li span input{
+     margin-right: 5px;
+}
+ .border-there {
+     border: 1px solid #707070;
+     padding: 10px 10px;
+}
+ .display_card_button{
+    /* margin-bottom: 15px;
+     */
+}
+ .display_card_button button{
+     background-color: #e5f5ff;
+     border: 0;
+     min-width: 250px;
+     color: #00a1ff;
+     padding: 10px;
+     font-size: 12px;
+     line-height: 18px;
+     font-weight: 800;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+}
+ .display_card_button button i{
+     font-size: 24px;
+}
+ .display_card_button button:hover{
+     background-color: #00a1ff;
+     color: #ffffff;
+}
+ .card_element{
+     transition: 0.7s ease-in-out;
+}
+ .card_element p{
+     padding: 10px 0;
+     margin: 0;
+     font-size: 16px !important;
+     font-weight: 800;
+     color: #2b3c51;
+}
+ .card_element_input{
+     border: 1px solid #e3f2ff;
+     padding: 10px;
+     border-radius: 4px;
+     width: 33%;
+}
+
+@media (min-width: 768px) {
+  /* Styles for desktop */
+  .card_element_input {
+    width: 33%;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Styles for mobile */
+  .card_element_input {
+    width: 100%;
+  }
+}
+
+ .hidecardelement{
+    /* visibility: hidden;
+     */
+     transform: translateX(101%);
+    /* transform: scaleY(0);
+     */
+     visibility: hidden;
+     height: 0px;
+     transition: 0.7s ease-in-out;
+}
+ .showcardelement{
+     visibility: visible;
+     transform: translateX(0%);
+     transition: 0.7s ease-in-out;
+    /* transform: scaleY(100%);
+     */
+     visibility: visible;
+     min-height: 150px;
+}
+/* styles created by noor end*/
+/* Global Styles */
+ .fixed-height {
+     height: 220px;
+}
+ .error-danger{
+     background: #fcd4d4;
+     color: rgb(221, 115, 115) !important;
+}
+ .error-danger p{
+     padding: 0 !important;
+     color: rgb(195, 112, 112) !important;
+     font-size: 16px !important;
+}
+ .container{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     padding: 15px;
+     max-width: inherit;
+     background-color: #fbfbff;
+}
+ .payment_method_area_add{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     border-radius: 4px;
+}
+ .payment_method_area_add p{
+     padding: 10px 0;
+     margin: 0;
+     font-size: 18px;
+     font-weight: 800;
+     color: #2b3c51;
+}
+ .payment_method_container{
+     max-width: 980px;
+     display: block;
+     margin: auto;
+}
+ .payment_method_area{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     margin-top: 15px;
+}
+ .payment_method_area p{
+     padding: 10px 0;
+     margin: 0;
+     font-size: 18px;
+     font-weight: 800;
+     color: #2b3c51;
+}
+ .plan_area{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     margin-top: 25px;
+}
+ .plan_box{
+     float: left;
+     width: 100%;
+     border: 1px solid #e3f2ff;
+     background: #ffffff;
+}
+ .plan_box h3{
+     font-size: 20px;
+     text-align: center;
+     margin-bottom: 0;
+     font-weight: 700;
+     color: #333333;
+}
+ .plan_box_body{
+     width: 100%;
+     float: left;
+}
+ .plan_box_header{
+     width: 100%;
+     float: left;
+     margin-top: 30px;
+}
+ .plan_box_header h1{
+     width: 100%;
+     float: left;
+     font-size: 42px;
+     font-weight: 500;
+     color: #00a1ff;
+     text-align: center;
+}
+ .plan_box_header h2{
+     width: 100%;
+     float: left;
+     font-size: 14px;
+     font-weight: 400;
+     color: #a4a4a4;
+     text-align: center;
+}
+ .plan_box_opportunity{
+     width: 100%;
+     float: left;
+     margin-top: 20px;
+     margin-bottom: 30px;
+}
+ .plan_box_opportunity p{
+     width: 100%;
+     float: left;
+     font-size: 14px;
+     font-weight: 400;
+     color: #333;
+     text-align: center;
+     margin-bottom: 6px;
+}
+ .plan_cancel{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     margin-top: 15px;
+     text-align: right;
+}
+ .plan_cancel button{
+     padding: 4px 20px;
+     border: 0;
+     background-color: #00a1ff;
+     color: #ffffff;
+     border-radius: 4px;
+     cursor: pointer;
+}
+ .plan_box_selected{
+     width: 100%;
+     float: left;
+     text-align: center;
+     margin-bottom: -15px;
+}
+ .plan_box_selected i{
+     font-size: 26px;
+     color: #3988fd;
+}
+ .plan_area_header{
+     display: flex;
+     justify-content: space-between;
+}
+ .plan_area_header p{
+     padding: 10px 0;
+     margin: 0;
+     font-size: 18px;
+     font-weight: 800;
+     color: #2b3c51;
+}
+ .plan_area_header button{
+     margin-left: 10px;
+     background: #e6f6ff;
+     border: 0;
+     font-size: 22px;
+     padding: 5px 12px;
+     color: #00a1ff;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+}
+ .plan_area_header button:hover{
+     background: #00a1ff;
+     color: #ffffff;
+}
+/* Slider */
+ .slider_width{
+     width: 100%;
+     height: auto;
+     float: left;
+     position: relative;
+     display: flex;
+     overflow: hidden;
+     padding-bottom: 30px;
+}
+ .slider_row{
+     display: flex;
+     margin-left: -8px;
+     margin-right: -8px;
+}
+ .slider_grid {
+     height: 100%;
+     padding: 0 8px;
+}
+ .selected {
+     transition: 1s ease-in-out;
+     -webkit-transition: 1s ease-in-out;
+}
+ .slider_width{
+     flex-wrap: nowrap;
+}
+ .slider_grid {
+     width: 50%;
+     flex: 0 0 50%;
+}
+ @media (max-width: 767px){
+     .slider_row{
+         width: 100%;
+         margin: 0px;
+    }
+     .product{
+         border-radius: 0px;
+    }
+}
+ @media (min-width: 768px) {
+     .slider_grid {
+         width: 33.33333%;
+         flex: 0 0 33.33333%;
+    }
+}
+ @media (min-width: 992px) {
+     .slider_grid {
+         width: 25%;
+         flex: 0 0 25%;
+    }
+}
+ @media (min-width: 1366px) {
+     .slider_grid {
+         width: 25%;
+         flex: 0 0 25%;
+    }
+}
+/* Confirm Popup */
+ .planconform_popup{
+     background: #ffffff;
+     padding: 10px;
+     border: 1px solid #e3e1e1;
+     border-radius: 4px;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     max-height: 130px;
+     display: block;
+     margin: auto;
+     z-index: 9999999;
+     width: 230px;
+     box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.5);
+     margin-left: 10px;
+}
+ .planconform_popup h3{
+     font-size: 16px;
+     font-weight: 500;
+     color: #858585;
+}
+ .planconform_popup_button{
+     text-align: right;
+     margin-top: 20px;
+}
+ .planconform_popup_button button{
+     margin-left: 5px;
+     background: none;
+     border: 0;
+     color: #d45d5d;
+     font-weight: 600;
+     font-size: 14px;
+}
+ .planconform_popup_loader{
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     background: rgba(0,0,0,0.5);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+}
+ .planconform_popup_success{
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     background: #ffffff;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+}
+ .planconform_popup_success p{
+     font-size: 18px;
+     color: #67b44c;
+     font-weight: 600;
+}
+ .planconform_popup_success button{
+     margin-right: 10px;
+     background: #e6f6ff;
+     border: 0;
+     font-size: 14px;
+     padding: 5px 15px;
+     color: #00a1ff;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+     position: absolute;
+     right: 0;
+     bottom: 10px;
+}
+ .planconform_popup_failure{
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     background: #ffffff;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     padding: 10px 10px 50px 10px;
+}
+ .planconform_popup_failure p{
+     font-size: 14px;
+     color: #b43632;
+     font-weight: 600;
+     line-height: 16px;
+     margin: 0;
+}
+ .planconform_popup_failure button{
+     margin-right: 10px;
+     background: #b43632;
+     border: 0;
+     font-size: 14px;
+     padding: 5px 15px;
+     color: #ffffff;
+     outline: none;
+     border-radius: 4px;
+     transition: 0.3s ease-in-out;
+     position: absolute;
+     right: 0;
+     bottom: 10px;
+}
+/* Add payment animation */
+ .show_add_payment{
+     width: 50px;
+     display: inline-flex;
+     justify-content: flex-end;
+     line-height: 1;
+     visibility: visible;
+     transition: 0.5s ease-in-out;
+}
+ .hide_add_payment{
+     display: inline-flex;
+     justify-content: flex-end;
+     line-height: 1;
+     visibility: hidden;
+     width: 0px;
+     transition: 0.5s ease-in-out;
+}
+/* Add set default animation */
+ .show_set_default{
+     width: 50px;
+     display: inline-flex;
+     justify-content: flex-end;
+     line-height: 1;
+     visibility: visible;
+     transition: 0.5s ease-in-out;
+}
+ .hide_set_default{
+     display: inline-flex;
+     justify-content: flex-end;
+     line-height: 1;
+     visibility: hidden;
+     width: 0px;
+     transition: 0.5s ease-in-out;
+}
+/*For Responsive */
+ @media screen and (max-width: 991px) {
+     .payment_method_container{
+         max-width: inherit;
+         width: 100%;
+    }
+}
+ @media screen and (max-width: 875px) {
+     .plan_area{
+         display: block;
+         width: 100%;
+    }
+     .plan_box h3{
+         border-bottom: 1px solid #e4e4e4;
+    }
+}
+/*For Responsive */

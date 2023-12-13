@@ -1,0 +1,18 @@
+<div class="d-grid gap-2" >
+  <button class="btn btn-primary" type="button" [disabled]="disabled" [ngClass]="customClasses" (click)="startNetworkRequest($event)">
+    <div class="button-content">
+      <i *ngIf="icon != ''" class="material-icons icon-spacing">{{icon}}</i>
+      <div class="circle" *ngIf="circle">
+        <i [ngClass]="{'material-icons': idle, 'progress-indicator': loading, 'animate-checkbox': success, 'animate-error': failure}">{{material_icon}}</i>
+      </div>
+      <span [class.move-to-left-animation]="shouldApplyMoveToLeftAnimation" class="button-text text-center"><ng-content></ng-content></span>
+
+    </div>
+
+    
+    <div [ngClass]="{ 'expanded': failure, 'collapsed': !failure }" class="box">
+      <div class="content"><br><br><br>{{errorMessage}}</div>
+    </div>
+
+  </button>
+</div>

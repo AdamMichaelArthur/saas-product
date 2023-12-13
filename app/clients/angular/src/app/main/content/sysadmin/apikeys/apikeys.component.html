@@ -1,0 +1,24 @@
+<app-flextable
+	(headerButtonClicked)='headerButtonClicked($event)'
+	(tableBtnClicked)='tableButtonClicked($event)'
+	[options]="
+		{
+			datasource: 'api_keys',
+
+			scope: 'all',
+
+			bAllowDeletion: true,
+
+			filter: {
+				visible: {
+					$ne: false 
+				}, 
+				archived: { $ne: true }
+			}, 
+			
+			columns: [
+			    'access_level',
+			    'api_key'
+			]
+		}"
+></app-flextable>

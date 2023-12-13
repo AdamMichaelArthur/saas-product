@@ -1,0 +1,16 @@
+/*
+	How to get your initial development environment set up
+	YouTube: www.youtube.com
+*/
+
+Requirements:	mongodb 4.2.1
+				node: 12.1.0
+				angular cli: 9.0.0
+
+
+Check your node version
+	node -v
+Check your angular version
+	ng --version
+Check your mongo version
+	mongo --version

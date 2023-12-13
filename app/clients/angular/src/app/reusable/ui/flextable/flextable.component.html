@@ -1,0 +1,315 @@
+<!-- Template Partials -->
+<!-- Table UI: These are UI elements that are placed above the table -->
+<ng-template #headerUI>
+  <div class="container" *ngIf="options.bNoHeader != true">
+    <div class="row">
+      <div class="col-md-12 d-flex align-items-center">
+        <!-- Add your buttons and UI elements here -->
+        <button *ngIf="bShowDeleteManyButton" class="btn btn-outline-danger button-spacing" (click)="deleteSelectedRecords()">Delete Selected</button>
+        <button *ngIf="bShowSelectManyButton" class="btn btn-link button-spacing" (click)="selectAllRecords()">{{sShowSelectManyButtonText}}</button>
+        <button *ngFor="let button of options.headerButtonsAr" class="btn btn-primary button-spacing" (click)="onHeaderBtnClicked(button)">{{ button }}</button>
+        <!-- Add more buttons or UI elements as needed -->
+        <button *ngIf="bIsLoading" class="btn btn-primary button-spacing" type="button" [disabled]="true">
+          <span *ngIf="bIsLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+        <select *ngFor="let select of filterLabelsAr; let y = index;" 
+      (change)="onFilterSelected(y, $event.target['value'], filterLabelsAr[y][0])"
+      class="form-select custom-select-width button-spacing">
+          <option *ngFor="let option of filterLabelsAr[y]" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+      &nbsp; 
+        
+        <!-- An empty row for a spacing effect -->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Table Header -->
+<ng-template #tableheader>
+  <thead>
+    <tr>
+      <ng-container *ngIf="options.columnNameRewrites && options.columnNameRewrites.length > 0; else defaultColumnNames">
+        <ng-container *ngTemplateOutlet="columnNameRewrites"></ng-container>
+      </ng-container>
+      <th></th>
+      <!-- Empty header for trash icon -->
+    </tr>
+  </thead>
+</ng-template>
+
+<!-- Column Name Overwrites -->
+<ng-template #columnNameRewrites>
+  <th *ngFor="let header of options.columnNameRewrites">
+    <ng-container *ngIf="options?.hiddenColumns?.['column'] != header">
+    <div class="resize-indicator">
+      <i class="material-icons">drag_indicator</i>
+    </div>{{header}}
+    </ng-container>  
+  </th>
+</ng-template>
+
+<!-- Default Column Names -->
+<ng-template #defaultColumnNames>
+  <th *ngFor="let displayHeader of tableData.displayHeaders">
+    <ng-container *ngIf="options?.hiddenColumns?.['column'] != displayHeader">
+    <div class="resize-indicator">
+      <i class="material-icons">drag_indicator</i>
+    </div>{{displayHeader}}
+    </ng-container>    
+      
+  </th>
+</ng-template>
+
+<!-- Link Columns -- the text is a link, assumed to be a valid path for the Angular App -->
+<ng-template #linkColumns let-cell let-columnName>
+
+  <!-- <a href="{{path}}" *ngIf="options.columnNameRewrites && options.columnNameRewrites.length > 0;">{{text}}</a> -->
+  
+</ng-template>
+
+<!-- Text -->
+<ng-template #noIdAggregateCell let-cell="cell" let-columnName="columnName" let-cellXPos="cellXPos" let-cellYPos = "cellYPos">
+    <!--  This template renders text content.  There are two possibilities we address here: plain text and linked text.  First
+          We must determine if this column is intended to be a link -->
+     <div *ngLet="tableData[options.datasource][cellYPos]['_id'] as _id">
+        <div *ngFor="let linkedColumn of options.linkColumns">
+           <div *ngIf="linkedColumn['column'] == columnName"><a routerLink="{{linkedColumn['path']}}/id/{{_id}}">{{cell.value['data']}}</a></div>
+        </div>
+     </div>
+      <div *ngIf="!options.linkColumns">
+        <!-- This is a plain text cell.  Here, we'll check and see if it's a badge column -->
+        {{cell.value['data']}}
+      </div>
+</ng-template>
+
+<ng-template #standardCellText let-cell="cell" let-columnName="columnName" let-cellXPos="cellXPos" let-cellYPos = "cellYPos" let-column = "column">
+
+    <!--  This template renders text content.  There are two possibilities we address here: plain text and linked text.  First
+          We must determine if this column is intended to be a link -->
+<!--      <div *ngLet="tableData[options.datasource][cellYPos]['_id'] as _id">
+        <div *ngFor="let linkedColumn of options.linkColumns">
+           <div *ngIf="linkedColumn['column'] == columnName"><a routerLink="{{linkedColumn['path']}}/id/{{_id}}">{{cell.value['data']}}</a></div>
+        </div>
+     </div>
+ -->
+
+
+  <span *ngIf="options.linkColumns" >
+    <span style="display: inline-block; vertical-align: middle;" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'text'" (click)="onTextClicked($event)">
+      <span *ngFor="let linkedColumn of options.linkColumns">
+        <span *ngIf="linkedColumn['column'] == columnName">
+          <span *ngLet="tableData[options.datasource][cellYPos]['_id'] as _id">
+            <!-- This is a linked cell -->
+            <a routerLink="{{linkedColumn['path']}}/id/{{_id}}">{{ cell.value['data'] }}</a>
+          </span>
+        </span>
+
+        <span *ngIf="linkedColumn['column'] != columnName">
+          <!-- This is a plain text cell.  Here, we'll check and see if it's a badge column -->
+          <!-- <span style="display: inline-block; vertical-align: middle;" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'text'" (click)="onTextClicked($event)">{{ cell.value['data'] }}</span> -->
+              <div *ngIf="options.columnBadges; else notBadge">
+              <div *ngIf="options.columnBadges[column]; else notBadge">
+                <div *ngIf="options.columnBadges[column]['column']">
+
+                        <div style="cursor: default;" class="badge d-inline-flex align-items-center" [title]="options.columnBadges[column]['states'][cell.value['data']]['tooltip']" [style.color]="options.columnBadges[column]['states'][cell.value['data']]['text_color']" [style.background-color]="options.columnBadges[column]['states'][cell.value['data']]['color']">
+                          <i style="cursor: default;" class="material-icons" [style.color]="options.columnBadges[column]['states'][cell.value['data']]['icon_color']">{{options.columnBadges[column]['states'][cell.value['data']]['material_icon']}}</i>
+                          <div style="cursor: default;" lass="ms-2" *ngIf="options.columnBadges[column]['states'][cell.value['data']]['display_text'] != false"  (click)="onTextClicked($event)">{{ cell.value['data'] | snakeCasePupe }}</div>
+                        </div>          
+                </div>
+
+              </div></div>
+              <ng-template #notBadge>
+                <div class="table-button-spacing mobile-center fs-6"
+            [style.font-family]="options?.columnDecorators?.[column]?.font ? options.columnDecorators[column].font : defaultFont"
+            [style.font-weight]="options?.columnDecorators?.[column]?.font_weight || ''"
+               >{{ cell.value['data']}}</div>
+              </ng-template>
+        </span>
+
+      </span>
+    </span>
+  </span>
+
+  <span *ngIf="!options.linkColumns" >
+
+    <span style="display: inline-block; vertical-align: middle;" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'text'" (click)="onTextClicked($event)">
+
+      <span *ngFor="let isCurrency of options.currencyColumns">
+        <span *ngIf="isCurrency['column'] == column; else notCurrency">
+          {{ cell.value['data'] | currency : isCurrency['currency'] }}
+        </span>
+      </span>
+
+      <ng-template #notCurrency>
+          {{ cell.value['data']}}
+      </ng-template>
+
+      <!-- No currency columns are defined, so we render all cells normally -->
+      <span *ngIf="!options.currencyColumns">
+
+
+       <!--  {{ options.columnBadges[column] }} xx - {{ column }} sefs -->
+      <div *ngIf="options.columnBadges; else notBadge">
+      <div *ngIf="options.columnBadges[column]; else notBadge">
+        <div *ngIf="options.columnBadges[column]['column']">
+
+                <div class="badge d-inline-flex align-items-center"  [style.color]="options.columnBadges[column]['states'][cell.value['data']]['text_color']" [style.background-color]="options.columnBadges[column]['states'][cell.value['data']]['color']">
+                  <i class="material-icons" [style.color]="options.columnBadges[column]['states'][cell.value['data']]['icon_color']">{{options.columnBadges[column]['states'][cell.value['data']]['material_icon']}}</i>
+                  <div class="ms-2" *ngIf="options.columnBadges[column]['states'][cell.value['data']]['display_text'] != false">{{ cell.value['data'] | snakeCasePupe }}</div>
+                </div>          
+        </div>
+
+      </div></div>
+      <ng-template #notBadge>
+        <div class="table-button-spacing"
+    [style.font-family]="options?.columnDecorators?.[column]?.font ? options.columnDecorators[column].font : defaultFont"
+    [style.font-weight]="options?.columnDecorators?.[column]?.font_weight || ''"
+
+
+
+        >{{ cell.value['data']}} </div>
+      </ng-template>
+
+  <!-- This is a plain text cell.  Here, we'll check and see if it's a badge column -->
+          
+
+      </span>
+
+      
+      
+
+
+    </span>
+  </span>
+
+</ng-template>
+
+<!-- End Template Partials -->
+
+
+
+<div class="table-responsive" #container>
+
+  <ng-container *ngTemplateOutlet="headerUI"></ng-container>
+
+  <table class="table">
+
+    <ng-container *ngTemplateOutlet="tableheader"></ng-container>
+
+    
+    <tbody>
+      <tr class="table-tr-spacing" *ngFor="let row of tableData.rows; let rowIndex = index" >
+
+        <td *ngFor="let cell of row | keyvalue; let cellIndex = index" [class.red]="clickedColumnIndex === rowIndex">
+
+          <!-- {{cell.value['formDefinition'] | json}} -->
+          <ng-container *ngIf="cellIndex > -1">
+          
+
+          <ng-container *ngIf="options?.hiddenColumns?.['column'] != tableData?.displayHeaders?.[cellIndex]; else doNotRenderCell">
+
+           <div class="dots-separator d-block d-md-none"></div>
+           <p class="d-block d-md-none"><u>{{tableData.displayHeaders[cellIndex]}}</u></p>
+
+          <div class="side-by-side">
+
+          <ng-container *ngLet="tableData.displayHeaders[cellIndex] as columnName">
+
+            <!-- <div *ngLet="options.columnNameRewrites[cellIndex] as columnNameRewrite"><span class="mobile-only">{{columnNameRewrite}}</span></div> -->
+
+            <div *ngLet="tableData.headers[cellIndex] as column">
+            <span *ngFor="let icon of options.iconColumns">
+                <span *ngIf="icon['column'] == columnName"  class="material-icons link-span" (click)="activatePanel($event, rowIndex, icon['component'])">{{icon['icon']}}</span>
+            </span>
+
+            <div *ngIf="options.noIdAggregate; else standardDocumentIds">
+              <ng-container *ngTemplateOutlet="noIdAggregateCell; context: { cell: cell, columnName: columnName, cellXPos: cellIndex, cellYPos: rowIndex }"></ng-container>
+            </div>
+             <ng-template #standardDocumentIds >
+
+              
+                <span *ngFor="let rowButton of options.rowButtons" class="table-button-spacing">
+                  <span *ngIf="cell.value['formDefinition']['field_name'] == rowButton['column']">
+                    <row-button [row]="row" (tableBtnClicked)="tableButtonClicked($event, rowIndex, rowButton['buttonName'])">{{ rowButton['buttonName'] }}</row-button>
+                  </span>
+                </span>
+              
+
+              <span *ngFor="let stateButton of options.stateButtons; let stateIndex = index" >
+                <span *ngIf="cell.value['formDefinition']['field_name'] == stateButton['column']">
+                  <variable-state-button (networkActionCompleted)="networkActionCompleted($event)" [rowIndex]="rowIndex" 
+                        [row]="tableData[options.datasource][rowIndex]" [stateIndex]="stateIndex" 
+                        [stateInput]="options.stateButtons">
+                  </variable-state-button>
+                </span>
+              </span>
+
+              <span *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'date'" >{{ cell.value['data'] | date }}</span>
+
+             <ng-container *ngTemplateOutlet="standardCellText; context: { cell: cell, columnName: columnName, cellXPos: cellIndex, cellYPos: rowIndex, column }"></ng-container>
+
+
+              <span *ngFor="let isCurrency of options.currencyColumns">
+                <span *ngIf="isCurrency['column'] == column; else notCurrency2">
+                  {{ cell.value['data'] | currency : isCurrency['currency'] }}
+                </span>
+              </span>
+              <ng-template #notCurrency2>
+                   <span *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'number'" 
+                        (click)="onNumberClicked($event)"
+                        class="d-block d-md-inline text-center text-md-start fs-5 fs-md-3">
+                    {{ cell.value['data'] | number }}
+
+
+
+                  </span>
+
+
+              </ng-template>
+
+              <mat-checkbox *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'checkbox'" [checked]="cell.value['data']" (change)="onSelectCheckboxClicked($event, rowIndex)"></mat-checkbox>
+              <select class="form-select custom-select-padding full-width-mobile" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'select'" (change)="onSelectClicked($event, rowIndex)"
+              >
+                <option *ngFor="let option of cell.value['data']">{{option}}</option>
+              </select>
+            </ng-template>
+          </div>
+          </ng-container>
+
+
+          </div>
+        </ng-container>
+        </ng-container>
+          <ng-template #doNotRenderCell><!-- Do nothing--></ng-template>
+        </td>
+
+        <td [class.red]="clickedColumnIndex === rowIndex">
+          <span *ngIf="options.bAllowDeletion" class="delete-icon material-icons link-span" (click)="deleteIconClicked($event, rowIndex)"> delete </span>
+            <span *ngFor="let icon of options.iconColumns">
+                <span *ngIf="icon['column'] == 'icons'"  class="material-icons spacing  link-span" (click)="activatePanel($event, rowIndex, icon['component'])">{{icon['icon']}}</span>
+            </span>
+        </td>
+
+
+      </tr>
+
+      <!-- Add more rows as needed -->
+    </tbody>
+
+  </table>
+  <div class="pagination-placeholder"></div>
+  <div class="pagination-ui">
+                  <nav aria-label="...">
+                <ul class="pagination">
+                  <li *ngFor="let page of tableData?.pagination?.['pages']; let i = index" (click)="Page(page.page_endpoint)" [ngClass]="{ 'page-item active': tableData.pagination['current_page'] == page.page_number }"> 
+                      <span class="page-link">{{page.page_number}}</span></li>
+                  
+                </ul>
+              </nav>
+  </div>
+</div>

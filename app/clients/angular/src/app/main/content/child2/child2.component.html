@@ -1,0 +1,172 @@
+
+<app-flextable
+	(headerButtonClicked)='headerButtonClicked($event)'
+	(tableBtnClicked)='tableButtonClicked($event)'
+	[options]="
+		{
+			datasource: 'bounty',
+
+			rowButtons: [
+				{
+					'column': 'brand_name',
+					'buttonName': 'Files',
+					'api': 'v1.0',
+					'action': 'files'
+				}
+			],
+
+			bAllowDeletion: true,
+
+			filter: {
+				visible: {
+					$ne: false 
+				}, 
+				archived: { $ne: true }
+			}, 
+
+          linkColumns: [
+            {
+              column: 'Brand Name',
+              path: '/main/sysadmin/planmanagement/plan/'
+            }
+          ],
+
+			columnPipes: [
+				{
+					column: 'spend',
+					pipe: { currency: 'USD', 'symbol': '1.2-2' }
+				}
+			],
+
+			columns: [
+				'selected',
+				'brand_name',
+				'release_for_bounty',
+				'spend',
+				'pipeline',
+				'keywords',
+				'titles',
+				'prompts'
+			],
+
+			headerButtonsAr: [
+				'Button 1',
+				'Button 2',
+				'Button 3'
+			],
+
+			filters: [
+				{
+			      'filter': { 'brand_name': '' },
+			      'label': 'Brand',
+			      'valueKeys': [],
+			      'valueIds': [],
+			      'datasource': 'brand',
+			      'key': 'brand_name',
+			      'distinct': 'brand_name',
+			      'all':false
+			    },
+			    {
+			      'filter': { 'content_type': '' },
+			      'label': 'Content Type',
+			      'valueKeys': [],
+			      'valueIds': [],
+			      'datasource': 'processes',
+			      'key': 'content_type',
+			      'distinct': 'content_type',
+			      'all':true
+			    },
+			    {
+			      'filter': { 'pipeline': '' },
+			      'label': 'Pipeline',
+			      'valueKeys': [],
+			      'valueIds': [],
+			      'datasource': 'bounties',
+			      'key': 'pipeline',
+			      'distinct': 'pipeline',
+			      'all':true
+			    },
+			    { 'filter': false,
+			      'filterLabels': [ 'Status', 'Selected', 'Released', 'Unclaimed', 'Started, Current Step Unclaimed', 'Claimed', 'Step In Progress', 'Claimed, Completed' ],
+			      'label': 'Status',
+			      'valueKeys': [],
+			      'valueIds': [],
+			      'datasource': 'bounty',
+			      'key': '',
+			      'distinct': 'brand_name',
+			      'all':false
+			    }
+			],
+
+			aggregate: [
+		      { '$match' : { 'release_for_bounty': { '$lte': '{{isoDateString}}' } } },
+		      { $project:{
+		      	  selected: 1,
+		          brand_name:1,
+		          content_type:1,
+		          pipeline:1,
+		          spend:1,
+		          keywords:1,
+		          titles:1,
+		          prompts:1,
+		          release_for_bounty:1,
+		          process:1
+		      }},
+		      {'$unwind':'$process'},
+		      {'$match':
+		        { '$and':
+		          [  
+		            {'process.bStatus': true},
+		            {'process.pipeline':'unclaimed'},
+		            {'process.inhouse': '$res.locals.user._id' },
+		          ]
+		        }
+		      },
+		      { $project:{
+		      	  selected: '$selected',
+		          brand_name:1,  
+		          content_type:1,
+		          bounty:'$process.bounty',
+		          refDocId:'$process.refDocId',
+		          name:'$process.name',
+		          description:'$process.description',
+		          pipeline:1,
+		          spend:1,
+		          release_for_bounty:1,
+		          keywords:1,
+		          titles:1,
+		          prompts:1,
+		          completion_order:'$process.completion_order'
+		      }},
+		      { 
+		        $replaceRoot: 
+		          { 
+		              newRoot: 
+		                { 
+		                  $mergeObjects: 
+		                    [ 
+		                      { 
+		                      	selected: '$selected',
+		                        _id: '$_id', 
+		                        brand_name: '$brand_name', 
+		                        content_type:'$content_type',
+		                        pipeline:'$pipeline',
+		                        keywords:'$keywords',
+		                        titles:'$titles',
+		                        release_for_bounty:'$release_for_bounty',
+		                        prompts:'$prompts',
+		                        bounty:'$bounty',
+		                        spend:'$spend',
+		                        name:'$name',
+		                        description:'$description',
+		                        completion_order:'$completion_order',
+		                        refDocId:'$refDocId'
+
+		                      } 
+		                    ] 
+		                } 
+		          }
+		      }
+			]
+		}"
+></app-flextable>

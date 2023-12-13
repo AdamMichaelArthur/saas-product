@@ -1,0 +1,30 @@
+
+<app-flextable
+	(headerButtonClicked)='headerButtonClicked($event)'
+	(tableBtnClicked)='tableButtonClicked($event)'
+	[options]="
+		{
+			datasource: 'users',
+
+			bAllowDeletion: true,
+
+			filter: {
+				visible: {
+					$ne: false 
+				}, 
+				archived: { $ne: true }
+			}, 
+
+			scope: 'all',
+			
+			columns: [
+				'selected',
+				'first_name',
+				'last_name',
+				'account_type',
+				'role',
+				'first_name',
+				'last_name'
+			]
+		}"
+></app-flextable>

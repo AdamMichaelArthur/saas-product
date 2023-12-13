@@ -1,0 +1,96 @@
+<!-- <mat-drawer-container class="sidebar-container" autosize>
+  <mat-drawer #drawer class="sidebar-sidenav" mode="side" position="end">
+    
+    <div #targetDiv><planmanagement-panel (childVarChange)="closePanel($event)" [panelId]="panelId"></planmanagement-panel></div>
+
+</mat-drawer> -->
+
+<mat-drawer-container class="sidebar-container" autosize>
+  <mat-drawer #drawer class="sidebar-sidenav" mode="side" position="end">
+    <div class="content-wrapper">
+      <div #targetDiv><planmanagement-panel (childVarChange)="closePanel($event)" [panelId]="panelId"></planmanagement-panel></div>
+    </div>
+  </mat-drawer>
+
+  <app-flextable #flextable
+  (headerButtonClicked)='headerButtonClicked($event)'
+  (tableBtnClicked)='tableButtonClicked($event)'
+  (activePanel)='activePanel($event)'
+  [options]="
+    {
+
+      bAllowDeletion: false,
+
+      headerButtonsAr: [
+        'Reset Plans'
+      ],
+
+        datasource: 'serializations',
+         
+        columns: [
+          'planName', 'currency', 'frequency', 'freeTrialDays', 'pricesUnit_amount'
+        ],
+
+        iconColumns: [
+          {
+            column: 'icons',
+            icon: 'edit',
+          }
+        ],
+
+        currencyColumns: [
+          {
+            column: 'pricesUnit_amount',
+            'currency': 'USD'
+          }
+        ],
+
+        columnNameRewrites: [
+          'Plan', 'Currency', 'Frequency', 'Free Trial Days', 'Price'
+        ],
+
+        aggregate: [
+            { $match: { accessLevel: 'system', className: 'EndpointsAdministrationPlans' } },
+            { $unwind: '$plans' },
+            { $unwind: '$plans.prices' },
+            { $addFields: {
+              'id': '$plans._id',
+              'theProductId': '$plans.productId.id',
+              'productId.metadata': '$plans.productId.metadata',
+              'productId.name': '$plans.productId.name',
+              currency: '$plans.currency',
+              frequency: '$plans.frequency',
+              annualDiscount: '$plans.annualDiscount',
+              freeTrialDays: '$plans.freeTrialDays',
+              gracePeriod: '$plans.gracePeriod',
+              priceId: '$plans.prices.id',
+              'pricesProduct': '$plans.prices.product',
+              'pricesType': '$plans.prices.type',
+              'pricesUnit_amount': '$plans.prices.unit_amount',
+              'pricesUnit_amount_decimal': '$plans.prices.unit_amount_decimal',
+              'planId': '$plans._id'
+            }},
+            { $project: {
+              _id: '$id',
+              theProductId: 1,
+              planName: '$productId.name',
+              currency: 1,
+              planId: 1,
+              frequency: 1,
+              annualDiscount: 1,
+              freeTrialDays: 1,
+              gracePeriod: 1,
+              pricesProduct:1,
+              pricesType:1,
+              pricesUnit_amount: { $round: [ { $divide: ['$pricesUnit_amount', 100] }, 2 ] },
+              pricesUnit_amount_decimal:1,
+              priceId: 1,
+              prices: 1
+            }}
+]
+
+    }">
+      
+</app-flextable>
+
+</mat-drawer-container>

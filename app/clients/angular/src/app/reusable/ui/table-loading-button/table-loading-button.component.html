@@ -1,0 +1,6 @@
+<button [disabled]="disabled" class="btn btn-primary btn-sm table-button-spacing" (click)="startLoader()">
+      <div class="circle" *ngIf="circle">
+        <i [ngClass]="{'material-icons': idle, 'progress-indicator': loading, 'animate-checkbox': success, 'animate-error': failure}">{{material_icon}}</i>
+      </div>
+  <ng-content></ng-content>
+</button>

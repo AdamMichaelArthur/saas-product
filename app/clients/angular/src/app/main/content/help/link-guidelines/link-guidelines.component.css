@@ -1,0 +1,79 @@
+/* Base blog container - gives a max-width and centers the content */
+.blog-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* The main title (H1) of the blog post */
+.blog-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+/* Sub-headers or section titles (H2) */
+.blog-container h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Paragraphs */
+.blog-container p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* Links within the blog content */
+.blog-container a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.blog-container a:hover, .blog-container a:focus {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Blockquotes (if any) */
+.blog-container blockquote {
+    padding: 0 1rem;
+    border-left: 4px solid #ddd;
+    font-style: italic;
+    color: #777;
+}
+
+/* Images within the blog post */
+.blog-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem auto;
+}
+
+/* Any lists in the content */
+.blog-container ul, .blog-container ol {
+    margin-bottom: 1rem;
+}
+
+.blog-container li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Adjust the spacing between consecutive elements for better vertical rhythm */
+.blog-container h2 + p, 
+.blog-container h1 + p, 
+.blog-container blockquote + p {
+    margin-top: 1rem;
+}

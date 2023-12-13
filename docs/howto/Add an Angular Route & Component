@@ -1,0 +1,48 @@
+/*
+	How to Add An Angular Route & Component
+	YouTube: www.youtube.com
+*/
+
+
+mkdir src/app/_components/[routename]
+mv src/app/[routename] src/app/_components
+
+edit "app.module.ts"
+	remove	import { test6Component } from './test6/test6.component';
+
+	import { ManagementComponent } from '../../management/management.component';
+	import { QueueComponent } from '../../queue/queue.component';
+	import { OutreachComponent } from '../../outreach/outreach.component';
+	import { CreatorsComponent } from '../../creators/creators.component';
+	import { DisbursementsComponent } from '../../disbursements/disbursements.component';
+
+edit "admin-layout.routing.ts": 
+	add 
+		{ path: 'management', component: ManagementComponent},
+		{ path: 'queue', component: QueueComponent},
+		{ path: 'outreach', component: OutreachCreatorsPaymentsComponent},
+		{ path: 'disbursements', component: DisbursementsComponent}
+	near line 131
+
+	add 
+		import { SiteadminAuthoritiesComponent } from '../../siteadmin-authorities/siteadmin-authorities.component'; 
+		import { SiteadminCreatorwComponent } from '../../siteadmin-creators/siteadmin-creators.component'; 
+		import { SiteadminGmailComponent } from '../../siteadmin-gmail/siteadmin-gmail.component'; 
+		import { SiteadminStripeComponent } from '../../siteadmin-stripe/siteadmin-stripe.component'; 
+		import { SiteadminAdministrationComponent } from '../../siteadmin-administration/siteadmin-administration.component'; 
+	near line 42
+
+edit "admin-layout.module.ts"
+	add import { SiteadminAuthoritiesComponent } from '../../siteadmin-authorities/siteadmin-authorities.component';
+
+near line 38
+
+	add Test6Component to declarations near line 114
+
+
+
+import { SiteadminAuthoritiesComponent } from './siteadmin-authorities/siteadmin-authorities.component';
+import { SiteadminCreatorsComponent } from './siteadmin-creators/siteadmin-creators.component';
+import { SiteadminGmailComponent } from './siteadmin-gmail/siteadmin-gmail.component';
+import { SiteadminStripeComponent } from './siteadmin-stripe/siteadmin-stripe.component';
+import { SiteadminAdministrationComponent } from './siteadmin-administration/siteadmin-administration.component';

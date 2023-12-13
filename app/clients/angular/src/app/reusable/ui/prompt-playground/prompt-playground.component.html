@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-9 col-sm-12">
+      <div class="form-group row">
+        <div class="col-md-3">
+          <label for="additionalInput">Data Label</label>
+          <input type="text" class="form-control" id="additionalInput" name="firstInputLabel" [(ngModel)]="input.firstInputLabel">
+        </div>
+        <div class="col-md-6">
+          <label for="input">Input Data or Target URL</label>
+          <input type="text" class="form-control" id="input" name="input" [(ngModel)]="input.input">
+        </div>
+        
+        <div class="col-md-3">
+          <label for="dropdown">Analysis Target</label>
+          <select name="analysisTarget" class="form-select" aria-label="Default select example" [(ngModel)]="analysisTarget">
+            <option value="body" selected value="content">content</option>
+            <option *ngFor="let option of targets" [ngValue]="option">{{option}}</option>
+          </select>
+        </div>   
+      </div>
+
+      <div class="form-group row">
+                <div class="col-md-3">
+          <label for="additionalInput">Data Label</label>
+          <input type="text" class="form-control" id="additionalInput" name="secondInputLabel" [(ngModel)]="input.secondInputLabel">
+        </div>
+        <div class="col-md-6">
+          <label for="input">Input Data or 2nd Target URL</label>
+          <input type="text" class="form-control" id="input" name="comparisontarget" [(ngModel)]="input.comparisonTarget">
+        </div>
+
+        <div class="col-md-3">
+          <label for="dropdown">Layer</label>
+          <select name="layer" class="form-select" aria-label="Default select example" [(ngModel)]="layer">
+            <option value="body" selected value="content">innerText</option>
+            <option *ngFor="let option of layers" [ngValue]="option">{{option}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="prompt">Prompt #1:</label>
+        <textarea class="form-control" id="prompt" name="prompt" rows="3" [(ngModel)]="input.prompt"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="prompt">Prompt #2:</label>
+        <textarea class="form-control" id="prompt2" name="prompt2" rows="3" [(ngModel)]="input.prompt2"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="prompt">Comparison:</label>
+        <textarea class="form-control" id="comparisonPrompt" name="comparisonPrompt" rows="3" [(ngModel)]="input.comparisonPrompt"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="output">Output:</label>
+        <textarea class="form-control" id="output" name="output" rows="7" [(ngModel)]="input.output"></textarea>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+      <div class="form-group">
+        <label for="dropdown">Choose Model:</label>
+        <select name="selectModel" class="form-select" aria-label="Default select example">
+          <option *ngFor="let option of dropdown" [ngValue]="option">{{option}}</option>
+        </select>
+      </div>
+      <div class="form-group align-bottom">
+        <label for="readonly-textarea">Function Name:</label>
+        <input type="text" class="form-control" id="functionName" name="functionName" [(ngModel)]="functionName" >
+        <label for="readonly-textarea">Category</label>
+        <input type="text" class="form-control" id="functionCategory" name="functionCategory" [(ngModel)]="functionCategory" >
+
+        <label for="readonly-textarea">Temperature</label>
+        <input type="text" class="form-control" id="functionTemperature" name="functionTemperature" [(ngModel)]="functionTemperature" >
+
+          <label for="dropdown">Chunk Size</label>
+          <select name="chunkSize" class="form-select" aria-label="Default select example" [(ngModel)]="chunkSize">
+            <option value="body" selected value="1000">1000</option>
+            <option *ngFor="let chunksize of chunkSizes" [ngValue]="chunksize">{{chunksize}}</option>
+          </select>
+        
+      </div>
+      <div class="form-group align-bottom">
+        <label for="readonly-textarea">Function Info:</label>
+        <textarea #functionInfo class="form-control" id="readonly-textarea" rows="5" readonly></textarea>
+      </div>
+      <div class="form-group align-bottom">
+        <label for="readonly-textarea">Validation:</label>
+        <textarea #validation class="form-control" id="readonly-textarea" rows="5" name="validation" >{{ input.validation | json }}</textarea>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="result">Result:</label>
+        <textarea #resultTextarea class="form-control" id="result" rows="10" name="result" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 button-container">
+
+      <network-request-button #request (result)="waitForResponse($event)" (click)="sendRequest($event)" [preventDefault]="bPreventDefault" timeoutDuration="120000" [request]="requestEndpoint" [payload]="payload" verb="POST">Test Prompt</network-request-button>
+      &nbsp;
+      <network-request-button *ngIf="bCreateNewMode" #saveRequestButton [preventDefault]="bPreventDefault" (click)="saveNewRequest($event)" (result)="saveResponse($event)" [request]="saveRequestEndpoint" [payload]="payload" verb="POST">Save Request</network-request-button>
+      <network-request-button *ngIf="!bCreateNewMode" #updateRequestButton [preventDefault]="bPreventDefault" (click)="updateRequest($event)" (result)="updateResponse($event)" [request]="saveRequestEndpoint" [payload]="payload" verb="PUT">Update Request</network-request-button>
+
+      <button class="circle-button" type="button">
+        <span>+</span>
+      </button>
+
+    </div>
+  </div>
+
+  <div class="divider-line"></div>
+
+</div>
+

@@ -1,0 +1,21 @@
+.container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.box {
+  width: 200px;
+  height: 200px;
+  background-color: blue;
+  transition: height 0.5s;
+}
+
+.expanded {
+  height: 200px;
+}
+
+.collapsed {
+  height: 0;
+}

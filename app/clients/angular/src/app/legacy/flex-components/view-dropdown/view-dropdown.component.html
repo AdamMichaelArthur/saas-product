@@ -1,0 +1,14 @@
+<!-- for the custom drop down -->
+<div class="custom_dropdown_container">
+  <div
+    class="dropdown_select_first"
+    (click)="openDropDown()"
+    *ngIf="isDropdownSelectdFirst"
+  >
+    <span>{{ data.length }}</span>
+  </div>
+  <!--     <span class="dropdown_select" (click)="openDropDown()" *ngIf="isDropdownSelectd">{{select_default_val}}</span> -->
+  <ul *ngIf="isDropdown">
+    <li *ngFor="let sel of data" (click)="hideDropDown(sel)">{{ sel }} <span *ngIf="disableDropdownDelete" (click)="removeArrayItem(sel)" class="close_dropdown">x</span></li>
+  </ul>
+</div>

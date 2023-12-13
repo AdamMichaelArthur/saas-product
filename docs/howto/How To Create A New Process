@@ -1,0 +1,44 @@
+Step 1:
+
+Call {{local}}/datasource/process
+with your process definition
+
+[
+        {
+            "content_type": "Page Rank Audit",
+            "suggested_word_count": 1800,
+            "suggested_video_length": 5,
+            "suggested_bounty": 125,
+            "media_type": "text",
+            "distribution_method": [
+                "Website,Platform,Document"
+            ],
+            "frequency": [
+                "Select Frequency",
+                "Daily",
+                "3x Per Week",
+                "Weekly",
+                "2x Per Month",
+                "Monthly"
+            ],
+            "starting_day": [
+                "Select Day",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ],
+            "short_description": "",
+            "process_description": "",
+            "editorial_guidelines": []
+        }
+]
+
+Step 2:
+
+Add Steps to that process
+
+Call 

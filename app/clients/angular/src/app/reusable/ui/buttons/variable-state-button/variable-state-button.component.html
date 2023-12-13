@@ -1,0 +1,18 @@
+<span *ngIf="!badge">
+<button *ngIf="displayed" [disabled]="disabled" class="btn btn-primary btn-sm" (click)="performStateAction()" style="margin-left:5px; margin-right:5px;"
+	
+	[style.background-color]="options?.display?.color" [style.border]="options?.display?.color"
+>
+      <div class="circle" *ngIf="circle">
+        <i [ngClass]="{'material-icons': idle, 'progress-indicator': loading, 'animate-checkbox': success, 'animate-error': failure}">{{material_icon}}</i>
+      </div>
+  {{displayText}}
+</button>
+</span>
+
+<span *ngIf="badge">
+	               <div class="btn btn-primary btn-sm" disabled style="margin-left:5px; margin-right:5px; cursor: default;" [style.background-color]="options?.display?.color" [style.border]="options?.display?.color">
+                  <i class="material-icons">{{options?.display?.material_icon}}</i>
+                  <div class="ms-2">{{displayText}}</div>
+                </div>   
+</span>

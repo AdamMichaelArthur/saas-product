@@ -1,0 +1,11 @@
+## Update your remote branches
+git remote update origin
+
+## See Remote Branches
+git branch -r
+or
+git branch -a
+
+## 
+
+git checkout -b flex_alignment origin/flex_alignment

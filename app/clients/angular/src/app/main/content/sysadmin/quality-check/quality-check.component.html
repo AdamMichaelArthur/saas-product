@@ -1,0 +1,87 @@
+<app-flextable #escrow
+(tableBtnClicked)="tableBtnClicked($event)"
+                           [options]="
+                           {
+                              
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                           datasource: 'offers',
+                           bNoHeader: true,
+                           bAllowDeletion: false,
+                           columns: [
+                           'headline', 'state', 'status'
+                           ],
+
+						rowButtons: [
+                        {
+                        'column': 'headline',
+                        'buttonName': 'Approve',
+                        'api': 'v1.0',
+                        'action': 'approve'
+                        },
+                        {
+                        'column': 'headline',
+                        'buttonName': 'Reject',
+                        'api': 'v1.0',
+                        'action': 'approve'
+                        }
+                        ],
+
+                           columnBadges: {
+                              'state': {
+                                 column: 'state',
+                                 color: 'red',
+                                 states: {
+                                    'complete': { color: 'white', icon_color: '#93C572', material_icon: 'thumb_up', display_text: false, tooltip: 'This transaction is complete' },
+                                    'waiting_seller': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'We are waiting on the seller to complete an action'  },
+                                    'waiting_buyer': { color: 'blue', material_icon: 'query_builder', tooltip: 'We are waiting on the buyer to complete an action'  },
+                                    'escrowed': { icon_color: '#FF7F50', color: 'teal', material_icon: 'lock', tooltip: 'This exchange is in escrpw'   },
+                                    'quality_check': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  },
+                                    'rejected': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  }
+                                 },
+                                 index: 0
+                              },
+                              'status': {
+                                 column: 'status',
+                                 color: 'blue',
+                                 states: {
+                                    'complete': { icon_color: '#FFFDD0', color: 'green', material_icon: 'done', tooltip: 'This transaction is complete' },
+                                    'waiting_seller': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'We are waiting on the seller to complete an action'  },
+                                    'waiting_buyer': { color: 'blue', icon_color: '#FAEBD7', material_icon: 'query_builder', tooltip: 'We are waiting on the buyer to complete an action'  },
+                                    'escrowed': { color: 'teal', material_icon: 'lock', tooltip: 'This exchange is in escrpw'  },
+                                    'quality_check': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  },
+                                    'rejected': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  }
+                                 },
+                                 index: 1
+                              }
+                           },
+                           columnDecorators: {
+                              'headline': {
+                                 'font_weight':'medium',
+                                 'font': '\'Trebuchet MS\''
+                              }
+                           },
+
+                           aggregate:
+                           [
+                              { $match: { status: 'quality_check' } },
+	                           {
+	                           '$project': {
+		                           'requested_by': '$res.locals.user._id',
+		                           'seller_id': 1,
+		                           'buyer_id': 1,
+		                           'created_by': 1,
+		                           'headline': 1,
+		                           'state': 1,
+		                           'status': 1,
+		                           'type': 1,
+		                           'category': 1
+	                           	}
+	                           }
+                           ]
+                           }"
+                           ></app-flextable> 

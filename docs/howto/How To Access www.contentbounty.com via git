@@ -1,0 +1,6 @@
+How To Access www.contentbounty.com via git
+
+Add /website and website to your .gitignore
+This is important
+
+git clone ssh://root@www.contentbounty.com:/srv/git/www.contentbounty.com.git

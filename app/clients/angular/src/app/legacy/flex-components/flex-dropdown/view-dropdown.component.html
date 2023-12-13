@@ -1,0 +1,15 @@
+<div class="custom_dropdown_container_area">
+  <div class="custom_dropdown_container" *ngFor="let d of data">
+    <span
+      class="dropdown_select_first"
+      (click)="openDropDown()"
+      *ngIf="isDropdownSelectdFirst"
+    ></span>
+    <!--     <span class="dropdown_select" (click)="openDropDown()" *ngIf="isDropdownSelectd">{{select_default_val}}</span> -->
+    <ul *ngIf="isDropdown">
+      <li *ngFor="let sel of d.select_val" (click)="hideDropDown(sel)">
+        {{ sel }}
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<!-- <div class="form-group" style="padding: 15px;">
+  <label for="comment">Leave a Comment</label>
+  <textarea id="comment" class="form-control" rows="4" placeholder="Type your comment here"></textarea>
+  <div style="padding-top:15px;">
+  <button type="submit" class="btn btn-primary">Submit</button></div>
+</div> -->
+
+<div class="post bg-info rounded" [ngStyle]="{'max-width.px': fullWidth ? 'none' : 400}">
+  <div class="post-header">
+    <h3 class="post-title">{{post.subject}}</h3>
+    <p>Posted by <span class="username">Username</span></p>
+  </div>
+  <div class="post-content">
+    <div class="post-bubble bg-light rounded p-3">
+      <p>{{post.post}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="chat-container" >
+  <div class="chat-bubble" *ngFor="let post of post.replies" style="max-width:400px;">
+    <p>{{post.post}}</p>
+  </div>
+</div> -->
+
+<div class="card" *ngFor="let post of post.replies; let i = index" [ngStyle]="{'max-width.px': fullWidth ? 'none' : 400}">
+            <!-- <div class="card-header"></div> -->
+            <div class="card-body">
+              <h5 class="card-title">{{ post.subject }}</h5>
+              {{ post.post }}
+            </div>
+            <!-- <div class="card-footer">
+              Footer
+            </div> -->
+          </div>
+
+<!-- <div class="post-content" *ngFor="let post of post.replies; let i = index" style="max-width: 400px;">
+  <div [ngClass]="{ 'chat-bubble': i % 2 === 0, 'chat-bubble user': i % 2 !== 0 }">
+    <p>{{ post.post }}</p>
+  </div>
+</div> -->
+
+<div class="comment-container">
+  <div class="form-group">
+  	<form (ngSubmit)="leaveComment()">
+    <label for="comment">Leave a Comment</label>
+    <textarea id="comment" name="comment" [(ngModel)]="comment" class="form-control" rows="15" placeholder="Type your comment here"></textarea>
+    <button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+  </div>
+</div>

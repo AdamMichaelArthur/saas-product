@@ -1,0 +1,93 @@
+<!--
+[
+  {
+    $lookup: {
+      from: 'accounts',
+      localField: 'accountId',
+      foreignField: '_id',
+      as: 'account'
+    }
+  },
+  {
+    $project: {
+      mergedDocument: {
+        $mergeObjects: [
+          { $arrayElemAt: ['$account', 0] },
+          '$$ROOT'
+        ]
+      }
+    }
+  },
+  {
+    $replaceRoot: {
+      newRoot: '$mergedDocument'
+    }
+  },
+  {
+    $project: {
+      account: 0
+    }
+  }
+]
+
+
+-->
+
+
+<app-flextable
+	(headerButtonClicked)='headerButtonClicked($event)'
+	(tableBtnClicked)='tableButtonClicked($event)'
+	[options]="
+		{
+			datasource: 'accounts',
+
+			bAllowDeletion: true,
+
+			filter: {
+				visible: {
+					$ne: false 
+				}, 
+				archived: { $ne: true }
+			}, 
+
+			columns: [
+				'selected',
+				'first_name',
+				'last_name',
+				'account_type',
+				'role',
+				'plan'
+			],
+
+			aggregate: [
+				  {
+				    $lookup: {
+				      from: 'users',
+				      localField: '_id',
+				      foreignField: 'accountId',
+				      as: 'account'
+				    }
+				  },
+				  {
+				    $project: {
+				      mergedDocument: {
+				        $mergeObjects: [
+				          { $arrayElemAt: ['$account', 0] },
+				          '$$ROOT'
+				        ]
+				      }
+				    }
+				  },
+				  {
+				    $replaceRoot: {
+				      newRoot: '$mergedDocument'
+				    }
+				  },
+				  {
+				    $project: {
+				      account: 0
+				    }
+				  }
+				]
+		}"
+></app-flextable>

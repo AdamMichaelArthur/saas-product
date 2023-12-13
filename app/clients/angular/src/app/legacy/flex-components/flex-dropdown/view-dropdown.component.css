@@ -1,0 +1,80 @@
+/* Done */
+/* custom drop down css */
+.custom_dropdown_container_area{
+  width: 100%;
+  height: 200px;
+  background: #e4e4e4;
+  float: left;
+  position: relative;
+  margin: 10px;
+}
+.custom_dropdown_container{
+  width: 30% !important;
+  border-radius: 4px;
+  padding-right: 3px;
+  padding: 0;
+  line-height: 36px;
+  margin: 10px;
+  float: left;
+  position: relative;
+}
+
+.custom_dropdown_container .dropdown_select_first{
+  width: 40px;
+  height: 36px;
+  background: #fff;
+  float: right;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+.custom_dropdown_container .dropdown_select_first::after{
+  content: "";
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-color: #4d4d4d transparent transparent transparent;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  
+}
+
+.custom_dropdown_container .dropdown_select{
+  width: 100%;
+  height: 36px;
+  background: #fff;
+  float: right;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding:0 10px;
+}
+
+.custom_dropdown_container ul{
+  width: 100%;
+  height: auto;
+  background: #e92727;
+  position: absolute;
+  left: 0;
+  top: 36px;
+  padding: 0;
+  z-index: 9;
+  margin-top: -2px;
+  margin-bottom: 0;
+  border-radius: 4px 0 4px 4px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+.custom_dropdown_container ul li{
+  width: 100%;
+  height: 36px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  padding: 0 10px;
+  line-height: 36px;
+}
+
+.custom_dropdown_container ul li:last-child{
+  border-bottom: 0px;
+}

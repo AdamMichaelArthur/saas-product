@@ -1,0 +1,22 @@
+.component-container {
+
+}
+
+.upper-right-button {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+}
+
+.save-button {
+  position: absolute;
+  bottom: 10px; /* Adjust the bottom position as needed */
+  right: 10px; /* Adjust the right position as needed */
+}
+
+.page-link {
+  cursor: pointer;
+  /* Additional styles for the link appearance */
+  color: blue;
+  text-decoration: underline;
+}

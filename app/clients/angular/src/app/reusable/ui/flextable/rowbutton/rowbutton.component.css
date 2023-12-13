@@ -1,0 +1,8 @@
+@media (max-width: 576px) { /* Targeting mobile screens */
+  .mobile-btn {
+    display: block; /* Stacks the buttons */
+    margin: 4px auto; /* Centering the buttons and adding a bit of space between them */
+    margin-top: 5px;
+    width: 80%; /* Setting a common width - you can adjust as needed */
+  }
+}

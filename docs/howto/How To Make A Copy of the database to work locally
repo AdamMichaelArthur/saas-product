@@ -1,0 +1,45 @@
+How To Make A Copy of the database to work locally
+
+Important: working locally requires us to disable some features of content bounty
+so if you work locally the benefit is it is MUCH faster, but there are some things
+you won't be able to do or that may cause problems, including:
+
+	Creating new bounties
+	Opening Files, Folders and Templates
+
+among other things
+
+Step 1		In your .env file, add or edit the key "DISABLE_BOX" to DISABLE_BOX="true"
+			Note that the "true" in quotation marks IS important, you cannot write DISABLE_BOX=true
+
+			This disable the Box.js file and the Box integration -- which is the main reason we've been
+			needing to connect to the database on the server, as opposed to working with a local copy
+
+Step 2		If your local mongo IS NOT setup for replication, you need to get that done first.
+
+			https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/
+			https://ondrej-kvasnovsky.medium.com/mongodb-replica-set-on-local-macos-f5fc383b3fd6
+			https://docs.mongodb.com/manual/tutorial/deploy-replica-set/
+
+Step 3		Once replica sets are setup on your local mongodb instance, you need to download the database
+			we want to work from
+
+			We have three databases for you to choose from:
+			
+			contentbounty
+			contentbounty-prod
+			contentbounty-copy
+
+			mkdir cb_database
+			cd db_database
+			mongodump --host app.contentbounty.com --username adam --password dino --authenticationDatabase=admin --db contentbounty-prod
+			mongorestore dump/ 
+			OR
+			mongorestore --drop
+
+Step 4		Change your .env file to use localhost instead of the remote server
+			DB_DOMAIN = "localhost"
+
+Step 5		Understand the limitations of working from a local copy of the database
+			1.	A lot of functionality will not work, or at least not 100% -- such as
+				creating new bounties.

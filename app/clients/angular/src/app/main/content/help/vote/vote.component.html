@@ -1,0 +1,8 @@
+<app-ballot
+  *ngFor="let q of questions" 
+  [question]="q.question" 
+  [headline]="q.headline"
+  [options]="q.options"
+  (close)="closeQuestion(q)">
+</app-ballot>
+<span *ngIf="questions.length == 0">You've voted on everything!  More questions will come soon<br><button class="btn btn-primary btn-sm" (click)="reset()">Change Your Votes</button></span>

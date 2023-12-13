@@ -1,0 +1,26 @@
+.component-container {
+
+}
+
+.upper-right-button {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+}
+
+
+.upper-left-button {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  left: 10px; /* Adjust the left position as needed */
+  min-width: 50px;
+  height: 50px;
+  background-color: transparent;
+}
+
+
+.save-button {
+  position: absolute;
+  bottom: 10px; /* Adjust the bottom position as needed */
+  right: 10px; /* Adjust the right position as needed */
+}

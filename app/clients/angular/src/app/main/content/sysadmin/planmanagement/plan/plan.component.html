@@ -1,0 +1,190 @@
+
+
+<network-request-button #request class="upper-left-button" customClasses="transparent-button" (result)="dataReceived($event)" [request]="'/api/administration/plans/getPlan/planId/' + jsonBody['_id']" verb="GET"></network-request-button>
+
+  <button mat-icon-button class="upper-right-button">
+    
+        <mat-icon>arrow_forward</mat-icon>
+       
+         
+       
+
+  </button>
+
+  <form (ngSubmit)="onSubmit()" #planForm="ngForm">
+
+           <label for="prices">Price</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="price"
+              required
+              [(ngModel)]="price"
+              name="prices"
+              #name="ngModel"
+            /><br>
+
+
+            <input 
+              type="text"
+              class="form-control"
+              id="_id"
+              disabled="true"
+              required
+              [(ngModel)]="jsonBody['_id']"
+              name="_id"
+              #name="ngModel"
+              hidden=true
+            />
+
+           <label for="prices">Allowed Users</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="users"
+              disabled="false"
+              required
+              [(ngModel)]="jsonBody['users']"
+              name="users"
+              #name="ngModel"
+            /><br>
+
+           <label for="prices">Currency</label>            
+            <input 
+              type="text"
+              class="form-control"
+              id="currency"
+              disabled="true"
+              required
+              [(ngModel)]="jsonBody['currency']"
+              name="currency"
+              #name="ngModel"
+            /><br>
+
+          <label for="prices">Free Trial Days</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="freeTrialDays"
+              disabled="false"
+              required
+              [(ngModel)]="jsonBody['freeTrialDays']"
+              name="freeTrialDays"
+              #name="ngModel"
+            /><br>
+
+           <label for="prices">Grace Period Days</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="gracePeriod"
+              disabled="false"
+              required
+              [(ngModel)]="jsonBody['gracePeriod']"
+              name="gracePeriod"
+              #name="ngModel"
+            /><br>
+
+          <label for="prices">Payment Reminders</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="paymentReminders"
+              disabled="false"
+              required
+              [(ngModel)]="jsonBody['paymentReminders']"
+              name="paymentReminders"
+              #name="ngModel"
+            /><br>
+           <button
+            type="submit"
+            class="btn btn-success save-button"
+          >
+            Save
+          </button>           
+
+            
+
+  </form>
+<!-- 
+  <div [hidden]="submitted">
+    <h1>Update Subscription</h1>
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
+
+<div *ngFor="let key of getObjectKeys()">
+
+  <div style="padding-right: 10px;" *ngIf="!isObject(jsonBody[key])">
+    <label for="numUsers">{{ key | titlecase }}</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="{{key}}"
+              disabled="true"
+              required
+              [(ngModel)]="jsonBody[key]"
+              name="{{key}}"
+              #name="ngModel"
+            /><br>
+</div></div>
+
+<div *ngFor="let key of getObjectKeys()">
+
+<div style="padding-right: 10px;" *ngIf="isObject(jsonBody[key])">
+  <br>
+<label for="numUsers"><b>{{ key | titlecase }}</b></label>
+  <div *ngFor="let childKey of getObjectKeys(key)">
+    <div *ngIf="!isArray(jsonBody[key])">
+      <label for="numUsers">{{ childKey | titlecase }}</label>
+    </div>
+                <div *ngIf="isArray(jsonBody[key])">
+                  <div *ngFor="let arrItem of jsonBody[key]">
+
+                    
+                    <label><b>{{ key }}</b> {{arrItem | json }} </label>
+                    <div *ngFor="let item of getObjectKeys( arrItem ); let itemIndex = index">
+
+                        <b><div *ngIf="!isUndefined(jsonBody[key][itemIndex][item])">
+                          {{item}}::{{arrItem[item]}} || {{jsonBody[key][itemIndex][item]}}</div></b>
+
+                    
+
+                  </div>
+
+                    
+                  </div>
+                </div>
+  </div>
+
+</div>
+
+</div>
+
+
+
+
+      <button
+        type="submit"
+        class="btn btn-success save-button"
+        [disabled]="!heroForm.form.valid"
+      >
+        Save
+      </button>
+    </form>
+  </div>
+  <div [hidden]="!submitted">
+    <h2>You submitted the following:</h2>
+    <div class="row">
+      <div class="col-xs-3">Name</div>
+      <div class="col-xs-9">{{ model.planName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Monthly Price</div>
+      <div class="col-xs-9">{{ model.monthlyPrice }}</div>
+    </div>
+    <br />
+    <button type="button" class="btn btn-primary" (click)="submitted=false">
+      Edit
+    </button>
+  </div>
+
+ -->

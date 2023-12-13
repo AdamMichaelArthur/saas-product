@@ -1,0 +1,88 @@
+Step 1		Log into our server
+			ssh root@www.watchmebark.com
+
+			If you don't have the password or SSH keys, contact Adam
+
+Step 2:		Add a new user for the install
+
+			adduser [domain-name]
+			usermod -aG sudo [domain-name]
+			su - toocuteforme
+
+Step 3:		Create your directories
+
+			sudo mkdir -p /var/www/toocuteforme
+			sudo chown toocuteforme:toocuteforme /var/www/toocuteforme
+			sudo chmod 775 /var/www/toocuteforme
+			cd /var/www/[domain-name]
+
+Step 4:		Run the install process
+			use http not https
+
+			ghost install
+
+Example Sequence:
+
+			adduser talknerdish
+			usermod -aG sudo talknerdish
+			su - toocuteforme
+			sudo mkdir -p /var/www/toocuteforme
+			sudo chown toocuteforme:toocuteforme /var/www/toocuteforme
+			sudo chmod 775 /var/www/toocuteforme
+			cd /var/www/toocuteforme
+			ghost install
+
+Step 5		Enter http://www.[domain-name].[tld]
+			Note: do not use https, we will setup https manually later
+
+			Mysql host: localhost
+			Mysql user: root
+			Mysql pass: Amos3rowe@
+			Mysql database: accept default
+
+			No
+			Yes
+			No
+			Yes
+			Yes
+
+Step 6		Navigate to the nginx server
+	
+			/etc/nginx/sites-enabled
+
+			sudo nano talknerdish.com.conf 
+
+			server {
+                            if ($host = contentbounty.com) {
+                                return 301 http://www.contentbounty.com;
+                            }
+
+                            listen 80;
+                            listen [::]:80;
+
+                            server_name contentbounty.com;
+                            return 404;
+                        }
+
+			sudo nginx -t
+			if no problems
+			sudo systemctl restart nginx
+
+			navigate to: http://talknerdish.com
+			it should redirect to http://www.talknerdish.com
+
+			If this works, then we can setup SSL
+
+Step 7		sudo certbot --nginx
+
+			Do it for 'talknerdish.com' first
+			then again for 'www.talknerdish.com'
+
+Step 8		navigate and verify it redirects to https
+
+Step 9:		cd /var/www/talknerdish
+			nano config.production.json
+
+			change http to https
+
+Step 10:	goto https://www.talknerdish.com/ghost

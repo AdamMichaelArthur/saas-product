@@ -1,0 +1,55 @@
+<!-- 
+
+
+  
+<div class="chat-container" >
+  <div class="chat-bubble user" *ngFor="let message of chatHistory" style="max-width:400px;">
+    <p>message</p>
+  </div>
+</div>
+
+<div class="parent-container">
+  <div class="comment-container">
+    <div class="form-group">
+      <form (ngSubmit)="sendChatMessage()">
+        <label for="comment">Leave a Comment</label>
+        <textarea id="comment" name="comment" [(ngModel)]="chatMessage" class="form-control" rows="5" placeholder="Type your comment here"></textarea>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div *ngIf="visible" [ngClass]="{'desktop': !hidden, 'mobile': hidden}">
+  <i (click)="chatIconClicked($event)" class="material-icons" style="font-size:60px; color: blue;">chat</i>
+</div> -->
+<div *ngIf="isChatButtonClicked">
+
+<div class="position-fixed bottom-0 end-0 p-3 chat-window custom-shadow rounded">
+  <button class="btn-close" (click)="closeChat($event)"></button>
+  <div class="profile-pic"></div><div class="recipient-container"><div class="founder-text">Adam - Founder</div></div>
+    <div class="card d-flex flex-column h-100 rounded"  style="max-height: 90%" >
+        <div class="card-body overflow-auto chat-messages mb-auto rounded-top" #chatContainer>
+            <div class="chat-container" >
+                <div [ngClass]="{'chat-bubble': true, 'user': message.bubble === 'user'}" *ngFor="let message of chatHistory" style="max-width:400px;">
+                    <p>{{message.chatMessage}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer rounded-bottom">
+            <form (ngSubmit)="sendChatMessage()" name="chatBubble">
+                <div class="input-group">
+                    <textarea (keydown.enter)="sendChatMessage(); $event.preventDefault()" #chatTextArea id="comment" [(ngModel)]="chatMessage" name="comment" class="form-control rounded-0" rows="2" placeholder="Type your message here"></textarea>
+                    <div class="input-group-append"  style="padding-left: 10px;">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</div>

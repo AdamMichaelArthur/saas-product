@@ -1,0 +1,44 @@
+
+<help-video embedded_video_url="6VnNtUd1MX4" videoTitle="How To Use Prompt Explorer"></help-video>
+
+<div *ngFor="let gpt of gptFunctions">
+	<app-prompt-playground></app-prompt-playground>
+</div>
+
+
+<div class="container">
+
+<div class="row">
+    <div class="col-12 button-container">
+
+      <button class="circle-button" type="button" (click)="createGptFunction()">
+        <span>+</span>
+      </button>
+
+    </div>
+  </div>
+
+  <app-flextable #flextable
+  [options]="
+    {
+
+      bAllowDeletion: true,
+        datasource: 'gptfunctions',        
+        columns: [
+          'functionName'
+        ],
+
+        linkColumns: [
+            {
+              column: 'FunctionName',
+              path: '/main/sysadmin/prompts/'
+            }
+          ],
+
+    }">
+      
+</app-flextable>       
+
+ 
+
+</div>

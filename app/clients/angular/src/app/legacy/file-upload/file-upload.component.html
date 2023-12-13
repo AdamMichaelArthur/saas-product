@@ -1,0 +1,74 @@
+<div class="popup_modal_fade" [style.display]="addfilearea ? '' : 'none'">
+    <div id="addfile" class="popup_modal_content_area" style="top: 0px !important; left: 0px !important;">
+      <h3>File upload</h3><span>Use Google Spreadsheet</span>
+      <button class="close_popup_modal" (click)="closeFileUpload()">X</button>
+      <div class="area_content showDiv">
+        <div class="user_image_area">
+          <div class="loader" *ngIf="uploading">Loading...</div>
+    
+          <p class="danger_input_box" *ngIf="excel_file_Error">
+            {{ excel_file_Error }}
+          </p>
+          <p class="info_input_box" *ngIf="excel_file_Info">
+            {{ excel_file_Info }}
+          </p>
+          <div>
+            <label class="theme-color custom-file-upload">
+              <input
+                type="file"
+                name="snippet_file"
+                id="snippet_file"
+                (change)="Validate($event)"
+                accept=".xlsx, .csv"
+                multiple
+              />
+              <!-- Upload Data Excel File -->
+            </label>
+            <label class="theme-color custom-file-upload">
+<!--             <div>
+              <label for="name">Google Sheets</label>
+              <input type="text" class="form-control" id="zapier_webhook_url"
+              autocorrect="off">
+              <button type="submit" class="btn btn-success" [disabled]="!brandUpdateForm.form.valid">Upload From Sheets</button>
+                   
+            </div> -->
+              <!-- Upload Data Excel File -->
+            </label>
+            <!-- <button
+              class="theme-color custom-file-upload ml-1"
+              [ngClass]="{ disable_style: uploading }"
+              [disabled]="uploading"
+              *ngIf="excel_loaded"
+              (click)="uploadExcelFile()"
+            >
+              {{ file_status }}
+            </button> -->
+          </div>
+        </div>
+      </div>
+      <!-- <h3>Required Format for Excel File</h3> -->
+      <div class="area_content showDiv">
+        <div *ngIf="fileUploadError">
+          <h4 style="color: red">File upload unsuccessful</h4>
+          <h4 style="color: red">Error returned: {{ errorMessage }}</h4>
+        </div>
+        <div class="user_image_area">
+          <table class="excel-foramt">
+              <thead>
+                  <tr>
+                    <th *ngFor="let data of excelFileFormat">{{data.field_label}}</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td *ngFor="let data of excelFileFormat">
+                      <span *ngIf="data.validation.required === true">Required</span>
+                      <span *ngIf="data.validation.required === false">Not required</span>
+                    </td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

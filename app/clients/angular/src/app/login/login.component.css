@@ -1,0 +1,9 @@
+.digit-input {
+      width: 40px;
+      margin: 5px;
+      text-align: center;
+    }
+    .input-container {
+      display: inline-flex;
+      align-items: center;
+    }

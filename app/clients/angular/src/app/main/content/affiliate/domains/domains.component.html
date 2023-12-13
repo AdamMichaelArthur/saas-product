@@ -1,0 +1,22 @@
+<div class="payment_method_area">
+   <p>Your Domains</p>
+   <div class="container">
+<input type="text" [(ngModel)]="domain" class="form-control element"><button class="element" (click)="addDomain()">Add Domain</button><p></p><br>
+</div><br><p></p>
+   <div class="payment-methods-area">
+      <table class="table table-striped custom-table">
+         <thead>
+            <tr style="height: 45px;">
+               <th scope="col"></th>
+               <th scope="col">Domain</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr *ngFor="let subscription of activeDomains; let rowIndex = index"  >
+               <td>{{subscription.domain}}</td>
+               <td><span class="material-icons spacing" (click)="removeDomain($event, subscription._id)">delete</span></td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

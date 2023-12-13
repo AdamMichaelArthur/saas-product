@@ -1,0 +1,10 @@
+The Content Bounty API makes it easy to save any data you want into the database, and to retreive it
+later.
+
+Step 1:		Make sure your class extends BaseComponent.  There are many examples of this in the project so details on how
+to do this are not provided here.  Just do a search for "extends BaseComponent"
+
+Step 2:		Base sure you include an instance of BaseService in the extended BaseComponent.  This is also frequently done...
+but it's not a requirement so be sure to check for this.
+
+Step 3:		

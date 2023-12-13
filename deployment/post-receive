@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Define the base project name
+project_name="app.saas-product.com"
+
+# Stop the PM2 processes
+echo 'Deploying Project To Production'
+pm2 stop ${project_name}-api-v1
+pm2 stop ${project_name}-api-v2
+
+# The production directory
+WWW="/srv/www/${project_name}"
+
+# A temporary directory for deployment
+TMP="/srv/tmp/${project_name}"
+
+# The Git repo
+GIT="/srv/git/${project_name}.git"
+
+# The Env repo
+ENV="/srv/env/${project_name}"
+
+
+# Deploy the content to the temporary directory
+mkdir -p $TMP
+git --work-tree=$TMP --git-dir=$GIT checkout -f
+
+# Copy the env variable to the temporary directory
+cp -a $ENV/. $TMP
+
+# Do stuffs, like npm install
+cd $TMP || exit
+
+# Replace the content of the production directory
+# with the temporary directory
+cd / || exit
+rm -rf $WWW
+mv $TMP $WWW
+
+# Do stuff like starting docker
+cd $WWW || exit
+# docker-compose up -d --build
+
+# Move our environment variables
+cp "/srv/env/${project_name}/apiv1" "/srv/www/${project_name}/apiv1/.env"
+cp "/srv/env/${project_name}/apiv2" "/srv/www/${project_name}/apiv2/.env"
+
+cd "/srv/www/${project_name}/apiv1"
+npm install 
+
+cd "/srv/www/${project_name}/apiv2"
+npm install
+
+# Build the react client, if present
+cd "/srv/www/${project_name}/clients/react"
+npm install
+
+# Build the project locally
+npm run build
+
+# Move this post-receive to the post-receive folder.  
+mv /srv/www/hammerheadads-client-frontend/deployment/post-receive /srv/git/hammerheadads-client-frontend.git/hooks/post-receive
+
+# Set the hook as an executable
+chmod +x /srv/git/hammerheadads-client-frontend.git/hooks/post-receive
+
+# Copy the nginx configuration file to the sites-enabled directory
+mv /srv/www/hammerheadads-client-frontend/deployment/hammerheadads-client-frontend.conf /etc/nginx/sites-enabled/hammerheadads-client-frontend.conf
+
+# Make sure the configuration files are good
+nginx -t 
+
+# And finally restart nginx to make the changes take effect
+systemctl restart nginx
+
+# Stop our PM2 processes
+pm2 start hammerheadads-apiv1
+pm2 start hammerheadads-apiv2
+
+
+
+
+

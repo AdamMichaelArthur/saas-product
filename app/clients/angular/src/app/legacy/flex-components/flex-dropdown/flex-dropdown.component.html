@@ -1,0 +1,10 @@
+<div style="margin:40px;" class="parent_class">
+  <div class="file_add_up full_width">
+    <select class="flexdropdown" style="border:0px" (change)="onSelected($event)">
+      <option *ngIf="initialNone" value="">Select</option>
+      <option *ngFor="let label of fruits; let y = index" [value]="label">{{
+        label
+      }}</option>
+    </select>
+  </div>
+</div>
