@@ -44,8 +44,22 @@ fi
 read -p "Enter Project Name: " projectName
 
 
-# Asking a simple yes/no question
-read -p "Is this a local (development) installation or a server (remote) installation? (dev/server) " answer
+while true; do
+    read -p "Is this a local (development) installation or a server (remote) installation? (l/s): " answer
+    case "${answer,,}" in
+        l)
+            installFlavor="local"
+            break
+            ;;
+        s)
+            installFlavor="server"
+            break
+            ;;
+        *)
+            echo "Invalid response. Please answer l for local or s for server."
+            ;;
+    esac
+done
 
 # Converting the answer to a boolean variable
 installFlavor="local"
@@ -69,11 +83,9 @@ if [ "$installFlavor" = "server" ]; then
     chmod +x ./setup/project-create.sh
     ./setup/project-create.sh "$projectName"
 
-    read -p "Would you like to setup this installation on a domain? " answer
-
     # Asking a yes/no question with a default option and handling 'q' for exit
     while true; do
-        read -p "Your question here? (y/n/q): " answer
+        read -p "Would you like to setup this installation on a domain? (y/n/q): " answer
         case $answer in
             [Yy]* ) break;;
             [Nn]* ) break;;
@@ -82,7 +94,6 @@ if [ "$installFlavor" = "server" ]; then
             * ) echo "Invalid response. Please answer y, n, or q.";;
         esac
     done
-
 
     if [ "${answer,,}" = "y" ]; then
         # Install the Shell Macros
@@ -126,7 +137,7 @@ if [ "$installFlavor" = "server" ]; then
         read -sp "Confirm recovery password: " RECOVERY_CONFIRM_PASS
         echo
 
-        if [ "$RECOVERT_ADMIN_PASS" = "$RECOVERY_CONFIRM_PASS" ]; then
+        if [ "$RECOVERY_ADMIN_PASS" = "$RECOVERY_CONFIRM_PASS" ]; then
             echo "Password confirmed."
             break
         else
