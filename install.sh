@@ -520,7 +520,7 @@ sudo tee "/srv/git/${projectName}.git/hooks/post-receive" >/dev/null <<EOF
 #!/bin/bash
 
 # Define the base project name
-project_name="${projectName}"
+projectName="${projectName}"
 
 # Stop the PM2 processes
 echo 'Deploying Project To Production'
@@ -562,13 +562,13 @@ cd \$WWW || exit
 
 
 # Move our environment variables
-cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/apiv1/.env"
-cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/apiv2/.env"
+cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.env"
+cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/app/apis/apiv2/.env"
 
-cd "/srv/www/${projectName}/apiv1"
+cd "/srv/www/${projectName}/app/apis/apiv1"
 npm install 
 
-cd "/srv/www/${projectName}/apiv2"
+cd "/srv/www/${projectName}/app/apis/apiv2"
 npm install
 
 # Build the react client, if present
@@ -577,6 +577,13 @@ npm install
 
 # Build the project locally
 npm run build
+
+# Build the react client, if present
+cd "/srv/www/${projectName}/clients/angular"
+npm install
+
+# Build the project locally
+ng build
 
 # Move this post-receive to the post-receive folder.  
 mv /srv/www/${projectName}/deployment/post-receive /srv/git/${projectName}.git/hooks/post-receive
