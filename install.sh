@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Save our original cwd, we'll need it later
+ORIG_PWD=$PWD
+
 find_available_port_range() {
     local START_PORT=49152  # Starting port for search
     local END_PORT=65534    # Adjusted end port for search to accommodate 10-port range
@@ -521,8 +524,8 @@ project_name="${projectName}"
 
 # Stop the PM2 processes
 echo 'Deploying Project To Production'
-pm2 stop ${projectName}-api-v1
-pm2 stop ${projectName}-api-v2
+pm2 stop ${projectName}-apiv1
+pm2 stop ${projectName}-apiv2
 
 # The production directory
 WWW="/srv/www/${projectName}"
@@ -557,9 +560,10 @@ mv \$TMP \$WWW
 cd \$WWW || exit
 # docker-compose up -d --build
 
+
 # Move our environment variables
-cp "/srv/env/${projectName}/apiv1" "/srv/www/${projectName}/apiv1/.env"
-cp "/srv/env/${projectName}/apiv2" "/srv/www/${projectName}/apiv2/.env"
+cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/apiv1/.env"
+cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/apiv2/.env"
 
 cd "/srv/www/${projectName}/apiv1"
 npm install 
@@ -594,6 +598,12 @@ pm2 start ${projectName}-apiv1
 pm2 start ${projectName}-apiv2
 
 EOF
+
+cp "/srv/git/${projectName}.git/hooks/post-receive" $ORIG_PWD/tmp/deployment/post-receive
+cd $ORIG_PWD/tmp
+git add .
+git commit -m "Moving Updated Post Receive Into Deployment Directory"
+git push 
 
 fi
 
