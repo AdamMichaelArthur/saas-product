@@ -161,7 +161,7 @@ if [ "$installFlavor" = "server" ]; then
     git commit -m "First Commit"
 
     # Push the commit
-    git push
+    #git push
 
     echo "ssh://root@app.saas-product.com:/srv/git/${projectName}.git/"
     # https://github.com/AdamMichaelArthur/saas-product.git
