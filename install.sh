@@ -45,9 +45,9 @@ read -p "Enter Project Name: " projectName
 
 
 while true; do
-    read -p "Is this a local (development) installation or a server (remote) installation? (l/s): " answer
+    read -p "Is this a (d) development installation or a (s) server installation? (d/s): " answer
     case "${answer,,}" in
-        l)
+        d)
             installFlavor="local"
             break
             ;;
@@ -62,10 +62,10 @@ while true; do
 done
 
 # Converting the answer to a boolean variable
-installFlavor="local"
-if [ "$answer" = "server" ]; then
-    installFlavor="server"
-fi
+# installFlavor="local"
+# if [ "$answer" = "server" ]; then
+#     installFlavor="server"
+# fi
 
 HOST="127.0.0.1"
 
@@ -240,6 +240,10 @@ PORT=${API_V2_PORT}
 WEBSOCKET_1=$((API_V2_PORT + 1))
 WEBSOCKET_2=$((API_V2_PORT + 2))
 
+# Recovery and Administrator Password
+GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
+SECRET_KEY="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
 DB_PORT="${DB_PORT}"
@@ -290,14 +294,28 @@ EOF
     echo $ENDPOINT
 
     # Sleeping for a few seconds, to give the API time to initialize
-    sleep 10
+    sleep 3
 
     # Using curl to make the API call and check for 200 OK response
     response=$(curl -o /dev/null -s -w "%{http_code}\n" "$ENDPOINT")
 
     # Check if the response is 200 OK
     if [ "$response" -eq 200 ]; then
-        echo "API is working fine."
+        echo "API is working fine.  Creating admin user"
+
+        curl --location 'http://localhost:4201/api/register' \
+        --header 'Content-Type: application/json' \
+        --header 'Accept: application/json' \
+        --data-raw "{
+            \"userId\": \"sysadmin@saas-product.com\",
+            \"pwd\": \"dino\",
+            \"plan\": \"sysadmin\",
+            \"adminPassword\": \"${RECOVERY_ADMIN_PASS}\",
+            \"account_type\": \"user\",
+            \"first_name\": \"Adam\",
+            \"last_name\": \"Arthur\"
+        }"
+
     else
         echo "API check failed with response code: $response"
     fi
@@ -432,10 +450,11 @@ EOF
 
     # See if our configuration file is ok
     nginx -t
-    systemctl restart nginx;
+    systemctl restart nginx
+
 fi
 
-exit;
+exit
 
 # https://ap.www.namecheap.com/Domains/DomainControlPanel/coffee-explained.com/advancedns
 
