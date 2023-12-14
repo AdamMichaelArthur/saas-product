@@ -164,48 +164,70 @@ if [ "$installFlavor" = "server" ]; then
     # MongoDB connection details with defaults
     DB_DOMAIN="127.0.0.1"
     DB_PORT="27017"
-    DB_USERNAME="adam"  # Set to empty initially
-    DB_PASSWORD="dino"  # Set to empty initially
+    DB_USERNAME=""  # Set to empty initially
+    DB_PASSWORD=""  # Set to empty initially
     AUTH_DB="admin"  # Default auth db
 
+ask_details() {
+
     # Prompt user for optional overrides
-    echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
+    #echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
+    read -p "Enter MongoDB Domain (default: 127.0.0.1):" inputDomain
     if [ ! -z "$inputDomain" ]; then
         DB_DOMAIN="$inputDomain"
     fi
 
-    echo "Enter MongoDB Port (default: 27017):" read inputPort
+    #echo "Enter MongoDB Port (default: 27017):" read inputPort
+    read -p "Enter MongoDB Port (default: 27017):" inputPort
     if [ ! -z "$inputPort" ]; then
         DB_PORT="$inputPort"
     fi
 
-    echo "Enter MongoDB Username (default: none):" read inputUsername
+    #echo "Enter MongoDB Username (default: none):" read inputUsername
+    read -p "Enter MongoDB Username (default: none):" inputUsername 
     if [ ! -z "$inputUsername" ]; then
         DB_USERNAME="$inputUsername"
     fi
 
-    echo "Enter MongoDB Password (default: none):" read inputPassword
+    #echo "Enter MongoDB Password (default: none):" read inputPassword
+    read -p "Enter MongoDB Password (default: none):" inputPassword
     if [ ! -z "$inputPassword" ]; then
         DB_PASSWORD="$inputPassword"
     fi
 
-    echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
+    #echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
+    read -p "Enter MongoDB Authentication Database (default: admin):" inputAuthDb
     if [ ! -z "$inputAuthDb" ]; then
         AUTH_DB="$inputAuthDb"
     fi
 
-    echo "Enter your Stripe Development Key:" read stripeDevKey
+    #echo "Enter your Stripe Development Key:" read stripeDevKey
+    read -p "Enter your Stripe Development Key:" stripeDevKey
     if [ ! -z "$stripeDevKey" ]; then
         STRIPE_KEY="$stripeDevKey"
     fi
 
-    # Echo values for verification
+}
+
+confirm() {
     echo "MongoDB Domain: $DB_DOMAIN"
     echo "MongoDB Port: $DB_PORT"
     echo "MongoDB Username: $DB_USERNAME"
     echo "MongoDB Password: $DB_PASSWORD"
     echo "MongoDB Auth Database: $AUTH_DB"
+    echo "Stripe Dev Key: $STRIPE_KEY"
+    read -p "Are these values correct? (y/n): " confirm
+    case "${confirm,,}" in
+        y) return 0;;
+        n) return 1;;
+        *) echo "Invalid response. Please answer y or n."; return 1;;
+    esac
+}
 
+while true; do
+    ask_details
+    confirm && break
+done
     WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
@@ -217,7 +239,7 @@ WEBSOCKET_1=$((API_V1_PORT + 1))
 WEBSOCKET_2=$((API_V1_PORT + 2))
 
 # The stripe API key
-stripe_key = ${STRIPE_KEY}
+stripe_key=${STRIPE_KEY}
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
@@ -240,6 +262,8 @@ WEBSOCKET_2=$((API_V2_PORT + 2))
 # Recovery and Administrator Password
 GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
 SECRET_KEY="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+
+stripe_key=${STRIPE_KEY}
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
@@ -277,7 +301,7 @@ TEXT_BODY_POST_SIZE_LIMIT='50mb'
 EOF
 
     cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/app/apis/apiv2/.env"
-
+    echo "nano /srv/www/${projectName}/app/apis/apiv2/.env"
     echo "Your git remote, assuming you have ssh keys installed and root access: root@${HOST}:/srv/git/${projectName}.git"
     echo "To clone: git clone ssh://root@${HOST}:/srv/git/${projectName}.git"
 
@@ -300,18 +324,18 @@ EOF
     if [ "$response" -eq 200 ]; then
         echo "API is working fine.  Creating admin user"
 
-        curl --location "http://${HOST}:${API_V2_PORT}/register" \
+        response=$( curl \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --data-raw "{
             \"userId\": \"${ADMIN_EMAIL}\",
-            \"pwd\": \"${ADMIN_PASS}\",
+            \"pwd\": \"${ADMIN_PASS\",
             \"plan\": \"sysadmin\",
             \"adminPassword\": \"${RECOVERY_ADMIN_PASS}\",
             \"account_type\": \"user\",
             \"first_name\": \"Adam\",
             \"last_name\": \"Arthur\"
-        }"
+        }" -o /dev/null -s -w "%{http_code}\n" "http://${HOST}:${API_V2_PORT}/register")
 
     else
         echo "API check failed with response code: $response"
