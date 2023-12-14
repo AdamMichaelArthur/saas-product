@@ -324,7 +324,7 @@ EOF
     if [ "$response" -eq 200 ]; then
         echo "API is working fine.  Creating admin user"
 
-        response=$( curl \
+        curl --location "http://${HOST}:${API_V2_PORT}/register" \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --data-raw "{
@@ -335,7 +335,7 @@ EOF
             \"account_type\": \"user\",
             \"first_name\": \"Adam\",
             \"last_name\": \"Arthur\"
-        }" -o /dev/null -s -w "%{http_code}\n" "http://${HOST}:${API_V2_PORT}/register")
+        }"
 
     else
         echo "API check failed with response code: $response"
