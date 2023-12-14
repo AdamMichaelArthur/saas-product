@@ -849,7 +849,7 @@ export default class Authorization {
 
     }
 
-      async encrypt(text) {
+    async encrypt(text) {
 
         const iv = crypto.randomBytes(16); // Initialization Vector (IV) for AES
         const key = Buffer.from(process.env.SECRET_KEY, 'hex');
