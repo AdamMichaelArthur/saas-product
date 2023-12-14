@@ -1,0 +1,41 @@
+                                <app-flextable
+                                    (tableBtnClicked)='tableButtonClicked($event)'
+                                [options]="
+                                {
+                                datasource: 'offers',
+                                'sort': { '_id': 'desc' },
+                                conditionalBadges: [
+                                {
+                                'column': 'Headline',
+                                'icon': 'shield',
+                                'conditionalKey': 'verified',
+                                'conditionalValue': true
+                                }
+                                ],
+                                rowButtons: [
+                                {
+                                'column': 'headline',
+                                'buttonName': 'Complete',
+                                'api': 'v1.0',
+                                'action': 'exchange'
+                                },
+                                {
+                                'column': 'headline',
+                                'buttonName': 'Cancel Deal',
+                                'api': 'v1.0',
+                                'action': 'purchase'
+                                }
+                                ],
+                                scope: 'user',
+                                bNoHeader: true,
+                                bAllowDeletion: false,
+                                filter: {
+                                    visible: { $ne: false  }, 
+                                    status: { $eq: 'escrowed' },
+                                    archived: { $ne: true }
+                                }, 
+                                columns: [
+                                        'headline', 'state'
+                                    ]
+                                }"
+                                ></app-flextable>

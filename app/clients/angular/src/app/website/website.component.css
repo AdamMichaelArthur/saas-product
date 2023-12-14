@@ -1,0 +1,482 @@
+        table {
+            width: 30%;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+/* Custom styles for desktop */
+  .custom-card {
+    max-width: 800px;
+    min-width: 800px;
+  }
+
+  /* Mobile styles using Bootstrap 5 responsive classes */
+  @media (max-width: 767.98px) {
+    .custom-card {
+      max-width: 100%;
+      min-width: auto;
+    }
+  }
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  background-color: #fff; /* Background color for content and header */
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .content {
+    width: 66.66%; /* 2/3 of the viewport width */
+    height: 66.66%; /* 2/3 of the viewport height */
+  }
+}
+
+.popup_header {
+  text-align: center;
+  color: #fff;
+}
+
+.header {
+  text-align: center;
+  background-color: transparent;
+}
+
+.header h1, .column p{
+  color: #000; /* Black color */
+  text-align: center;
+}
+
+
+.columns {
+  display: flex;
+}
+
+.column {
+  flex: 1;
+  padding: 20px;
+}
+
+#socialProofBox {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    max-width: 300px;
+    z-index: 1;
+}
+
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 9000;
+    opacity: 95%;
+}
+
+.center-content {
+    display: flex; /* Using Flexbox to center block elements */
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-card {
+    width: auto; /* You can set a specific width if needed */
+}
+
+ul {
+    list-style-type: none; /* Removes default bullet points */
+    padding-left: 20px; /* Adds left padding */
+}
+
+li {
+    padding: 5px 0; /* Adds padding above and below each item */
+}
+
+.checkmark-list {
+  list-style-type: none; /* Removes default bullets */
+  padding-left: 0;
+}
+
+.checkmark-list li {
+  position: relative;
+  padding-left: 1.5em;
+  margin-bottom: .5em;
+}
+
+.checkmark-list li:before {
+  content: '\2713'; /* Unicode checkmark character */
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+  color: green; /* Color of the checkmark */
+}
+
+.nice p {
+  border: 0 none currentColor;
+  border-image: none 100% 1 0 stretch;
+  box-sizing: border-box;
+   text-align: left;
+  color: #54595f;
+  font-size: 100%;
+  font-stretch: 100%;
+  font-weight: 500;
+  line-height: 25.6px;
+  margin: 0 0 1.75em;
+  outline: 0 none currentColor;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+.nice p:last-child {
+  margin-bottom: 0;
+}
+
+.btn-spacing {
+  margin-top: 8px;
+  margin-botton: 8px;
+
+}
+body {
+            background: linear-gradient(to bottom, rgb(97, 104, 176), rgb(79, 88, 167));
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 768px) {
+            .container-full-viewport .first-row {
+                padding-top: 50px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container-full-viewport .first-row {
+                padding-top: 10px;
+            }
+        }
+
+        .container-full-viewport {
+            background: linear-gradient(to bottom, rgb(97, 104, 176), rgb(79, 88, 167));
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .first-frame {
+            background: linear-gradient(to bottom, rgb(97, 104, 176), rgb(79, 88, 167));
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .second-frame {
+            background-color: yellow;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .third-frame {
+            background-color: white;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fourth-frame {
+            min-height: 25vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fifth-frame {
+            min-height: 25vh;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+
+        .sixth-frame {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: blue;
+        }
+
+        p {
+          border: 0 none currentcolor;
+          border-image: none 100% 1 0 stretch;
+          box-sizing: border-box;
+          clear: both;
+          color: #fff;
+          display: block;
+          font-family: ubuntu, sans-serif;
+          font-size: 18px;
+          font-stretch: 100%;
+          font-weight: 700;
+          line-height: 1.4em;
+          margin: 0;
+          outline: 0 none currentcolor;
+          padding: 0;
+          text-align: center;
+          
+          vertical-align: baseline;
+        }
+
+        h1 {
+          border: 0 none currentcolor;
+          border-image: none 100% 1 0 stretch;
+          box-sizing: border-box;
+          clear: both;
+          color: #fff;
+          display: block;
+          font-family: ubuntu, sans-serif;
+          font-size: 50px;
+          font-stretch: 100%;
+          font-weight: 700;
+          line-height: 1.4em;
+          margin: 0;
+          outline: 0 none currentcolor;
+          padding: 0;
+          text-align: center;
+          text-transform: capitalize;
+          vertical-align: baseline;
+        }
+
+        h2 {
+          border: 0 none currentcolor;
+          border-image: none 100% 1 0 stretch;
+          box-sizing: border-box;
+          clear: both;
+          color: #fff;
+          display: block;
+          font-family: ubuntu, sans-serif;
+          font-size: 25px;
+          font-stretch: 100%;
+          font-weight: 700;
+          line-height: 1.4em;
+          margin: 0;
+          outline: 0 none currentcolor;
+          padding: 0;
+          text-align: center;
+          text-transform: capitalize;
+          vertical-align: baseline;
+        }
+
+        @media (max-width: 767px) {
+          h1 {
+            font-size: 28px;
+            line-height: 1.2em;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          h1 {
+            font-size: 48px;
+          }
+        }
+
+.image-desktop {
+    display: none;
+}
+
+.image-mobile {
+    display: block;
+    width: 95%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+    .image-desktop {
+        display: block;
+        width: 95%;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .image-mobile {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-desktop {
+        display: none;
+    }
+
+    h1 {
+          border: 0 none currentcolor;
+          border-image: none 100% 1 0 stretch;
+          box-sizing: border-box;
+          clear: both;
+          color: #fff;
+          display: block;
+          font-family: ubuntu, sans-serif;
+          font-size: 20px;
+          font-stretch: 100%;
+          font-weight: 700;
+          line-height: 1.4em;
+          margin: 0;
+          outline: 0 none currentcolor;
+          padding: 0;
+          text-align: center;
+          text-transform: capitalize;
+          vertical-align: baseline;
+    }
+}
+.flex-equal > * {
+    display: flex;
+    flex: 1;
+}
+
+.title-section {
+    flex: 0 0 auto;
+}
+
+.content-section {
+    flex-grow: 1;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start;
+}
+
+@media (max-width: 767px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+   .equal-height {
+      display: flex;
+   }
+
+   .equal-height > div {
+      flex: 1;
+   }
+
+   .title-section {
+    flex: 0 0 auto;
+}
+
+.content-section {
+    flex-grow: 1;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* Aspect Ratio (16:9) */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.text-dark-grey {
+  color: #555555; /* Dark greyish color */
+}
+
+#special-span p {
+  margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+
+.apply-link {
+  background-color: white;
+  color: black; /* Or any other text color you prefer */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border-radius: 25px; /* This will create rounded corners */
+  text-decoration: none; /* Remove the underline from the link */
+  display: inline-block; /* Helps in applying padding and other styles */
+}
+
+/* Optional: Add a hover effect */
+.apply-link:hover {
+  background-color: #f2f2f2; /* Light grey background on hover */
+}
+
+.big-quote {
+  position: relative;
+  padding: 1em;
+  font-size: 1.2em; /* You can adjust the font size of the text as needed */
+}
+
+.big-quote:before,
+.big-quote:after {
+  font-family: "Times New Roman", serif; /* Or any other font that has nice quote characters */
+  font-size: 4em; /* Adjust the size as needed */
+  position: absolute;
+  line-height: 0; /* This helps with vertical positioning */
+}
+
+.big-quote:before {
+  content: "“";
+  left: -0.4em; /* Adjust horizontal positioning as needed */
+  top: -0.2em; /* Adjust vertical positioning as needed */
+}
+
+.big-quote:after {
+  content: "”";
+  right: -0.4em; /* Adjust horizontal positioning as needed */
+  bottom: -0.2em; /* Adjust vertical positioning as needed */
+}
+
+

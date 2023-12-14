@@ -1,0 +1,55 @@
+.invisible-button {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+
+.nav-tabs {
+  flex-direction: column; /* Stack the items vertically */
+}
+
+.nav-item {
+  text-align: center; /* Align text to the left */
+  width: 100%; /* Take up full width of the container */
+}
+
+.nav-link {
+  display: block; /* Make the link take up the full width of the item */
+}
+
+}
+
+@media (max-width: 576px) { /* Targeting mobile screens */
+  .mobile-btn {
+    display: block; /* Stacks the buttons */
+    margin: 10px auto; /* Centering the buttons and adding a bit of space between them */
+    width: 80%; /* Setting a common width - you can adjust as needed */
+  }
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+  .nav-link-desktop {
+    /* Styles for nav-link, copied from Bootstrap's default styling */
+  }
+
+  .active-desktop {
+    /* Styles for active, copied from Bootstrap's default styling */
+  }
+
+  .btn.btn-primary {
+    /* Override btn and btn-primary styles for desktop */
+    background-color: transparent;
+    border: none;
+    /* Add any other resets needed to negate the btn and btn-primary styles */
+  }
+}
+
+.mobile-button {
+    width: 75%;
+    padding: 10px; /* Adjust as needed */
+    margin: 5px auto; /* Center the button */
+    display: block; /* Make it block-level to accept width */
+}

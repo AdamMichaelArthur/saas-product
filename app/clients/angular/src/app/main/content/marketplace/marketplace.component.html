@@ -1,0 +1,641 @@
+<div *ngIf="bDisplayPlanModal">
+<div #getPlan class="modal fade" id="needs-plan" tabindex="-1">
+   <app-upgrade-plan></app-upgrade-plan>
+</div></div>
+
+      <div joyrideStep="firstStep" title="Page Title" text="Main title!" [stepContent]="customContent" ></div> 
+      <ng-template #customContent>
+         <div style="width:500px; height: 500px; background-color: yellow">This is atest</div>
+      </ng-template>
+
+      <div class="card">
+   <div class="card-body">
+      <h5 class="card-title">Exchange Marketplace</h5>
+      <p  class="d-none d-sm-block">Browse for things you need, post the things you have.  Barter & Exchange Marketplace.  Low quality sites / assets not allowed.  If you monetize primarily through paid links or guest posts, this marketplace is not for you.  Offer services if you want!</p>
+      
+         <button #postAnOfferBtn [class.d-none]="bHidden" type="button" data-bs-toggle="modal" data-bs-target="#post-offer" class="mobile-btn"></button>
+         <button #postARequestBtn [class.d-none]="bHidden" type="button" data-bs-toggle="modal" data-bs-target="#post-request" class="mobile-btn"></button>
+         <button #getPointsBtn [class.d-none]="bHidden" type="button" data-bs-toggle="modal" data-bs-target="#get-points" class="mobile-btn"></button>
+
+         <div class="d-flex flex-column flex-sm-row">
+      <button joyrideStep="firstStep" title="Post An Offer" text="When you want to trade something you have, you can post it here." type="button" class="btn btn-primary" (click)="postOffer()" >
+      Post An Offer
+      </button>&nbsp;
+      <button type="button" class="btn btn-primary" (click)="postRequest()">
+      Post A Request
+      </button>&nbsp;
+      <button joyrideStep="secondStep" title="Get Points" text="Click here to get points, which you can use to trade for the assets you want." type="button" class="btn btn-primary"  (click)="getPoints($event)">
+      Get Points
+      </button>
+   </div>
+
+
+      <div  class="modal fade" id="post-offer" tabindex="-1">
+         <app-post-offer *ngIf="displayPostOffer" (offerPosted)="offerPosted()"></app-post-offer>
+         <!-- <app-upgrade-plan *ngIf="!displayPostOffer"></app-upgrade-plan> -->
+      </div>
+      <div class="modal fade" id="post-request" tabindex="-1">
+         <app-post-request *ngIf="displayPostRequest" (updateRequestsTable)="requestPosted()"></app-post-request>
+         <!-- <app-upgrade-plan *ngIf="!displayPostRequest"></app-upgrade-plan> -->
+      </div>
+      <div class="modal fade" id="get-points" tabindex="-1">
+         <app-needs *ngIf="displayGetPoints"></app-needs>
+         <!-- <app-upgrade-plan *ngIf="!displayGetPoints"></app-upgrade-plan> -->
+      </div>
+   </div>
+</div>
+
+<mat-drawer-container class="sidebar-container" autosize>
+   <mat-drawer #drawer class="sidebar-sidenav" mode="side" position="end">
+      <div class="content-wrapper">
+         <div #targetDiv><app-thread (closePanel)="closePanel($event)" [parentEvent]="parentEvent" [panelId]="panelId"></app-thread></div>
+      </div>
+   </mat-drawer>
+   <section class="section profile">
+      <div class="row">
+         <div >
+            <div class="card">
+               <div class="card-body pt-3">
+                  <!-- Bordered Tabs -->
+                  <ul class="nav nav-tabs nav-tabs-bordered">
+                     <li class="nav-item">
+                         <!-- Mobile Version -->
+                        <button joyrideStep="thirdStep" title="Browser Offers" text="In this tab, you see all of the assets currently available"
+                          class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#browse_offers"
+                          (click)="setTab('#what_people_have')">What People Have</button>
+
+                        <!-- Desktop Version -->
+                        <button joyrideStep="thirdStep" title="Browser Offers" text="In this tab, you see all of the assets currently available"
+                          class="nav-link active d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#browse_offers"
+                          (click)="setTab('#what_people_have')">What People Have</button>
+                     </li>
+<li class="nav-item">
+  <button #whatpeopleneedbtn [disabled]="!this.loadWhatPeopleNeed" class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#what_people_need" (click)="setTab('#what_people_need')">What People Need</button>
+  <button #whatpeopleneedbtn [disabled]="!this.loadWhatPeopleNeed" class="nav-link d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#what_people_need" (click)="setTab('#what_people_need')">What People Need</button>
+</li>
+<li class="nav-item">
+  <button #myoffersbtn [disabled]="!this.loadMyOffers" class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#my_offers" (click)="setTab('#my_offers')">My Offers</button>
+  <button #myoffersbtn [disabled]="!this.loadMyOffers" class="nav-link d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#my_offers" (click)="setTab('#my_offers')">My Offers</button>
+</li>
+<li class="nav-item">
+  <button #pendingproposalsbtn [disabled]="!this.pendingProposals" class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#pending_proposals" (click)="setTab('#pending_proposals')">Pending Proposals</button>
+  <button #pendingproposalsbtn [disabled]="!this.pendingProposals" class="nav-link d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#pending_proposals" (click)="setTab('#pending_proposals')">Pending Proposals</button>
+</li>
+<li class="nav-item">
+  <button #myrequestsbtn [disabled]="!this.myRequests" class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#my_needs" (click)="setTab('#my_requests')">My Requests</button>
+  <button #myrequestsbtn [disabled]="!this.myRequests" class="nav-link d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#my_needs" (click)="setTab('#my_requests')">My Requests</button>
+</li>
+<li class="nav-item">
+  <button #escrowbtn [disabled]="!this.escrowLoaded" class="btn btn-primary d-md-none mobile-button" data-bs-toggle="tab" data-bs-target="#escrow" (click)="setTab('#escrow')">Escrow</button>
+  <button #escrowbtn [disabled]="!this.escrowLoaded" class="nav-link d-none d-md-inline" data-bs-toggle="tab" data-bs-target="#escrow" (click)="setTab('#escrow')">Escrow</button>
+</li>
+
+                  </ul>
+                  <div class="tab-content pt-2">
+                     <div class="tab-pane fade show active browser_offers pt-1" id="browse_offers">
+                        <h5 class="card-title">Browse Offers</h5>
+                        <p class="small fst-italic">Search Through and Browse All Offers Here</p>
+                        <button class="invisible-button" #btn type="button" data-bs-toggle="modal" data-bs-target="#xyz">
+                        Post An Offer
+                        </button>&nbsp;
+                        <app-flextable #what_people_have
+                        (dataLoaded)='offersDataLoaded()'
+                        (activePanel)='activePanel($event)'
+                        (tableBtnClicked)='tableButtonClicked($event)'
+                        [options]="
+                        {
+                        datasource: 'offers',
+                        linkColumns: [
+                           {
+                              column: 'Headline',
+                              path: '/main/marketplace/offer-details'
+                           }
+                        ],
+                        hiddenColumns: {
+                           header: true,
+                           column: 'Created By'
+                        },
+                        'sort': { '_id': 'desc' },
+                        currencyColumns: [
+                        {
+                        column: 'buyitnow',
+                           'currency': 'USD'
+                        }
+                        ],
+                        columnNameRewrites: [
+                           'Headline', 'Points', 'Looking For', 'Created By'
+                        ],
+                        conditionalBadges: [
+                        {
+                        'column': 'Headline',
+                        'icon': 'shield',
+                        'conditionalKey': 'verified',
+                        'conditionalValue': true
+                        }
+                        ],
+                        rowButtons: [
+                        {
+                        'column': 'headline',
+                        'buttonName': 'Propose Exchange',
+                        'api': 'v1.0',
+                        'action': 'exchange'
+                        },  
+                        {
+                        'column': 'headline',
+                        'buttonName': 'Buy With Points',
+                        'api': 'v1.0',
+                        'action': 'points-purchase'
+                        }
+                        ],
+                        scope: 'all',
+                        bNoHeader: true,
+                        bAllowDeletion: false,
+                        filter: {
+                           visible: { $ne: false  }, 
+                           quality_approved: true,
+                           type: { $ne: 'request'},
+                           status: { $eq: 'available' },
+                           archived: { $ne: true },
+                           created_by: { $ne: '$res.locals.user._id' },
+                           'proposals.buyer_id': { '$ne' : '$res.locals.user._id' }
+                        }, 
+                        columns: [
+                           'headline', 'pointsCost', 'looking_for', 'created_by', 'category'
+                        ]
+                        }"
+                        ></app-flextable>
+                     </div>
+                     <div *ngIf="loadWhatPeopleNeed" class="tab-pane fade pt-3" id="what_people_need">
+                        <h5 class="card-title">What People Need</h5>
+                        <p class="small fst-italic">Things People Are Looking For</p>
+                        <div>
+                           <app-flextable #what_people_need
+                           (tableBtnClicked)='tableButtonClicked($event)'
+                           (dataLoaded)='whatPeopleNeedLoaded()'
+                           [options]="
+                           {
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                           datasource: 'offers',
+                           scope: 'all',
+                           bNoHeader: true,
+                           bAllowDeletion: false,
+                           rowButtons: [
+                           {
+                           'column': 'headline',
+                           'buttonName': 'Propose Exchange',
+                           'api': 'v1.0',
+                           'action': 'exchange'
+                           },
+                           {
+                           'column': 'headline',
+                           'buttonName': 'Do It For Points',
+                           'api': 'v1.0',
+                           'action': 'purchase'
+                           }
+                           ],
+                           filter: {
+                           visible: { $ne: false }, 
+                           type: { $eq: 'request'},
+                           archived: { $ne: true },
+                           created_by: { $ne: '$res.locals.user._id' }
+                           }, 
+                           columns: [
+                           'headline', 'category', 'looking_for'
+                           ]
+                           }"
+                           ></app-flextable> 
+                        </div></div>
+
+                  <div *ngIf="loadMyOffers" class="tab-pane google-analytics pt-5" id="my_offers">
+                        <h5 class="card-title">My Offers</h5>
+                        <app-flextable #my_offers
+                        (dataLoaded)='myOffersLoaded()'
+                           [options]="
+                           {
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                        datasource: 'offers',
+                        sort: { '_id': 'desc' },
+                        conditionalBadges: [
+                        {
+                        'column': 'Headline',
+                        'icon': 'shield',
+                        'conditionalKey': 'verified',
+                        'conditionalValue': true
+                        }
+                        ],
+                        scope: 'user',
+                        bNoHeader: true,
+                        bAllowDeletion: true,
+                        filter: {
+                        visible: {
+                           $ne: false 
+                        }, 
+                        archived: { $ne: true },
+                        '$or': [ { status: { $eq: 'available' } }, { status: { $eq: 'quality_check' } }],
+                        
+
+                        }, 
+                        columns: [
+                        'headline', 'category', 'looking_for', 'available', 'status'
+                        ]
+                        }"
+                        ></app-flextable>
+                  </div>
+                     <div *ngIf="pendingProposals" class="tab-pane google-analytics pt-6" id="pending_proposals">
+                        <h5 class="card-title">Pending Proposals</h5>
+                        <p>Proposals from other community members go here.  Accept or reject them as you see fit</p>
+                        <app-flextable #pending_proposals
+                        (tableBtnClicked)='acceptProposalTableButtonClicked($event)'
+                        (dataLoaded)='pendingProposalsLoaded()'
+                           [options]="
+                           {
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                        datasource: 'offers',
+                        scope: 'user',
+                        bNoHeader: true,
+                        bAllowDeletion: false,
+
+                        'stateButtons': [
+                           {
+                           status: 'waiting_seller',
+                           defaultState: true,
+                           column: 'headline',
+                           displayText: 'Withdraw',
+                           state: 'waiting_seller',
+                           displayConditional: true,
+                           confirmText: 'You are about to withdraw your offer.  This cannot be undone.  Please confirm.',
+                           conditionals: {
+                              buyer_id: '$requested_by'
+                           },
+                           endpoint: '/api/app/marketplace/withdrawBuyer'
+                           },
+                           {
+                           status: 'waiting_seller',
+                           defaultState: true,
+                           column: 'headline',
+                           displayText: 'Accept',
+                           state: 'waiting_seller',
+                           displayConditional: true,
+                           confirmText: 'You are about to accept an offer, and by doing so you will be obligated to fulfill your commitment.  Please confirm.',
+                           conditionals: {
+                              buyer_id: '!requested_by',
+                           },
+                           endpoint: '/api/app/marketplace/acceptProposal'
+                           },
+                           {
+                           status: 'waiting_seller',
+                           defaultState: true,
+                           column: 'headline',
+                           displayText: 'Reject',
+                           state: 'waiting_seller',
+                           displayConditional: true,
+                           conditionals: {
+                              buyer_id: '!requested_by',
+                           },
+                           endpoint: '/api/app/marketplace/rejectOffer'
+                           }
+                        ],
+
+                        filter: {
+                        visible: {
+                        $ne: false 
+                        }, 
+                        archived: { $ne: true }
+                        }, 
+                        columns: [
+                        'headline','for'
+                        ],
+
+                        aggregate: [
+                        { '$unwind': '$proposals' },
+                        {
+                           '$match': {
+                              'proposals.status': { $ne: 'rejected' },
+                              'status': 'available',
+                              
+                           '$or': [
+                           { created_by: '$res.locals.user._id' },
+                           { 'proposals.buyer_id': '$res.locals.user._id' }
+                           ]
+                           }
+                        },
+                        { 
+                        '$addFields': { 
+                        'proposals._id': '$_id',
+                        'proposals.created_by': '$created_by',
+                        'proposals.owner': '$owner',
+                        'proposals.pointsCost': '$pointsCost',
+                        'proposals.seller_id': '$created_by',
+                        'proposals.state': '$state',
+                        'proposals.available':'$available',
+                        'proposals.for': { '$concat': [ '$proposals.headline', ' for ', '$headline' ] }
+                        }
+                        },
+                        { '$replaceRoot': { 'newRoot': '$proposals' } }
+                        ]
+                        }"
+                        ></app-flextable> 
+                     </div>
+                     
+                     <div *ngIf="myRequests" class="tab-pane google-analytics pt-7" id="my_needs">
+                        <h5 class="card-title">My Requests</h5>
+                        <app-flextable #my_requests
+                        (dataLoaded)='myRequestsLoaded()'
+                           [options]="
+                           {
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                        datasource: 'offers',
+                        scope: 'user',
+                        'sort': { '_id': 'desc' },
+                        bNoHeader: true,
+                        bAllowDeletion: true,
+                        filter: {
+                        visible: { $ne: false }, 
+                        type: { $eq: 'request'},
+                        archived: { $ne: true }
+                        }, 
+                        columns: [
+                        'headline'
+                        ]
+                        }"
+                        ></app-flextable> 
+                     </div>
+
+                     <div  class="tab-pane google-analytics pt-8" id="escrow">
+                        <h5 class="card-title">Escrow</h5>
+                        <div>
+                           <app-flextable #escrow
+                           (dataLoaded)='escrowLoaded()'
+
+                           (tableBtnClicked)='escrowTableButtonClicked($event)'
+                           [options]="
+                           {
+                              
+                              linkColumns: [
+                                 {
+                                    column: 'Headline',
+                                    path: '/main/marketplace/offer-details'
+                                 }
+                              ],
+                           datasource: 'offers',
+                           bNoHeader: true,
+                           bAllowDeletion: false,
+                           columns: [
+                           'headline', 'state', 'status'
+                           ],
+
+                           columnBadges: {
+                              'state': {
+                                 column: 'state',
+                                 color: 'red',
+                                 states: {
+                                    'complete': { color: 'white', icon_color: '#93C572', material_icon: 'thumb_up', display_text: false, tooltip: 'This transaction is complete' },
+                                    'waiting_seller': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'We are waiting on the seller to complete an action'  },
+                                    'waiting_buyer': { color: 'blue', material_icon: 'query_builder', tooltip: 'We are waiting on the buyer to complete an action'  },
+                                    'escrowed': { icon_color: '#FF7F50', color: 'teal', material_icon: 'lock', tooltip: 'This exchange is in escrpw'   },
+                                    'quality_check': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  },
+                                    'rejected': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'This link opportunity was rejected for not meeting our standards'  },
+                                 },
+                                 index: 0
+                              },
+                              'status': {
+                                 column: 'status',
+                                 color: 'blue',
+                                 states: {
+                                    'complete': { icon_color: '#FFFDD0', color: 'green', material_icon: 'done', tooltip: 'This transaction is complete' },
+                                    'waiting_seller': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'We are waiting on the seller to complete an action'  },
+                                    'waiting_buyer': { color: 'blue', icon_color: '#FAEBD7', material_icon: 'query_builder', tooltip: 'We are waiting on the buyer to complete an action'  },
+                                    'escrowed': { color: 'teal', material_icon: 'lock', tooltip: 'This exchange is in escrpw'  },
+                                    'quality_check': { color: 'teal', material_icon: 'lock', tooltip: 'A human reviewer from Niche Site Exchange needs to review this to ensure quality'  },
+                                    'rejected': { color: 'red', material_icon: 'hourglass_empty', tooltip: 'This link opportunity was rejected for not meeting our standards'  },
+                                 },
+                                 index: 1
+                              }
+                           },
+                           columnDecorators: {
+                              'headline': {
+                                 'font_weight':'medium',
+                                 'font': '\'Trebuchet MS\''
+                              }
+                           },
+
+                           'stateButtons': [
+                           {
+                              status: 'waiting_seller',
+                              defaultState: true,
+                              column: 'headline',
+                              displayText: 'Action Required',
+                              state: 'waiting_seller',
+                              displayConditional: true,
+                              conditionals: {
+                              buyer_id: '$requested_by',
+                              status: 'waiting_buyer'
+                              },
+                              endpoint: '/api/app/marketplace/completeSeller',
+                              display: { color: 'red', material_icon: 'star'  },
+                              material_icon: 'star',
+                              badge: true,
+                              disabled: true,
+                           },
+                           {
+                              status: 'waiting_seller',
+                              defaultState: true,
+                              column: 'headline',
+                              displayText: 'Action Required',
+                              state: 'waiting_seller',
+                              displayConditional: true,
+                              conditionals: {
+                              seller_id: '$requested_by',
+                              status: 'waiting_seller'
+                              },
+                              endpoint: '/api/app/marketplace/completeSeller',
+                              display: { color: 'red', material_icon: 'star'  },
+                              material_icon: 'star',
+                              badge: true,
+                              disabled: true,
+                           },                           
+                           {
+                              status: 'waiting_seller',
+                              defaultState: true,
+                              column: 'headline',
+                              displayText: 'Complete',
+                              state: 'waiting_seller',
+                              displayConditional: true,
+                              conditionals: {
+                              seller_id: '$created_by',
+                              requested_by: '$created_by',
+                              status: 'waiting_seller'
+                              },
+                              endpoint: '/api/app/marketplace/completeSeller'
+                           },
+                           {
+                           status: 'waiting_buyer',
+                           defaultState: false,
+                           column: 'headline',
+                           displayText: 'Complete',
+                           state: 'waiting_buyer',
+                           displayConditional: true,
+                           conditionals: {
+                           buyer_id: '$requested_by',
+                           status: 'waiting_buyer'
+                           },
+                           endpoint: '/api/app/marketplace/completeBuyer'
+                           }
+                           ],
+                           aggregate:
+                           [
+                           {
+                           '$match': {
+                           '$or': [
+                           { seller_id: '$res.locals.user._id' },
+                           { buyer_id: '$res.locals.user._id' }
+                           ]
+                           }
+                           },
+                           {
+                           '$lookup': {
+                           from: 'users',
+                           localField: 'buyer_id',
+                           foreignField: '_id',
+                           as: 'seller_info'
+                           }
+                           },
+                           {
+                           '$unwind': '$seller_info'
+                           },
+                           {
+                           '$project': {
+                           'requested_by': '$res.locals.user._id',
+                           'seller_id': 1,
+                           'buyer_id': 1,
+                           'created_by': 1,
+                           'headline': 1,
+                           'state': 1,
+                           'status': 1,
+                           'type': 1,
+                           'category': 1
+                           }
+                           }
+                           ]
+                           }"
+                           ></app-flextable> 
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</mat-drawer-container>
+<div class="modal fade" id="xyz" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Your Proposed Exchange</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <input id="exchange_id" name="exchange_id" [(ngModel)]="exchange_id" type="hidden">
+            <div class="row mb-4">
+               <label for="inputText" class="col-form-label">Quick Summary of exchange</label>
+               <div class="col-sm-10">
+                  <input id="exchange_headline" name="exchange_headline" [(ngModel)]="exchange_headline" type="text" class="form-control">
+               </div>
+            </div>
+            <div class="row mb-4">
+               <div class="col-sm-4">
+                  <label for="exchange_buyitnow" class="col-form-label">Cash exchange</label>
+                  <input id="exchange_buyitnow" name="exchange_buyitnow" [(ngModel)]="exchange_buyitnow" type="number" class="form-control" (ngModelChange)="onexchangeBuyItNowChange($event)">
+               </div>
+               <div class="col-sm-4">
+                  <label for="exchange_buyitnow" class="col-form-label">Points Price (1 - 10)</label>
+                  <input id="exchange_buywithpoints" name="exchange_buywithpoints" [(ngModel)]="exchange_buywithpoints" type="number" class="form-control" min="1" max="10">
+               </div>
+               <div class="col-sm-4">
+               </div>
+               <div class="row mb-4">
+               </div>
+               <div class="row mb-4">
+                  <div class="form-group">
+                     <label for="looking_for">Details of proposed exchange</label>
+                     <textarea id="looking_for" name="looking_for" [(ngModel)]="exchange_lookingfor" class="form-control" rows="{{rows}}" placeholder="What are you thinking?"></textarea>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button #closeProposal type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" (click)="proposeExchange(exchange_id, exchange_headline, exchange_lookingfor, exchange_buyitnow, exchange_buywithpoints)" class="btn btn-primary">Post</button>
+         </div>
+      </div>
+   </div>
+</div>
+<button #buyitnowPopup class="invisible-button" type="button" data-bs-toggle="modal" data-bs-target="#buyitnowPopup">
+Buy It Now
+</button>&nbsp;
+<div class="modal fade" id="buyitnowPopup" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Buy It Now</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <h2>Cash Price: ${{buyitnowData['buyitnow']}}.00</h2>
+            <p>Your funds will be held in escrow until the transaction is complete</p>
+         </div>
+         <div class="modal-footer">
+            <network-request-button #login (result)="purchaseComplete($event)" [request]="buyitnowEndpoint" [payload]="buyitnowPayload" verb="POST">Pay Now</network-request-button>
+            <button #closeProposal type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+         </div>
+      </div>
+   </div>
+</div>
+<button #buywithPoints class="invisible-button" type="button" data-bs-toggle="modal" data-bs-target="#buywithPoints">
+Buy With Points
+</button>&nbsp;
+<div class="modal fade" id="buywithPoints" tabindex="-1">
+   <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title">Buy With Points</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <h2>Points Cost: {{ buyitnowData['pointsCost'] }}</h2>
+            <p>Points will be immediately deducted.</p>
+         </div>
+         <div *ngIf="buyitnowData['category'] == 'Link'" class="modal-body">
+            <label for="inputText" class="col-form-label">Requested Link</label>
+            <input [(ngModel)]="buywithpointsPayload['link']" type="text" class="form-control">
+            <label for="inputText" class="col-form-label">Preferred Anchor Text</label>
+            <input [(ngModel)]="buywithpointsPayload['anchor_text']" type="text" class="form-control">
+         </div>
+         <div class="modal-footer">
+            <network-request-button #login (result)="buyWithPointsComplete($event, buywithpointsPayload)" [request]="buywithpointsEndpoint" [payload]="buywithpointsPayload" verb="POST">Pay With Points Now</network-request-button>
+            <button #closeBuyWithPoints type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>                     
+         </div>
+      </div>
+   </div>
+</div>

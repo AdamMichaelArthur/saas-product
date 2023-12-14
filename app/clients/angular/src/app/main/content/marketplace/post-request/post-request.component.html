@@ -1,0 +1,44 @@
+
+         <form name="addPost" (ngSubmit)="postRequest()">
+            <div class="modal-dialog modal-dialog-centered">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title">What Are You Looking For?</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <div class="row mb-4">
+                        <label for="inputText" class="col-sm-3 col-form-label">Headline</label>
+                        <div class="col-sm-10">
+                           <input id="subject" name="subject" [(ngModel)]="offer_headline" type="text" class="form-control">
+                        </div>
+                     </div>
+<!--                      <div class="row mb-4">
+                        <label for="inputText" class="col-form-label">Approximate Market Value</label>
+                        <div class="col-sm-10">
+                           <input id="offer_marketvalue" name="offer_marketvalue" [(ngModel)]="offer_marketvalue" type="text" class="form-control">
+                        </div>
+                     </div> -->
+                     <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Category&nbsp;</label>
+                        <div class="col-sm-10">
+                           <select name="mySelect" class="form-select" aria-label="Default select example" [(ngModel)]="offer_category">
+                           <option value="default">Choose Category</option>
+                           <option *ngFor="let option of categories" [ngValue]="option">{{option}}</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="comment-container">
+                        <div class="form-group">
+                           <label for="comment">What are you looking for?</label>
+                           <textarea id="comment" name="comment" [(ngModel)]="offer_lookingfor" class="form-control" rows="15" placeholder="Put something new on each line"></textarea>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="modal-footer">
+                     <button #myModal type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Post</button>
+                  </div>
+               </div>
+            </div>
+         </form>

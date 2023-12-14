@@ -88,26 +88,37 @@ import { ChatComponent } from './chat/chat.component';
 import { PromptPlaygroundComponent } from './reusable/ui/prompt-playground/prompt-playground.component';
 import { PromptsComponent } from './main/content/sysadmin/prompts/prompts.component';
 import { VideoComponentComponent } from './reusable/ui/video-component/video-component.component';
-//import { MarketplaceComponent } from './main/content/marketplace/marketplace.component';
-//import { OffersComponent } from './main/content/marketplace/flextables/offers/offers.component';
-//import { ProposalsComponent } from './main/content/marketplace/flextables/proposals/proposals.component';
-//import { NeedsComponent } from './main/content/marketplace/flextables/needs/needs.component';
-//import { EscrowComponent } from './main/content/marketplace/flextables/escrow/escrow.component';
-//import { MyproposalsComponent } from './main/content/marketplace/flextables/myproposals/myproposals.component';
-//import { MyoffersComponent } from './main/content/marketplace/flextables/myoffers/myoffers.component';
-//import { DrawerComponent } from './main/content/marketplace/flextables/offers/drawer/drawer.component';
-//import { LinkGuidelinesComponent } from './main/content/help/link-guidelines/link-guidelines.component';
-//import { PostRequestComponent } from './main/content/marketplace/post-request/post-request.component';
-//import { ProposeExchangeComponent } from './main/content/marketplace/propose-exchange/propose-exchange.component';
+import { MarketplaceComponent } from './main/content/marketplace/marketplace.component';
+import { OffersComponent } from './main/content/marketplace/flextables/offers/offers.component';
+import { ProposalsComponent } from './main/content/marketplace/flextables/proposals/proposals.component';
+import { NeedsComponent } from './main/content/marketplace/flextables/needs/needs.component';
+import { EscrowComponent } from './main/content/marketplace/flextables/escrow/escrow.component';
+import { MyproposalsComponent } from './main/content/marketplace/flextables/myproposals/myproposals.component';
+import { MyoffersComponent } from './main/content/marketplace/flextables/myoffers/myoffers.component';
+import { DrawerComponent } from './main/content/marketplace/flextables/offers/drawer/drawer.component';
+import { LinkGuidelinesComponent } from './main/content/help/link-guidelines/link-guidelines.component';
+import { PostRequestComponent } from './main/content/marketplace/post-request/post-request.component';
+import { ProposeExchangeComponent } from './main/content/marketplace/propose-exchange/propose-exchange.component';
 import { VariableStateButtonComponent } from './reusable/ui/buttons/variable-state-button/variable-state-button.component';
 
 import { JoyrideModule } from 'ngx-joyride';
+import { PostOfferComponent } from './main/content/marketplace/post-offer/post-offer.component';
 import { TableBadgesComponent } from './reusable/ui/buttons/table-badges/table-badges.component';
 import { SnakeCasePupePipe } from './snake-case-pupe.pipe';
+import { OfferDetailsComponent } from './main/content/marketplace/offer-details/offer-details.component';
 import { PermissionsCellComponent } from './reusable/ui/flextable/permissions-cell/permissions-cell.component';
+import { QualityCheckComponent } from './main/content/sysadmin/quality-check/quality-check.component';
 import { UpgradePlanComponent } from './main/account/billing/upgrade-plan/upgrade-plan.component';
 import { FaqComponent } from './main/content/help/faq/faq.component';
+import { VoteComponent } from './main/content/help/vote/vote.component';
+import { BallotComponent } from './main/content/help/vote/ballot/ballot.component';
+import { RoadmapComponent } from './main/content/help/roadmap/roadmap.component';
+import { OnboardingComponent } from './main/content/help/onboarding/onboarding.component';
 import { HowtouseComponent } from './main/content/help/howtouse/howtouse.component';
+import { WebsiteComponent } from './website/website.component';
+import { PreregisterComponent } from './website/preregister/preregister.component';
+import { LinkAlgorithmComponent } from './website/link-algorithm/link-algorithm.component';
+import { YourfullschoolComponent } from './website/yourfullschool/yourfullschool.component'
 
 @NgModule({
   declarations: [
@@ -151,7 +162,7 @@ import { HowtouseComponent } from './main/content/help/howtouse/howtouse.compone
     FreePlanPageComponent,
     ProPlanPageComponent,
     EnterprisePlanPageComponent,
-    //TermsComponent,
+    TermsComponent,
     PrivacyComponent,
     FlextableComponent,
     TableLoadingButtonComponent,
@@ -177,27 +188,35 @@ import { HowtouseComponent } from './main/content/help/howtouse/howtouse.compone
     PromptPlaygroundComponent,
     PromptsComponent,
     VideoComponentComponent,
-    //MarketplaceComponent,
-    //OffersComponent,
-    //ProposalsComponent,
-    //NeedsComponent,
-    //EscrowComponent,
-    //MyproposalsComponent,
-    //MyoffersComponent,
-    //DrawerComponent,
-    //PostRequestComponent,
-    //ProposeExchangeComponent,
+    MarketplaceComponent,
+    OffersComponent,
+    ProposalsComponent,
+    NeedsComponent,
+    EscrowComponent,
+    MyproposalsComponent,
+    MyoffersComponent,
+    DrawerComponent,
+    LinkGuidelinesComponent,
+    PostRequestComponent,
+    ProposeExchangeComponent,
     VariableStateButtonComponent,
-    //PostOfferComponent,
+    PostOfferComponent,
     TableBadgesComponent,
     SnakeCasePupePipe,
-    //OfferDetailsComponent,
+    OfferDetailsComponent,
     PermissionsCellComponent,
-    //QualityCheckComponent,
+    QualityCheckComponent,
     UpgradePlanComponent,
-    //FaqComponent,
-    //VoteComponent,
-    //BallotComponent
+    FaqComponent,
+    VoteComponent,
+    BallotComponent,
+    RoadmapComponent,
+    OnboardingComponent,
+    HowtouseComponent,
+    WebsiteComponent,
+    PreregisterComponent,
+    LinkAlgorithmComponent,
+    YourfullschoolComponent
   ],
   imports: [
     BrowserModule,

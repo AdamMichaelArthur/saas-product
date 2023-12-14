@@ -1,0 +1,10 @@
+.invisible-button {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+}
+
+.modal {
+  z-index: 1050 !important;  /* or a higher value if necessary */
+}

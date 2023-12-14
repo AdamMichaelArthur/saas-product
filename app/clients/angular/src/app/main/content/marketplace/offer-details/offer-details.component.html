@@ -1,0 +1,167 @@
+<div class="container mt-5">    
+
+  <div *ngIf="offer_type =='Offer'" class="card" style="margin-top: 10px;">
+            <div class="card-body">
+              <h5 class="card-title">Details (private)</h5>
+              Website: {{protectedInfo}}
+            </div>
+  </div>
+
+
+  <h2>{{offer_type}}</h2>
+  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
+
+    <div class="row">
+      <!-- Category -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" [(ngModel)]="category" formControlName="category" class="form-control">
+        </div>
+      </div>
+            <div class="col-md-9">
+        <div class="form-group">
+          <label>Headline</label>
+          <input type="text" [(ngModel)]="headline" formControlName="headline" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Category -->
+
+      <!-- Headline -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Looking For</label>
+          <input type="text" [(ngModel)]="looking_for" formControlName="looking_for" class="form-control">
+        </div>
+      </div>
+
+      <!-- Input DR -->
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>DR</label>
+          <td><span class="badge bg-success">{{offer['inputDr']}}</span></td>
+          <!-- <input class="badge bg-success"type="number" formControlName="inputDr" class="form-control"> -->
+        </div>
+      </div>
+
+      <!-- Input Page Traffic -->
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>Page Traffic</label>
+          <td><span class="badge bg-success">{{offer['inputPageTraffic']}}</span></td>
+          <!-- <input type="number" formControlName="inputPageTraffic" class="form-control"> -->
+        </div>
+      </div>
+
+      <!-- Input Site Traffic -->
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>Site Traffic</label>
+          <td><span class="badge bg-success">{{offer['inputSiteTraffic']}}</span></td>
+          <!-- <input type="number" formControlName="inputSiteTraffic" class="form-control"> -->
+        </div>
+      </div>
+
+      <!-- Points Cost -->
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>Points</label>
+          <td><span class="badge bg-success">{{offer['pointsCost']}}</span></td>
+          <!-- <input type="number" formControlName="pointsCost" class="form-control"> -->
+        </div>
+      </div>
+
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>Category</label>
+          <td><span class="badge bg-success">{{offer['category']}}</span></td>
+          <!-- <input type="number" formControlName="pointsCost" class="form-control"> -->
+        </div>
+      </div>
+
+      <div class="col-md-1">
+        <div class="form-group">
+          <label>Status</label>
+          <!-- <input type="text" formControlName="status" class="form-control"> -->
+          <td><span class="badge bg-success">{{offer['status'] | titlecase}}</span></td>
+        </div>
+      </div>
+    </div>
+      
+    <div *ngIf="myProposal" class="card" style="margin-top: 10px;">
+      <div *ngIf="type == 'exchange'">
+            <div class="card-body">
+              <h5 class="card-title">Proposal</h5>
+              My Proposal Info Goes Here
+            </div>
+      </div>
+    </div>
+
+    <div *ngIf="showProposals" class="card" style="margin-top: 10px;">
+            <div class="card-body">
+              <h5 class="card-title">Proposals</h5>
+            </div>
+    </div>
+
+    <div *ngIf="!this.escrowed" class="card" style="margin-top: 10px;">
+          <h5 class="card-title" style="margin: 5px;">Questions</h5>
+            <div *ngFor="let question of questions" class="card-body">
+              <p *ngIf="question['poster'] == 'buyer'" style=" border-radius: 10px; background-color: lightblue; padding: 5px; margin: 5px;"><b>From:&nbsp;</b><i>Possible Buyer</i><br><br>{{ question['post'] }}</p>
+              <p *ngIf="question['poster'] == 'seller'" style=" border-radius: 10px; background-color: lightgrey;  padding: 5px; margin: 5px; margin-left: 25px;"><b>From:&nbsp;</b><i>Seller</i><br><br>{{ question['post'] }}</p>
+            </div>
+            <div class="row"><div class="col-md-12" style="margin-top:10px; margin: 5px;"><button (click)="postQuestionForm()" class="btn btn-primary">Ask Question</button></div></div>
+
+    <div *ngIf="bPostQuestion" class="card" style="margin-top: 10px; margin:25px;">
+            <div class="card-body">
+              <h5 class="card-title">Questions (public)</h5>
+              
+              <form [formGroup]="messagesForm" (ngSubmit)="postQuestion()">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Type Your Question</label>
+                      <textarea type="text" formControlName="message" [(ngModel)]="question" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div><div class="row"><div class="col-md-12" style="margin-top:10px;"><button type="submit" class="btn btn-primary">Post</button></div></div>
+              </form>
+            </div>
+    </div>    
+
+    </div> 
+
+  
+    
+
+
+
+    <div  *ngIf="this.escrowed" class="card" style="margin-top: 10px;">
+          <h5 class="card-title" style="margin: 5px;">Messages (between buyer and seller)</h5>
+            <div *ngFor="let message of messages" class="card-body">
+              <p *ngIf="message['poster'] == 'buyer'" style=" border-radius: 10px; background-color: lightblue; padding: 5px; margin: 5px;"><b>From:&nbsp;</b><i>Buyer</i><br><br>{{ message['post'] }}</p>
+              <p *ngIf="message['poster'] == 'seller'" style=" border-radius: 10px; background-color: lightgrey;  padding: 5px; margin: 5px; margin-left: 25px;"><b>From:&nbsp;</b><i>Seller</i><br><br>{{ message['post'] }}</p>
+            </div>
+            <div class="row"><div class="col-md-12" style="margin-top:10px; margin: 5px;"><button (click)="postMessageForm()" class="btn btn-primary">Post Message</button></div></div>
+
+    <div *ngIf="bPostMessage" class="card" style="margin-top: 10px; margin:25px;">
+            <div class="card-body">
+              <h5 class="card-title">Your Message</h5>
+              
+              <form [formGroup]="messagesForm">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Type Your Message</label>
+                      <textarea type="text" formControlName="message" [(ngModel)]="message" class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div><div class="row"><div class="col-md-12" style="margin-top:10px;"><button (click)="postEncryptedMessage()" class="btn btn-primary">Post</button></div></div>
+              </form>
+            </div>
+    </div> 
+    </div>
+
+  </form>
+</div>

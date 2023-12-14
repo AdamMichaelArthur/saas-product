@@ -1,0 +1,726 @@
+<div class="popup" id="popup" *ngIf="displayPopup">
+   <div class="content">
+      <button class="close-button" (click)="closePopup()">✖</button>
+      <div class="popup_header">
+         <h1 style="color:black">See If Your Site Qualifies</h1>
+      </div>
+      <div class="columns">
+         <div class="column">
+            <div class="row mb-4">
+               <div class="col-12">
+                  <label class="form-check-label" for="emailAddress">Email Address</label>
+                  <input id="emailAddress" [(ngModel)]="applicationEmail" type="email" class="form-control">
+                  <!-- <div *ngIf="form.get('emailAddress').invalid" class="text-danger">
+                     *required.
+                  </div> -->
+                  <label class="form-check-label" for="emailAddress">Primary Website</label>
+                  <input id="emailAddress" [(ngModel)]="website" type="text" class="form-control">
+                  <!-- <div *ngIf="form.get('emailAddress').invalid" class="text-danger">
+                     *required.
+                  </div> -->
+               </div>
+            </div>
+            <div class="row mb-4">
+               <div class="col-12">
+                  <button (click)="startApplication()" class="btn btn-primary btn-lg">Submit</button>
+               </div>
+            </div>
+
+            <a href="https://docs.google.com/spreadsheets/d/1PXCApAhrMhlcfgalyI1CJfJGsQh6pILzY4-UON-DqGo/edit#gid=0">Check Out This Google Sheets Document to see sites that are offering links</a>
+<!--             <div class="row mb-4">
+               <div class="col-12">
+                  <button (click)="startApplication()" class="btn btn-danger btn-sm">Learn More First</button>
+               </div>
+            </div> -->
+         </div>
+<!--          <div class="column">
+            <div class="container">
+               <div class="row justify-content-center">
+                  <div class="col-sm-12 d-flex justify-content-center">
+                     <iframe id="myYouTubeVideo" loading="lazy" src="https://www.youtube.com/embed/8B_x1SZ9Wuc" width="315" height="560" frameborder="0" allowfullscreen="allowfullscreen"> &lt;p&gt;Text. here is some text and now a square video, not centered. Grabbed the embed code from youtube and changed the iframe from the default width=&amp;#8221;560&amp;#8243; height=&amp;#8221;315&amp;#8243; to be width=&amp;#8221;315&amp;#8243; height=&amp;#8221;315&amp;#8243;&lt;/p&gt;&lt;p&gt;&lt;iframe loading="lazy" 
+                     src="https://www.youtube.com/embed/P76R7TmnO5c" allowfullscreen="allowfullscreen" width="315" height="315" frameborder="0"&gt;</iframe>
+                  </div>
+               </div>
+            </div>
+         </div> -->
+      </div>
+   </div>
+</div>
+
+<!-- <div class="popup" id="popup" *ngIf="displayPopup">
+   <div class="content">
+      <button class="close-button" onclick="closePopup()">✖</button>
+      <div class="header">
+         <h1>Application Submitted</h1>
+      </div>
+      <div class="columns">
+         <div class="column">
+            <div class="row mb-4">
+               <div class="col-12">
+                  <label class="form-check-label" for="emailAddress">You've unlocked three invites</label>
+                  <input id="emailAddress" [(ngModel)]="applicationEmail" type="email" class="form-control">
+                  <div *ngIf="form.get('emailAddress').invalid" class="text-danger">
+                     *required.
+                  </div>
+               </div>
+            </div>
+            <div class="row mb-4">
+               <div class="col-12">
+                  <button (click)="startApplication()" class="btn btn-primary btn-lg">Start Application</button>
+               </div>
+            </div>
+         </div>
+         <div class="column">
+            <div class="container">
+               <div class="row justify-content-center">
+                  <div class="col-sm-12 d-flex justify-content-center">
+                     <iframe loading="lazy" src="https://www.youtube.com/embed/3yvwVbDI-d0" width="315" height="560" frameborder="0" allowfullscreen="allowfullscreen"> &lt;p&gt;Text. here is some text and now a square video, not centered. Grabbed the embed code from youtube and changed the iframe from the default width=&amp;#8221;560&amp;#8243; height=&amp;#8221;315&amp;#8243; to be width=&amp;#8221;315&amp;#8243; height=&amp;#8221;315&amp;#8243;&lt;/p&gt;&lt;p&gt;&lt;iframe loading="lazy" src="https://www.youtube.com/embed/P76R7TmnO5c" allowfullscreen="allowfullscreen" width="315" height="315" frameborder="0"&gt;</iframe>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div> -->
+
+<div [@slideUpDown]="stateName" id="socialProofBox" class="fixed-bottom">
+<div class="container mb-4">
+   <div class="card">
+      <div class="card-body">
+         <h5 class="card-title">{{socialProofTitles[displayCount]}}</h5>
+         <p class="card-text text-dark">{{socialProofMessages[displayCount]}}</p>
+      </div>
+   </div>
+</div>
+</div>
+<div class="fixed-bottom d-flex align-items-center justify-content-center" *ngIf="showBottomBannerBox">
+   <div class="container mb-4">
+      <div class="card" style="position: relative;">
+         <div class="card-body text-center" style="padding-top:22px;">
+            <button type="button" class="btn btn-danger" aria-label="Close" (click)="dismissBanner()" style="position: absolute; z-index: 100000; top: 2px; right: 2px;">&times;</button>
+         </div>
+         <div class="d-flex justify-content-center align-items-center" style="padding:15px;">
+            <div class="col-7 text-center">
+               <h2>
+                  <a (click)="dismissBanner()" href="application#application" class="apply-link">Apply for our private launch</a>
+               </h2>
+            </div>
+         </div>
+         <div class="card-body text-center" style="padding-top:22px;">
+            <a href="https://docs.google.com/spreadsheets/d/1PXCApAhrMhlcfgalyI1CJfJGsQh6pILzY4-UON-DqGo/edit#gid=0" target="_blank" class="btn btn-danger" style="opacity: 100%;">Checkout The Google Spreadsheet of awesome link commitments we've already got</a>
+         </div>
+      </div>
+   </div>
+</div>
+<div [@slideUpDown]="stateName" id="socialProofBox" class="fixed-bottom">
+<div class="container mb-4">
+   <div class="card">
+      <div class="card-body">
+         <h5 class="card-title">{{socialProofTitles[displayCount]}}</h5>
+         <p class="card-text text-dark">{{socialProofMessages[displayCount]}}</p>
+      </div>
+   </div>
+</div>
+</div>
+<div class="fixed-bottom d-flex align-items-center justify-content-center" *ngIf="showBottomBannerBox">
+   <div class="container mb-4">
+      <div class="card">
+         <div class="d-flex justify-content-center align-items-center" style="padding:15px;">
+            <div class="col-7 text-center">
+               <h2>
+                  <a (click)="dismissBanner()" href="application#application" class="apply-link">Apply for our private launch</a>
+               </h2>
+            </div>
+         </div>
+         <div class="card-body text-center" style="padding-top:22px;">
+            <a href="https://docs.google.com/spreadsheets/d/1PXCApAhrMhlcfgalyI1CJfJGsQh6pILzY4-UON-DqGo/edit#gid=0" target="_blank" class="btn btn-danger" style="opacity: 100%;">Checkout The Google Spreadsheet of awesome link commitments we've already got</a>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="first-frame">
+   <div class="blog-container">
+      <div class="col text-center p-5 p-md-3">
+         <img decoding="async" src="assets/img/logo.webp" class="attachment-large size-large wp-image-3983 entered lazyloaded img-fluid" alt="">
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+         <div class="col-7 text-center d-none d-md-block">
+            <h1>
+               A private link exchange community 
+            </h1>
+         </div>
+      </div>
+         <div class="row justify-content-center my-3" *ngIf="formSubmitted">
+      <div class="col-auto">
+         <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Your Application Has Been Submitted</h4>
+         </div>
+      </div>
+   </div>
+      <!--       <div class="d-flex justify-content-center align-items-center" style="padding-bottom:25px; padding-top:10px">
+         <p>Applications Close After {{ remainingApprovals }} more Approvals</p>
+         </div> -->
+   </div>
+   <div class="container d-lg-none">
+      <div class="row justify-content-center">
+         <div class="col-sm-12 d-flex justify-content-center">
+            <iframe loading="lazy" src="https://www.youtube.com/embed/3yvwVbDI-d0" width="315" height="560" frameborder="0" allowfullscreen="allowfullscreen"> &lt;p&gt;Text. here is some text and now a square video, not centered. Grabbed the embed code from youtube and changed the iframe from the default width=&amp;#8221;560&amp;#8243; height=&amp;#8221;315&amp;#8243; to be width=&amp;#8221;315&amp;#8243; height=&amp;#8221;315&amp;#8243;&lt;/p&gt;&lt;p&gt;&lt;iframe loading="lazy" src="https://www.youtube.com/embed/P76R7TmnO5c" allowfullscreen="allowfullscreen" width="315" height="315" frameborder="0"&gt;</iframe>
+         </div>
+      </div>
+   </div>
+   <div class="justify-content-center d-none d-lg-flex">
+      <!-- Desktop Video First -->
+      <div class="col-12 text-center">
+         <div style="max-width: 960px; margin: 0 auto;">
+            <iframe #youtubePlayer width="100%" height="540" src="https://www.youtube.com/embed/8B_x1SZ9Wuc?rel=0" frameborder="0" allowfullscreen></iframe>
+         </div>
+      </div>
+   </div>
+   <div class="d-flex justify-content-center align-items-center" style="padding:15px;">
+      <div class="col-7 text-center">
+         <h2>
+            <a  (click)="dismissBanner()" href="application#application" class="apply-link">Apply for our private launch</a>
+         </h2>
+      </div>
+   </div>
+</div>
+<div class="fifth-frame">
+   <div class="container h-100">
+      <div>
+         <div class="row justify-content-center h-100">
+            <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100">
+               <div class="row h-100">
+                  <div class="col-12 col-md-6">
+                     <div class="nice">
+                        <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">&nbsp;&nbsp;</h3>
+                        <div class="col-sm-12 d-flex justify-content-center">
+                           <iframe loading="lazy" src="https://www.youtube.com/embed/lCg3ScHLTK8" width="315" height="560" frameborder="0" allowfullscreen="allowfullscreen"> &lt;p&gt;Text. here is some text and now a square video, not centered. Grabbed the embed code from youtube and changed the iframe from the default width=&amp;#8221;560&amp;#8243; height=&amp;#8221;315&amp;#8243; to be width=&amp;#8221;315&amp;#8243; height=&amp;#8221;315&amp;#8243;&lt;/p&gt;&lt;p&gt;&lt;iframe loading="lazy" src="https://www.youtube.com/embed/P76R7TmnO5c" allowfullscreen="allowfullscreen" width="315" height="315" frameborder="0"&gt;</iframe>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-12 col-md-6 h-100 nice">
+                     <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">Why I made Niche Site Exchange</h3>
+                     <p><b>Link building is hopelessly broken.</b></p>
+                     <p>Big Search Engines will tell you that if you just focus on creating quality content, traffic will come.</p>
+                     <p>But that's not the world we live in.</p>
+                     <p>So this community is a home for like-minded site operators where we can grow together, without sacrificing our core values.</p>
+                     <p>I'm not a fan of a "walled garden," but it's necessary to keep the quality of assets high.  That's why we have an application process, so I can personally vet new potential members.</p>
+                     <p>In exchange for agreeing to put a link on your site in the future, we give you 
+                        <b>points</b> today.
+                     </p>
+                     <p>When you find a relevant link that you want, you purchase it with your points.</p>
+                     <p>When someone buys your link, you complete the cycle by posting it on your site.</p>
+                     <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">More About Points</h3>
+                     <p>The point-value of a link is determined by an algorithm, which is designed to keep things fair.  The more powerful and valuable the link, the more points you get.</p>
+                     <p>As an example, links on existing content with page traffic get substantially more points than links on new content that have no traffic.
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="card bg-light d-flex justify-content-center align-items-center text-primary text-center" style="padding-top:30px;">
+   <div>
+      <h3>Relevant Placements</h3>
+   </div>
+   <div class="card bg-light d-flex text-primary custom-card">
+      <div class="card-body">
+         <h3 class="card-title text-primary">Quality First Philosophy</h3>
+         <p class="card-text text-secondary">Maintaining marketplace quality is our top priority.  Many sites are <a href="application#rejected">rejected</a> for not meeting our <a href="#site-requirements" target="_self">minimum site requirements.</a></p>
+      </div>
+   </div>
+   <div class="card bg-light d-flex text-primary custom-card">
+      <div class="card-body" id="special-span">
+         <h3 class="card-title text-primary">We could charge a lot more for this</h3>
+         <p class="card-text text-secondary">We charge $39 a month for access</p>
+         <p class="card-text text-secondary">All links are permanent.  If you cancel your subscription, your links stay.</p>
+         <br>
+         <h3><u>This is what our competitors charge</u></h3>
+         <br>
+         <p class="text-dark-grey text-start"><a href="application#cost-proof-1"><span class="" role="button" tabindex="0">linksthatrank.com</span>&nbsp;charges $177</a> for a DR 20+ Link</p>
+         <p class="text-start text-dark-grey"><a href="application#cost-proof-2"><span class="" role="button" tabindex="0">authority.builders</span>&nbsp;charges $249</a> for a DR 37+ Guest Post</p>
+         <p class="text-start text-dark-grey">A guy I emailed&nbsp;<a href="application#cost-proof-3">wanted $450</a> for a link</p>
+         <p class="text-start text-dark-grey">I know a guy who&nbsp;<a href="application#cost-proof-4">charges $3,500</a> a month for 20 links</p>
+         <p class="text-start text-dark-grey">If you get one lower-tier link every four and a half months, it'll cost </p>
+         <br>
+         <br>
+         <p class="text-start text-dark-grey">I think these costs are <u>too high</u>.</p>
+         <br>
+         <p class="text-start text-dark-grey">Let's break the cycle of unreasonably high costs <u>together</u></p>
+      </div>
+   </div>
+   <div class="card bg-light d-flex text-primary custom-card">
+      <!--       <div class="card-body">
+         <h3 class="card-title text-primary">Free Access</h3>
+         <p class="card-text text-secondary">During our launch month, we're giving all approved applications free access.<br><br>$39 / month after</p>
+         </div> -->
+   </div>
+   <div class="card bg-light d-flex text-primary custom-card">
+      <div class="card-body">
+         <h3 class="card-title text-primary">Totally Free During Our Launch Month</h3>
+         <p class="card-text text-secondary">During our launch month, we're offering access 100% free.<br><br>$39 / month after</p>
+      </div>
+   </div>
+   <div class="card bg-light d-flex text-primary custom-card">
+      <div class="card-body">
+         <h3 class="card-title text-primary">Limited Applications</h3>
+         <p class="card-text text-secondary">To keep our quality high, we're pulling our advertising after we approve 100 applications.  Not sure when we'll open back up after registration closes.</p>
+      </div>
+   </div>
+</div>
+<div class="fourth-frame" id="escrow" style="height:600px;">
+   <div class="container mt-4 h-100">
+      <div class="container-fluid h-100" style="border-radius: 15px;">
+         <div class="row justify-content-center h-100">
+            <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100" >
+               <div class="row h-100 flex-equal" >
+                  <div class="col-12 col-md-6 bg-primary h-100 p-4 text-white d-flex flex-column">
+                     <div class="title-section">
+                        <p class="lead">Built In "Escrow" System</p>
+                        <hr>
+                     </div>
+                     <div class="">
+                        <div class="content-section flex-grow-1">
+                           <span>No money is exchanged -- but the "escrow" system helps keep everyone accountable.</span>
+                           <p>&nbsp;</p>
+                        </div>
+                        <p class="mb-0" style="text-align: left;">
+                           Points Escrow
+                        </p>
+                        <div class="card d-flex align-items-end">
+                           <div class="card-body text-dark">
+                              <h3 class="card-title">Safety and Security</h3>
+                              <p class="card-text text-dark">A built-in escrow solution ensures a smooth and accountable transaction</p>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- 
+                        <div class="">
+                          <div class="content-section flex-grow-1">
+                              <span>No money is exchanged -- but the "escrow" system helps keep everyone accountable.</span><p>&nbsp;</p>
+                         </div>
+                             <p class="mb-0" style="text-align: left;">
+                                Do Exchanges
+                             </p>
+                             <div class="d-flex align-items-start mb-3" style="margin-top:15px;">
+                              <i class="fa fa-search fa-2x mr-4" style="margin-right: 10px; margin-left: 6px; margin-top:10px;"  aria-hidden="true"></i>
+                              <p class="mb-0 text-dark" style="text-align: left;">Don't have enough points?  Propose an exchange.</p>
+                           </div>
+                        
+                        </div> -->
+                     <div class="d-flex align-items-start">
+                        <p class="mb-0" style="text-align: left;">Do Exchanges</p>
+                     </div>
+                     <div class="card d-flex align-items-end" >
+                        <div class="d-flex align-items-start mb-3" style="margin-top:15px;">
+                           <i class="fa fa-exchange-alt fa-2x mr-4" style="margin-right: 10px; margin-left: 6px; margin-top:10px;"  aria-hidden="true"></i>
+                           <p class="mb-0 text-dark" style="text-align: left;">Don't have enough points?  Propose an exchange.</p>
+                        </div>
+                     </div>
+                     <div class="d-flex align-items-start mb-3">
+                        <p class="mb-0" style="text-align: left;">Accept, Decline or Withdraw from transactions when necessary</p>
+                     </div>
+                  </div>
+                  <div class="col-12 col-md-6 bg-primary h-100 p-4 text-white d-flex flex-column">
+                     <div class="title-section">
+                        <p class="lead">Safety and Security</p>
+                        <hr>
+                     </div>
+                     <div class="content-section flex-grow-1">
+                        <div class="d-flex align-items-start">
+                           <p class="mb-0" style="text-align: left;">
+                              Anonymity
+                           </p>
+                        </div>
+                        <!--                      <div class="d-flex align-items-start mb-3">
+                           <p class="mb-0" style="text-align: left;">Your name and websites are never displayed on the site -- period</p>
+                           </div> -->
+                        <div class="card d-flex align-items-end">
+                           <div class="card-body text-dark">
+                              <h3 class="card-title">Remain Completely Anonymous</h3>
+                              <p class="card-text text-dark" style="text-align: left;">Your name and websites are never displayed on the site -- period</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="container-fluid fifth-frame">
+   <div class="container mt-4 h-100">
+      <div>
+         <div class="row justify-content-center h-100">
+            <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100">
+               <div class="row h-100">
+                  <div class="col-12 col-md-6 h-100 p-4 text-white">
+                     <div class="nice">
+                        <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">We're not just about links!</h3>
+                        <p>You can exchange anything of value, including services.</p>
+                        <p>In this way, you don't necessarily have to offer links on your site to take advantage of the platform</p>
+                        <p>You can exchange Social Media Shoutouts, Services, Advertising Space, or really anything relevant to the membership</p>
+                     </div>
+                  </div>
+                  <div class="col-12 col-md-6 h-100 p-4 text-white nice">
+                     <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">A Better Way</h3>
+                     <p>An entire industry exists where people build low quality sites just so they can sell links and guest posts for unreasonable prices.</p>
+                     <p>We need something better, and that's why Niche Site Exchange exists</p>
+                     <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">How It Works</h3>
+                     <p>First, you will fill out an application.  We will manually check your applications and digital assets against our guidelines.  If your sites meet our quality guidelines, we'll give you an invitation to join the platform.</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="fourth-frame">
+   <div class="container mt-4 h-100">
+      <div class="container-fluid h-100" style="border-radius: 15px;">
+         <div class="row justify-content-center h-100">
+            <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100">
+               <div class="row h-100">
+                  <div class="col-12 col-md-6 h-100 p-4 text-dark">
+                     <p class="lead text-black">Let's Talk About Google</p>
+                     <hr>
+                     <div class="nice">
+                        <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">"Just Create Great Content", We're Told</h3>
+                        <h4 class="text-dark">Doesn't this break Google Webmaster Guidelines?</h4>
+                        <ol>
+                           <li>First, Google doesn't make the law.  This is 100% legal, period.</li>
+                           <li>Links make a big difference.  If you want to rank, you need links.  The only question is how you're going to get them</li>
+                           <li>There's no identifying information on our marketplace, applications are completely anonymous</li>
+                           <li>We don't allow sites that are part of a PBN's or engage in egregious link spam</li>
+                        </ol>
+                        <p>Our position is that our marketplace is primarily designed to allow people to exchange valuable digital assets, which includes Sponsorships and Advertising.  We encourage people to link to highly relevant content and we only accept members who uphold only high standards of content quality.  We expect that people who exchange links on our site do so because it helps users and recipients can expect referral traffic.
+                        <p>In this way, you don't necessarily have to offer links on your site to take advantage of the platform</p>
+                        <p>You can exchange Social Media Shoutouts, Services, Advertising Space, or really anything relevant to the membership</p>
+                     </div>
+                     <div class="d-flex align-items-start mb-3 text-dark">
+                        <p class="mb-0 text-dark" style="text-align: left;">
+                           Use Cases
+                        </p>
+                     </div>
+                     <div class="card d-flex align-items-end">
+                        <div class="card-body text-dark">
+                           <h3 class="card-title">Rank Your Existing Content</h3>
+                           <p class="card-text text-dark">A built-in escrow solution ensures a smooth and accountable transaction</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-12 col-md-6 h-100 p-4 text-dark">
+                     <p class="lead text-black">Ineligible Sites</p>
+                     <hr>
+                     <div class="nice">
+                        <h3 style="color:black; padding-top:15px; padding-bottom: 15px;">Disqualified Sites</h3>
+                        <h4 class="text-dark">These sites don't qualify:</h4>
+                        <li>PBN's</li>
+                        <li>Manipulated DR</li>
+                        <li>Low Quality Content</li>
+                        <li>AI Spam Sites <a href="application#ai-polocy">*see our AI policy</a></li>
+                        <li>Most Programmatic SEO Sites <a href="application#pseo-polocy">*see our Programmatic SEO policy</a></li>
+                        <br>
+                        <h4>Factors we consider in our application process</h4>
+                        <li><a href="pubic/application#visitors-per-month">Visitors per month</a></li>
+                        <li><a href="pubic/application#monetization-strategy">"Legitimate" monetization strategy</a></li>
+                        <li><a href="pubic/application#guest-post-policy">No Paid Guest Posts</a></li>
+                        <li><a href="pubic/application#top-keywords">#1 Keywords (Ahrefs)</a></li>
+                        <li><a href="pubic/application#site-age">Site Age</a></li>
+                        <li><a href="pubic/application#natural-dr">Non-manipulated DR</a></li>
+                        <li><a href="pubic/application#content-quality">Quality Content</a></li>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--
+   <div class="container mt-4 h-100">
+    <div class="container-fluid h-100" style="border-radius: 15px;">
+       <div class="row justify-content-center h-100">
+          <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100">
+             <div class="row h-100">
+                <div class="col-12 col-md-6 h-100 p-4 text-dark">
+   -->
+<div class="fourth-frame">
+   <div class="container mt-4 h-100">
+      <div class="container-fluid h-100" style="border-radius: 15px;">
+         <div class="row justify-content-center h-100">
+            <div class="col-lg-6 col-xl-8 px-3 px-lg-0 h-100">
+               <p class="lead text-black">Frequently Asked Questions</p>
+               <hr>
+               <div class="nice">
+                  <h4 class="text-dark" id="ai-polocy">What's your AI Policy?</h4>
+                  <p>By itself, we don't have any policies against using AI content, as long as it's good content.  That said, many people using AI are dumping hundreds, sometimes thousands, of useless posts that get zero traffic.  Usually the content is junk.  If the site doesn't have the authority and traffic to justify this content, or if we determine the site appears to be an AI pump and dump scheme, the site is not likely to qualify.</p>
+                  <h4 id="site-age">Site Age</h4>
+                  <p>Newer sites are less likely to get accepted.  The reason is simple: we're looking for an established track record and history.</p>
+                  <h4 class="text-dark" id="pseo-polocy">What's your Programmatic SEO Site Policy?</h4>
+                  <p>If the quality of your programmatic content is good and Google seems to like your site, as evidenced by having a good number of top-ranking keywords, then the site might qualify.  But like with AI pump and dump sites, too many posts for too little traffic will be a negative factor in our evaluation of the site.</p>
+                  <h4 class="text-dark" id="visitors-per-month">How many visitors per month does my site need to qualify?</h4>
+                  <p>There's no hard cutoff, but generally we're looking for sites with more than 10,000 visitors a month.  This is only to PROVIDE links.  You can get links for any site, but you'll need to contribute something of value to the community to get the points you need.  The reason for this cutoff is because most PBN's and link farms never get much more than 1,000 to 2,000 visitors per month.  If the site has fewer than 10,000 visitors, but we feel it would be a good addition to the community it may be accepted.  It costs nothing to apply.</p>
+                  <h4>What do you consider a "legitimate monetization strategy"</h4>
+                  <p>Sites generally need to have an easily identifiable, primary monetization strategy.  For most sites this is going to be affiliate offers and display ads.  Other legitimate monetization strategies include offering services and e-commerce.  Really what we're looking for is to weed out guest-post traps, PBN's and link farms.  If we determine the site monetizes primarily through one of these mechanisms, it will be rejected.  We're not making any commentary about whether this is good or bad, just that our platform isn't the right place for these types of sites. 
+                  <h4 id="guest-post-policy">No Paid Guest Posts</h4>
+                  <p>Having a "Write For Us" page, or publicly accepting Guest Posts, will weigh heavily against a site.  By itself, it won't be a determining factor but if the site has less than 10,000 visitors and publicly accepts Guest Posts, the site is unlikely to pass our screening.</p>
+                  <h4 id="top-keywords">Top Keywords</h4>
+                  <p>If the site has a decent number of top keywords, it weights favorably in terms of getting accepted.  Sites that only have 10-20 top keywords aren't going to provide enough value to be able to offer links.</p>
+                  <h4 id="natural-dr">Natural Domain Rating</h4>
+                  <p>It's pretty easy to manipulate a site's DR if you know what you're doing, especially for people operating a PBN.  If a site has a high DR, but doesn't have much traffic, it works against the site.  We'll discount that it's DR completely and evaluate the site on its other metrics.</p>
+                  <h4 id="content-quality">Low Quality Content</h4>
+                  <p>We look at the content the site is posting, and if we feel the content is likely to be considered "low quality" by other members, we'll likely reject the site.</p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="fourth-frame">
+<div class="container mt-4 h-100">
+   <div class="container-fluid h-100" style="border-radius: 15px;">
+      <div class="row justify-content-center h-100">
+         <div class="col-lg-12 col-xl-8 px-3 px-lg-0 h-100">
+            <div class="row h-100">
+               <div class="col-12 h-100 p-4 text-dark">
+                  <p class="lead text-black">Using Link Building Services is Expensive</p>
+                  <hr>
+                  <div class="card">
+                     <div class="card-body text-dark">
+                        <h3 class="card-title" id="cost-proof-1">authority.builders</h3>
+                        <p class="card-text text-dark">Authority Builders charges $249 for a DR 37 site with 2,626 traffic</p>
+                        <img decoding="async" src="assets/img/authority.builders.png" class="" alt="" style="width: 100%;">
+                     </div>
+                  </div>
+                  <div class="card">
+                     <div class="card-body text-dark">
+                        <h3 class="card-title" id="cost-proof-2">linksthatrank.com</h3>
+                        <p class="card-text text-dark">Links That Rank Charges $177 for a DR 20+ Link</p>
+                        <img decoding="async" src="assets/img/linksthatrank.png" class="" alt="" style="width: 100%;">
+                     </div>
+                     <div class="card">
+                        <div class="card-body text-dark">
+                           <h3 class="card-title" id="cost-proof-3">Email Outreach</h3>
+                           <p class="card-text text-dark">A guy I emailed wanted $450 for a guest post</p>
+                           <img decoding="async" src="assets/img/guy-i-emailed.png" class="" style="width: 100%;"><br>
+                           <img decoding="async" src="assets/img/hrefs.png" class="" style="width: 100%;"><br><br>
+                           <p>&nbsp;</p>
+                           <p class="card-text text-dark">$450 for a post on a site that gets 3,400 visits a month?  <u>This</u> is what's wrong with link building</p>
+                        </div>
+                        <div class="nice">
+                           <h4 class="text-dark" style="padding: 15px;">Here's my take</h4>
+                           <p style="padding-left: 15px; padding-right: 15px;">There's nothing wrong with people monetizing their site in whatever way they can.  The problem is at these prices, it becomes exploitative.  It locks out small site operators and leaves room only for big companies and large agencies that have deep pockets.</p>
+                           <p style="padding-left: 15px;  padding-right: 15px;">Based on what it costs people to buy links, I could probably charge a lot more than $39 a month.  But, I don't want to be part of the problem.</p>
+                           <p style="padding-left: 15px;  padding-right: 15px;" id="cost-proof-4">A guy I know charges $3,500 a month for up to 15 links.  That's $233 per link.  Now, to be clear, I'm not saying these companies are scams or don't provide value.  Clearly they do, otherwise they'd go out of business.  My issue is more with the larger eco-system that drives these costs up.</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div id="application" class="container mt-4" >
+   <div class="container-fluid third-frame" style="border-radius: 15px;" *ngIf="!submitted">
+      <div class="row justify-content-center">
+         <div class="col-lg-6 col-xl-8 px-3 px-lg-0">
+            <form [formGroup]="form" name="addPost" (submit)="onSubmit($event)">
+            <div #requestModal class="modal-dialog modal-dialog-centered modal-lg">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                     <div class="row mb-4">
+                        <h3 appVisibilityObserver (isVisible)="handleVisibility($event)">Application Form</h3>
+                     </div>
+                     <div class="row mb-4">
+                        <div class="row">
+                           <div class="col">
+                              <div class="row mb-4">
+                                 <div class="col-12 col-md-6">
+                                    <label class="form-check-label" for="firstName">First Name</label>
+                                    <input formControlName="firstName" id="firstName" name="firstName" type="text" class="form-control">
+                                    <div *ngIf="form.get('firstName').invalid" class="text-danger">
+                                       *required
+                                    </div>
+                                 </div>
+                                 <div class="col-12 col-md-6">
+                                    <label class="form-check-label" for="lastName">Last Name</label>
+                                    <input formControlName="lastName" id="lastName" name="lastName" type="text" class="form-control">
+                                    <div *ngIf="form.get('lastName').invalid" class="text-danger">
+                                       *required
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row mb-4">
+                                 <div class="col-12">
+                                    <label class="form-check-label" for="emailAddress">Email Address</label>
+                                    <input formControlName="emailAddress" id="emailAddress" name="emailAddress" [(ngModel)]="applicationEmail" type="email" class="form-control">
+                                    <div *ngIf="form.get('emailAddress').invalid" class="text-danger">
+                                       *required.
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row mb-4">
+                                 <div class="col-12">
+                                    <label class="form-check-label" for="screenName">Screen Name</label>
+                                    <input formControlName="screenName" id="screenName" name="screenName" type="text" class="form-control">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col d-none d-sm-flex justify-content-center align-items-center">
+                              <ul class="checkmark-list pl-3">
+                                 <li class="mb-2">Your name and identifying information is 
+                                    <b>never</b> displayed
+                                 </li>
+                                 <li class="mb-2">Your websites are 
+                                    <i>fully anonymous</i> until you post the final link
+                                 </li>
+                                 <li class="mb-2">Your screen name 
+                                    <b>*is visible*</b> to other members, so keep that in mind
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <div>
+                        <label class="form-check-label">Websites You Have</label>
+                        <textarea formControlName="websitesOffered" class="form-control" rows="3" placeholder="List the websites you will be offering links or other digital assets from.  Put one for each line."></textarea>
+                     </div>
+                     <div class="row mb-4">
+                        <div class="col-sm-12 mt-3">
+                           <div class="form-group">
+                              <label class="form-check-label">What best describes you:</label>
+                              <div class="form-check">
+                                 <input type="radio" id="operator" value="niche_operator" class="form-check-input" formControlName="role">
+                                 <label for="operator" class="form-check-label">I am a Niche Site operator.</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="operator" value="website_operator" class="form-check-input" formControlName="role">
+                                 <label for="operator" class="form-check-label">I own or control websites that don't fit neatly into the "Niche Website" label</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="agency" value="agency" class="form-check-input" formControlName="role">
+                                 <label for="agency" class="form-check-label">I am an agency that can put links on my clients site.</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="seo" value="seo" class="form-check-input" formControlName="role">
+                                 <label for="seo" class="form-check-label">I'm an SEO that can offer value to the marketplace</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="seo" value="businss_owner" class="form-check-input" formControlName="role">
+                                 <label for="seo" class="form-check-label">I am a business owner with a website seeking to improve my online presence</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="none" value="none" class="form-check-input" formControlName="role">
+                                 <label for="none" class="form-check-label">None of these describe me</label>
+                              </div>
+                           </div>
+                           <div *ngIf="(form.get('role').invalid && (form.get('role').touched || submitted))" class="text-danger">
+                              You must choose an option
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row mb-4">
+                        <div class="col-sm-12 mt-3">
+                           <div class="form-group">
+                              <label class="form-check-label">
+                              <b>My sites have a combined traffic total of:</b>
+                              </label>
+                              <div class="form-check">
+                                 <input type="radio" id="operator" value="0_10K" class="form-check-input" formControlName="combinedTraffic">
+                                 <label for="operator" class="form-check-label">0 - 10,000 Monthly Visitors</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="agency" value="10K_25K" class="form-check-input" formControlName="combinedTraffic">
+                                 <label for="agency" class="form-check-label">10,000 - 25,000 Monthly Visitors</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="seo" value="25K_100K" class="form-check-input" formControlName="combinedTraffic">
+                                 <label for="seo" class="form-check-label">25,000 - 100,000 Monthly Visitors</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="none" value="100K+" class="form-check-input" formControlName="combinedTraffic">
+                                 <label for="none" class="form-check-label">100,000+ Monthly Visitors</label>
+                              </div>
+                           </div>
+                           <div *ngIf="(form.get('combinedTraffic').invalid && (form.get('combinedTraffic').touched || submitted))" class="text-danger">
+                              You must choose an option
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row mb-4">
+                        <div class="col-sm-12 mt-3">
+                           <div class="form-group">
+                              <label class="form-check-label">What kind of digital assets are you interested in trading? (select all that apply)</label>
+                              <div class="form-check">
+                                 <input type="radio" id="operator" value=true class="form-check-input" formControlName="hasLinks">
+                                 <label for="operator" class="form-check-label">Links</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="agency" value=true class="form-check-input" formControlName="hasNewsletter">
+                                 <label for="agency" class="form-check-label">Newsletter Ad Space</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="seo" value=true class="form-check-input" formControlName="hasSocialMedia">
+                                 <label for="seo" class="form-check-label">Social Media Shoutouts</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="none" value=true class="form-check-input" formControlName="hasContentCreation">
+                                 <label for="none" class="form-check-label">Content Creation</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="none" value=true class="form-check-input" formControlName="hasTechnicalServices">
+                                 <label for="none" class="form-check-label">Technical Services</label>
+                              </div>
+                              <div class="form-check">
+                                 <input type="radio" id="none" value=true class="form-check-input" formControlName="hasOther">
+                                 <label for="none" class="form-check-label">Other</label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div>
+                        <label>If accepted, your account will be created using this email address and your Points and Offers will be pre-loaded.</label>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox" value=true id="rememberMe" formControlName="bAcceptsTerms">
+                           <label class="form-check-label" for="rememberMe">I accept the terms and conditions</label>
+                           <div *ngIf="form.get('bAcceptsTerms').hasError('mustBeChecked') && (form.get('bAcceptsTerms').touched || submitted)" class="text-danger">
+                              You must accept the terms and conditions.
+                           </div>
+                        </div>
+                     </div>
+                     <div class="mt-3">
+                        <label>
+                        <b>Philosophy</b>
+                        </label>
+                        <div class="form-check">
+                           <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe" formControlName="bAcceptsPhilosophy">
+                           <label class="form-check-label" for="rememberMe">I'm ready, willing and able to give and receive links, without paying or receiving monetary compensation</label>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row justify-content-center my-3">
+               <div class="col-auto">
+                  <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid">Apply Now</button>
+               </div>
+            </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   <div class="row justify-content-center my-3" *ngIf="submitted">
+      <div class="col-auto">
+         <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Your Application Has Been Submitted</h4>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,50 @@
+<app-propose-exchange #proposeExchangeDialog></app-propose-exchange>
+                                <app-flextable
+                                    (activePanel)='activePanel($event)'
+                                    (tableBtnClicked)='tableButtonClicked($event)'
+                                [options]="
+                                {
+                                datasource: 'offers',
+                                'sort': { '_id': 'desc' },
+                                conditionalBadges: [
+                                {
+                                'column': 'Headline',
+                                'icon': 'shield',
+                                'conditionalKey': 'verified',
+                                'conditionalValue': true
+                                }
+                                ],
+                                rowButtons: [
+                                {
+                                'column': 'headline',
+                                'buttonName': 'Propose Exchange',
+                                'api': 'v1.0',
+                                'action': 'exchange'
+                                },
+                                {
+                                'column': 'headline',
+                                'buttonName': 'Buy It Now',
+                                'api': 'v1.0',
+                                'action': 'purchase'
+                                },
+                                {
+                                'column': 'headline',
+                                'buttonName': 'Buy With Points',
+                                'api': 'v1.0',
+                                'action': 'points-purchase'
+                                }
+                                ],
+                                scope: 'all',
+                                bNoHeader: true,
+                                bAllowDeletion: false,
+                                filter: {
+                                    visible: { $ne: false  }, 
+                                    status: { $eq: 'available' },
+                                    archived: { $ne: true }
+                                }, 
+                                columns: [
+                                        'headline', 'looking_for'
+                                    ]
+                                }"
+                                ></app-flextable>
+

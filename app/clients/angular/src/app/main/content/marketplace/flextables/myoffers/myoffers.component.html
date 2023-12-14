@@ -1,0 +1,32 @@
+<app-flextable
+                                [options]="
+                                {
+                                datasource: 'offers',
+
+                                sort: { '_id': 'desc' },
+
+                                conditionalBadges: [
+                                {
+                                'column': 'Headline',
+                                'icon': 'shield',
+                                'conditionalKey': 'verified',
+                                'conditionalValue': true
+                                }
+                                ],
+
+
+                                scope: 'user',
+
+                                bNoHeader: true,
+                                bAllowDeletion: true,
+                                filter: {
+                                visible: {
+                                $ne: false 
+                                }, 
+                                archived: { $ne: true }
+                                }, 
+                                columns: [
+                                'headline'
+                                ]
+                                }"
+                                ></app-flextable>

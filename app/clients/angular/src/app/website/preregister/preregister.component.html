@@ -1,0 +1,111 @@
+<form name="addPost">
+   <div #requestModal class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+
+            <div class="modal-body">
+               <div class="row mb-4">
+                  <div class="col-sm-12" *ngIf="step1">
+                     <input placeholder="Website / Page URL" id="inputDomain" name="inputDomain" [(ngModel)]="webpageSummaryPayload.input" type="text" class="form-control" style="margin-bottom: 8px;">
+                      <network-request-button #login (result)="pageAnalysis($event)" [request]="webpageSummaryEndpoint" [payload]="webpageSummaryPayload" verb="POST">Analyze Page</network-request-button>
+
+                  </div>
+               </div>
+
+            <div *ngIf="bShowPageSummaryInput">
+
+               <label class="form-check-label">Website or Page Summary (please edit if needed)</label>
+               <textarea class="form-control" rows="3" placeholder="Briefly describe website or webpage.  This will be shown publicly.">{{pageDescription}}</textarea>
+            </div>
+
+            <div *ngIf="determineSiteStatistics">
+               <network-request-button #login (result)="siteStatistics($event)" [request]="webpageSummaryEndpoint" [payload]="webpageSummaryPayload" verb="POST">Fetching Site Statistics</network-request-button>
+            </div>
+            <div *ngIf="step2">
+                <span>
+                	<h4><a [href]=hrefsTarget target='_blank'>Check Your Ahrefs Traffic Stats Here</a></h4>
+                	<h6 style="display: inline-block;"><a routerLink="/website/link-requirements">Minimum Link Requirements</a>&nbsp;*&nbsp;</h6>
+                	<h6 style="display: inline-block;"><a routerLink="/website/link-requirements">What if my site doesn't qualify?</a>&nbsp;*&nbsp;</h6>
+                	<h6 style="display: inline-block;"><a routerLink="/website/link-algorithm">How does the algorithm work?</a>&nbsp;*&nbsp;</h6></span>
+
+               <div class="row mb-4">
+                  <div class="col-sm-3">
+                  	<label class="form-check-label" for="inputPageTraffic">Site DR</label>
+                     <input placeholder="Site DR" id="inputDr" name="inputDr" [(ngModel)]="inputDr" type="number" class="form-control">
+                  </div>
+                  <div class="col-sm-3">
+                  	<label class="form-check-label" for="inputPageTraffic">Site Traffic</label>
+                     <input placeholder="Site Traffic" id="inputSiteTraffic" name="inputSiteTraffic" [(ngModel)]="inputSiteTraffic" type="number" class="form-control">
+                  </div>
+                  <div class="col-sm-3">
+                  	<label class="form-check-label" for="inputPageTraffic">Page Traffic</label>
+                     <input placeholder="Page Traffic" id="inputPageTraffic" name="inputPageTraffic" [(ngModel)]="inputPageTraffic" type="number" class="form-control">
+                  </div>
+                  <div joyrideStep="firstStep" title="Number of links" text="Get more points by offering more than 1 link" class="col-sm-3">
+                  	<label class="form-check-label" for="inputPageTraffic">Number of Links</label>
+                     <input placeholder="Number of Offered Links" id="inputPageTraffic" name="inputLinksOffered" [(ngModel)]="inputLinksOffered" type="number" class="form-control">
+                  </div>
+               </div>
+               <button (click)="determineValue()" class="btn btn-primary" style="margin-bottom: 15px;">Determine Value</button>&nbsp;            
+               
+                <h5 style="display: inline-block;">You would get {{linkPointValue * inputLinksOffered}} points</h5>
+               
+
+            </div>
+            <div *ngIf="step3">
+                
+                <h5 style="display: inline-block;">See the kinds of links you could get with {{linkPointValue * inputLinksOffered}} points:</h5>
+               <app-flextable #what_people_have
+                        (tableBtnClicked)='tableButtonClicked($event)'
+                        [options]="
+                        {
+                        datasource: 'offers',
+
+                        hiddenColumns: {
+                           header: true,
+                           column: 'Created By'
+                        },
+                        'sort': { '_id': 'desc' },
+                        currencyColumns: [
+                        {
+                        column: 'buyitnow',
+                           'currency': 'USD'
+                        }
+                        ],
+                        columnNameRewrites: [
+                           'Headline', 'Points', 'Created By'
+                        ],
+                        conditionalBadges: [
+                        {
+                        'column': 'Headline',
+                        'icon': 'shield',
+                        'conditionalKey': 'verified',
+                        'conditionalValue': true
+                        }
+                        ],
+                        scope: 'all',
+                        bNoHeader: true,
+                        bAllowDeletion: false,
+                        filter: {
+                           visible: { $ne: false  }, 
+                           quality_approved: true,
+                           type: { $ne: 'request'},
+                           status: { $eq: 'available' },
+                           archived: { $ne: true },
+                           created_by: { $ne: '$res.locals.user._id' },
+                           'proposals.buyer_id': { '$ne' : '$res.locals.user._id' }
+                        }, 
+                        columns: [
+                           'headline', 'pointsCost', 'created_by'
+                        ]
+                        }"
+                        ></app-flextable>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</form>

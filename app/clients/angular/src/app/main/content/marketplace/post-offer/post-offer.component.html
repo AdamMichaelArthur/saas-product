@@ -1,0 +1,372 @@
+<form name="addPost" (ngSubmit)="onSubmit()" [formGroup]="yourForm">
+  <div #requestModal id="requestModal" class="modal-dialog modal-dialog-centered modal-lg">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title">Your Offer</h5>
+           <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              ></button>
+        </div>
+        <div class="modal-body">
+           <div class="row mb-4">
+              <label for="inputText" class="col-form-label">Headline</label>
+              <div class="col-sm-10">
+                 <input
+                 #offer_headline_el
+                 id="offer_headline"
+                 name="offer_headline"
+                 type="text"
+                 [(ngModel)]="offer_headline"
+                 class="form-control"
+                 formControlName="offer_headline"
+                 />
+                 <div class="error-message" *ngIf="yourForm.get('offer_headline').errors?.['required'] && yourForm.get('offer_headline').touched">
+                    Headline must not be empty
+                 </div>
+              </div>
+           </div>
+           <div class="row mb-4">
+              <div class="col-sm-4">
+                 <label for="offer_buyitnow" class="col-form-label"
+                    >Points Price (1 - 10)</label>
+                 <input
+                 [disabled]="allowPointInput"
+                 id="offer_buywithpoints"
+                 name="offer_buywithpoints"
+                 [(ngModel)]="offer_buywithpoints"
+                 type="number"
+                 class="form-control"
+                 min="1"
+                 max="100"
+                 formControlName="offer_buywithpoints"
+                 />
+                 <div class="error-message" *ngIf="yourForm.get('offer_buywithpoints').errors?.['min'] && yourForm.get('offer_buywithpoints').touched">
+                    The value must be greater than 0.
+                 </div>
+              </div>
+              <div class="col-sm-4">
+                 <label class="col-sm-12 col-form-label">Category&nbsp;</label>
+                 <select
+                 name="mySelect"
+                 class="form-select"
+                 aria-label="Default select example"
+                 [(ngModel)]="offer_category"
+                 (change)="onCategorySelected()"
+                 formControlName="offer_category"
+                 >
+                 <option value="default">Choose Category</option>
+                 <option *ngFor="let option of categories" [ngValue]="option">
+                 {{option}}
+                 </option>
+                 </select>
+                 <div class="error-message" *ngIf="yourForm.get('offer_category').errors?.['defaultSelected'] && yourForm.get('offer_category').touched">You must choose a category.</div>
+              </div>
+           </div>
+           <div *ngIf="displayLinkConditions">
+              <p class="small fst-italic" style="color:red">
+                 Sites that primarily monetize through selling links, guest posts or
+                 other "grey" monetization tactics are not eligible to provide links.
+                 We reserve
+                 the right to remove sites we feel offer low quality or low value
+                 links.
+              </p>
+              <p> <a routerLink="help">The point value of links is determined algorithmically, to ensure fairness
+                 and consistency.</a>  Site stats checked using Ahrefs.
+              </p>
+              <div class="row mb-4">
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Site DR"
+                    id="inputDr"
+                    name="inputDr"
+                    [(ngModel)]="inputDr"
+                    type="number"
+                    class="form-control"
+                    formControlName="inputDr"
+                    (ngModelChange)="determineValue()"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('inputDr').errors?.['required'] && yourForm.get('inputDr').touched">You must put in the Site DR</div>
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Site Traffic"
+                    id="inputSiteTraffic"
+                    name="inputSiteTraffic"
+                    [(ngModel)]="inputSiteTraffic"
+                    type="number"
+                    class="form-control"
+                    formControlName="inputSiteTraffic"
+                    (ngModelChange)="determineValue()"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('inputSiteTraffic').errors?.['required'] && yourForm.get('inputSiteTraffic').touched">You must put in site traffic</div>
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Page Traffic"
+                    id="inputPageTraffic"
+                    name="inputPageTraffic"
+                    [(ngModel)]="inputPageTraffic"
+                    type="number"
+                    class="form-control"
+                    formControlName="inputPageTraffic"
+                    (ngModelChange)="determineValue()"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('inputPageTraffic').errors?.['required'] && yourForm.get('inputPageTraffic').touched">Use '0' for new content</div>
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Primary Niche"
+                    id="primaryNiche"
+                    name="primaryNiche"
+                    [(ngModel)]="inputNiche"
+                    type="text"
+                    class="form-control"
+                    formControlName="primaryNiche"
+                    (ngModelChange)="determineValue()"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('primaryNiche').errors?.['required'] && yourForm.get('primaryNiche').touched">You must put in the main niche</div>
+                 </div>
+                 <div class="col-sm-3" style="margin-top:5px;">
+                    <div class="form-check">
+                       <input class="form-check-input" id="inputNewContent" name="inputNewContent" [(ngModel)]="inputNewContent" (ngModelChange)="determineValue()" type="checkbox" formControlName="inputNewContent">
+                       <label class="form-check-label" for="inputPageTraffic">
+                       New Content
+                       </label>
+                    </div>
+                    <div class="form-check">
+                       <input class="form-check-input" id="inputHumanWritten" name="inputHumanWritten" [(ngModel)]="inputHumanWritten" (ngModelChange)="determineValue()" type="checkbox" formControlName="inputHumanWritten">
+                       <label class="form-check-label" for="inputPageTraffic">
+                       Human Written
+                       </label>
+                    </div>
+                 </div>
+                 <div class="col-sm-3" style="margin-top:5px;">
+                    <div >
+                       <h1>{{linkPointValue}}<sup>&nbsp;points</sup></h1>
+                    </div>
+                 </div>
+              </div>
+              <div class="row mb-4">
+                 <p class="small fst-italic" style="color:blue">
+                    *Your site WILL NOT be displayed. But we need to check it for
+                    quality.
+                 </p>
+                 <div class="col-sm-12">
+                    <input
+                    placeholder="Website / Page URL"
+                    id="inputDomain"
+                    name="inputDomain"
+                    [(ngModel)]="inputDomain"
+                    formControlName="inputDomain"
+                   
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+              </div>
+           </div>
+           <div *ngIf="displayNewsletterConditions">
+              <div class="row mb-4">
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Subscribers"
+                    id="newsletterSubscribers"
+                    name="newsletterSubscribers"
+                    [(ngModel)]="newsletterSubscribers"
+                    type="number"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Open Rate"
+                    id="newsletterOpenRate"
+                    name="newsletterOpenRate"
+                    [(ngModel)]="newsletterOpenRate"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Frequency"
+                    id="newsletterFrequency"
+                    name="newsletterFrequency"
+                    [(ngModel)]="newsletterFrequency"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Primary Niche"
+                    id="primaryNiche"
+                    name="primaryNiche"
+                    [(ngModel)]="inputNiche"
+                    type="text"
+                    class="form-control"
+                    formControlName="primaryNiche"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('primaryNiche').errors?.['required'] && yourForm.get('primaryNiche').touched">You must put in the main niche</div>
+                 </div>
+              </div>
+           </div>
+           <div *ngIf="displayShoutoutConditions">
+              <p class="small fst-italic" style="color:blue">
+                 The provider is responsible for any creatives.
+              </p>
+              <div class="row mb-4">
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Followers"
+                    id="shoutoutFollowers"
+                    name="shoutoutFollowers"
+                    [(ngModel)]="shoutoutFollowers"
+                    type="number"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Platform"
+                    id="shoutoutPlatform"
+                    name="shoutoutPlatform"
+                    [(ngModel)]="shoutoutPlatform"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Niche"
+                    id="shoutoutNiche"
+                    name="shoutoutNiche"
+                    [(ngModel)]="shoutoutNiche"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+              </div>
+           </div>
+           <div *ngIf="displayAdSpaceConditions">
+              <div class="row mb-4">
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Type of Ad"
+                    id="adspaceType"
+                    name="adspaceType"
+                    [(ngModel)]="adspaceType"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Duration"
+                    id="adspaceDuration"
+                    name="adspaceDuration"
+                    [(ngModel)]="adspaceDuration"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Eyeballs"
+                    id="adspaceEyeballs"
+                    name="adspaceEyeballs"
+                    [(ngModel)]="adspaceEyeballs"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Primary Niche"
+                    id="primaryNiche"
+                    name="primaryNiche"
+                    [(ngModel)]="inputNiche"
+                    type="text"
+                    class="form-control"
+                    formControlName="primaryNiche"
+                    />
+                    <div class="error-message" *ngIf="yourForm.get('primaryNiche').errors?.['required'] && yourForm.get('primaryNiche').touched">You must put in the main niche</div>
+                 </div>
+              </div>
+           </div>
+           <div *ngIf="displayDomainConditions">
+              <div class="row mb-4">
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="Domain Name"
+                    id="domainName"
+                    name="domainName"
+                    [(ngModel)]="domainName"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+                 <div class="col-sm-3">
+                    <input
+                    placeholder="DR"
+                    id="domainTraffic"
+                    name="domainTraffic"
+                    [(ngModel)]="domainTraffic"
+                    type="text"
+                    class="form-control"
+                    />
+                 </div>
+              </div>
+           </div>
+           <div *ngIf="displayServiceConditions">
+              <div class="comment-container">
+                 <div class="form-group">
+                    <label for="comment">Service Description</label>
+                    <textarea
+                    id="comment"
+                    name="comment"
+                    [(ngModel)]="serviceDescription"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Briefly describe the service you can offer"
+                    ></textarea>
+                 </div>
+              </div>
+              <br />
+           </div>
+           <div *ngIf="displaySomethingElseConditions">
+              <div class="comment-container">
+                 <div class="form-group">
+                    <label for="comment">What are you thinking?</label>
+                    <textarea
+                    id="somethingElse"
+                    name="somethingElse"
+                    [(ngModel)]="somethingElse"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Briefly describe what you want to offer to the community"
+                    ></textarea>
+                 </div>
+              </div>
+              <br />
+           </div>
+        </div>
+        <div class="modal-footer">
+           <button
+              #myModal
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              >
+           Close
+           </button>
+           <button type="submit" class="btn btn-primary">
+           Post
+           </button>
+        </div>
+     </div>
+  </div>
+</form>

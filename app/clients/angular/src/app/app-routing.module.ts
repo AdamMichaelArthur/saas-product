@@ -35,7 +35,7 @@ import { FormsModule } from "@angular/forms"
 
 /* Admin */
 import { PlanComponent } from './main/content/sysadmin/planmanagement/plan/plan.component';
-//import { QualityCheckComponent } from './main/content/sysadmin/quality-check/quality-check.component';
+import { QualityCheckComponent } from './main/content/sysadmin/quality-check/quality-check.component';
 
 /* Affiliate */
 import { CookiesComponent } from './main/content/affiliate/cookies2/cookies2.component'
@@ -57,8 +57,34 @@ import { MessagesComponent } from './main/messages/messages.component';
 import { ForumComponent } from './main/forum/forum.component'
 import { ThreadComponent } from './main/forum/thread/thread.component'
 
+/* Prompt Playground */
+import { PromptsComponent } from './main/content/sysadmin/prompts/prompts.component';
+import { PromptPlaygroundComponent } from './reusable/ui/prompt-playground/prompt-playground.component';
+
+import { MarketplaceComponent } from './main/content/marketplace/marketplace.component'
+import { OfferDetailsComponent } from './main/content/marketplace/offer-details/offer-details.component'
+
+/* Help */
+import { LinkGuidelinesComponent } from './main/content/help/link-guidelines/link-guidelines.component'
+import { FaqComponent } from './main/content/help/faq/faq.component'
+import { VoteComponent } from './main/content/help/vote/vote.component'
+import { RoadmapComponent } from './main/content/help/roadmap/roadmap.component'
+import { OnboardingComponent } from './main/content/help/onboarding/onboarding.component'
+import { HowtouseComponent } from './main/content/help/howtouse/howtouse.component'
+
+/* Website */
+import { WebsiteComponent } from './website/website.component'
+
+import { YourfullschoolComponent } from './website/yourfullschool/yourfullschool.component'
+
+import { LinkAlgorithmComponent } from './website/link-algorithm/link-algorithm.component'
+
 const routes: Routes = [  
   /* Public Routes */
+  { path: 'application', component: WebsiteComponent },
+  { path: 'yourfullschool', component: YourfullschoolComponent },
+  { path: 'public/application/link-requirements', component: LinkGuidelinesComponent },
+  { path: 'public/application/link-algorithm', component: LinkAlgorithmComponent },
   { path: 'login', component: LoginComponent },
   // { path: 'register', component: RegisterComponent },
   // { path: 'register-affiliate', redirectTo: 'register', pathMatch: 'full' },
@@ -77,6 +103,7 @@ const routes: Routes = [
     path: 'terms/privacy',
     component: PrivacyComponent
   },
+  { path: 'onboarding', component: OnboardingComponent },
   {
     path: 'main',
     component: MainComponent,
@@ -85,10 +112,16 @@ const routes: Routes = [
       { path: 'upgrade', component: UpgradePlanComponent },
 
       /* Help */
-      // { path: 'faq', component: FaqComponent },
-      // { path: 'vote', component: VoteComponent },
-      // { path: 'howtouse', component: HowtouseComponent },
+      { path: 'faq', component: FaqComponent },
+      { path: 'vote', component: VoteComponent },
+      { path: 'howtouse', component: HowtouseComponent },
 
+
+      /* Marketplace */
+      { path: 'marketplace', component: MarketplaceComponent },
+      { path: 'marketplace/offer-details', component: OfferDetailsComponent },
+      { path: 'marketplace/offer-details/id/:id', component: OfferDetailsComponent },
+      { path: 'help/link-guidelines', component: LinkGuidelinesComponent },
       /* Forum */
       { path: 'forum', component: ForumComponent },
       { path: 'forum/thread', component: ThreadComponent },
@@ -121,9 +154,9 @@ const routes: Routes = [
       { path: 'sysadmin/planmanagement/plan/id/:id', component: PlanComponent },
       { path: 'sysadmin/reports', component: ReportsComponent },
       { path: 'sysadmin/transactions', component: TransactionsComponent },
-      //{ path: 'sysadmin/prompts', component: PromptsComponent },
-      //{ path: 'sysadmin/prompts/id/:id', component: PromptPlaygroundComponent },
-      //{ path: 'sysadmin/quality', component: QualityCheckComponent },
+      { path: 'sysadmin/prompts', component: PromptsComponent },
+      { path: 'sysadmin/prompts/id/:id', component: PromptPlaygroundComponent },
+      { path: 'sysadmin/quality', component: QualityCheckComponent },
 
       /* Affiliate Routes */
       { path: 'affiliate/cookies', component: CookiesComponent },
