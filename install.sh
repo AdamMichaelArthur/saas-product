@@ -160,15 +160,14 @@ if [ "$installFlavor" = "server" ]; then
     # Push the commit
     git push
 
-    echo "ssh root@app.saas-product.com:/srv/git/${projectName}.git/"
+    echo "ssh://root@app.saas-product.com:/srv/git/${projectName}.git/"
+    # https://github.com/AdamMichaelArthur/saas-product.git
     # This sets and copies the repo into the git directory, which will now become the "source of truth"
     #cp -a .git/. "/srv/git/${projectName}.git/"
 
     # Now, we will copy the project files into our installation directory
     cp -r * "/srv/www/${projectName}/"
 
-    # Exit, so I can test...
-    exit
     # Run NPM Install in our project directories, where required
     #cd "/srv/www/${projectName}/app/apis/apiv1" && npm install
     cd "/srv/www/${projectName}/app/apis/apiv2" && npm install --loglevel=error
@@ -507,6 +506,94 @@ EOF
     # See if our configuration file is ok
     nginx -t
     systemctl restart nginx
+
+sudo tee "/srv/git/${projectName}.git/hooks/post-receive" >/dev/null <<EOF
+
+
+
+
+
+
+#!/bin/bash
+
+# Define the base project name
+project_name="${projectName}"
+
+# Stop the PM2 processes
+echo 'Deploying Project To Production'
+pm2 stop ${projectName}-api-v1
+pm2 stop ${projectName}-api-v2
+
+# The production directory
+WWW="/srv/www/${projectName}"
+
+# A temporary directory for deployment
+TMP="/srv/tmp/${projectName}"
+
+# The Git repo
+GIT="/srv/git/${projectName}.git"
+
+# The Env repo
+ENV="/srv/env/${projectName}"
+
+
+# Deploy the content to the temporary directory
+mkdir -p \$TMP
+git --work-tree=\$TMP --git-dir=\$GIT checkout -f
+
+# Copy the env variable to the temporary directory
+cp -a \$ENV/. \$TMP
+
+# Do stuffs, like npm install
+cd \$TMP || exit
+
+# Replace the content of the production directory
+# with the temporary directory
+cd / || exit
+rm -rf \$WWW
+mv \$TMP \$WWW
+
+# Do stuff like starting docker
+cd \$WWW || exit
+# docker-compose up -d --build
+
+# Move our environment variables
+cp "/srv/env/${projectName}/apiv1" "/srv/www/${projectName}/apiv1/.env"
+cp "/srv/env/${projectName}/apiv2" "/srv/www/${projectName}/apiv2/.env"
+
+cd "/srv/www/${projectName}/apiv1"
+npm install 
+
+cd "/srv/www/${projectName}/apiv2"
+npm install
+
+# Build the react client, if present
+cd "/srv/www/${projectName}/clients/react"
+npm install
+
+# Build the project locally
+npm run build
+
+# Move this post-receive to the post-receive folder.  
+mv /srv/www/${projectName}/deployment/post-receive /srv/git/${projectName}.git/hooks/post-receive
+
+# Set the hook as an executable
+chmod +x /srv/git/${projectName}.git/hooks/post-receive
+
+# Copy the nginx configuration file to the sites-enabled directory
+mv /srv/www/${projectName}/deployment/${projectName}.conf /etc/nginx/sites-enabled/${projectName}.conf
+
+# Make sure the configuration files are good
+nginx -t 
+
+# And finally restart nginx to make the changes take effect
+systemctl restart nginx
+
+# Start our PM2 processes
+pm2 start ${projectName}-apiv1
+pm2 start ${projectName}-apiv2
+
+EOF
 
 fi
 
