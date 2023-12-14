@@ -579,7 +579,7 @@ npm install
 npm run build
 
 # Build the react client, if present
-cd "/srv/www/${projectName}/clients/angular"
+cd "/srv/www/${projectName}/app/clients/angular"
 npm install
 
 # Build the project locally
