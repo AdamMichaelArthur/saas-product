@@ -175,34 +175,34 @@ if [ "$installFlavor" = "server" ]; then
     AUTH_DB="admin"  # Default auth db
 
     # Prompt user for optional overrides
-    echo "Enter MongoDB Domain (default: 127.0.0.1):"
-    read inputDomain
+    echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
     if [ ! -z "$inputDomain" ]; then
         DB_DOMAIN="$inputDomain"
     fi
 
-    echo "Enter MongoDB Port (default: 27017):"
-    read inputPort
+    echo "Enter MongoDB Port (default: 27017):" read inputPort
     if [ ! -z "$inputPort" ]; then
         DB_PORT="$inputPort"
     fi
 
-    echo "Enter MongoDB Username (default: none):"
-    read inputUsername
+    echo "Enter MongoDB Username (default: none):" read inputUsername
     if [ ! -z "$inputUsername" ]; then
         DB_USERNAME="$inputUsername"
     fi
 
-    echo "Enter MongoDB Password (default: none):"
-    read inputPassword
+    echo "Enter MongoDB Password (default: none):" read inputPassword
     if [ ! -z "$inputPassword" ]; then
         DB_PASSWORD="$inputPassword"
     fi
 
-    echo "Enter MongoDB Authentication Database (default: admin):"
-    read inputAuthDb
+    echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
     if [ ! -z "$inputAuthDb" ]; then
         AUTH_DB="$inputAuthDb"
+    fi
+
+    echo "Enter your Stripe Development Key:" read stripeDevKey
+    if [ ! -z "$stripeDevKey" ]; then
+        STRIPE_KEY="$stripeDevKey"
     fi
 
     # Echo values for verification
@@ -221,6 +221,9 @@ PROJECT_NAME=${projectName}
 PORT=${API_V1_PORT}
 WEBSOCKET_1=$((API_V1_PORT + 1))
 WEBSOCKET_2=$((API_V1_PORT + 2))
+
+# The stripe API key
+stripe_key = ${STRIPE_KEY}
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
@@ -303,7 +306,7 @@ EOF
     if [ "$response" -eq 200 ]; then
         echo "API is working fine.  Creating admin user"
 
-        curl --location 'http://localhost:4201/api/register' \
+        curl --location "http://${HOST}:${API_V2_PORT}/register" \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --data-raw "{
