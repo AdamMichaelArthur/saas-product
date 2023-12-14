@@ -64,7 +64,8 @@ cd "$TMP" || exit
 # So instead we do an "initial" npm install, store it in this directory, and then copy it 
 # as needed for quick deployments
 sudo mkdir -p "$NODE_MODULES"
-cd "$NODE_MODULES" || exit
+
+cd "$GIT" || exit
 
 # Init the repo as an empty git repository
 sudo git init --bare
