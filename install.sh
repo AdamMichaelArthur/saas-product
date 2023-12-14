@@ -142,21 +142,25 @@ if [ "$installFlavor" = "server" ]; then
     # Trash our existing git repo
     rm -rf .git
 
-    # Clone the empty repository into our cwd
-    git clone "/srv/git/${projectName}.git/"
+    # Clone the empty repository into our tmp
+    git clone "/srv/git/${projectName}.git/" tmp
 
-    # Move the project files into our cwd
-    mv -f "${projectName}/*" .
+    # Move the project files into our empty, tmp directory
+    #find . -maxdepth 1 -not -name "tmp" -not -name '.' -exec mv {} tmp/ \;
 
+    find . -path ./tmp -prune -o -type f -exec cp --parents {} tmp/ \;
+
+    cd tmp
     # Add the newly moved files to our empty git repo
     git add .
 
     # Create an initial commit
     git commit -m "First Commit"
 
-    # Push the commit 
+    # Push the commit
     git push
 
+    echo "ssh root@app.saas-product.com:/srv/git/${projectName}.git/"
     # This sets and copies the repo into the git directory, which will now become the "source of truth"
     #cp -a .git/. "/srv/git/${projectName}.git/"
 
