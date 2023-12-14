@@ -619,11 +619,16 @@ export default class Authorization {
         let bAutoCreateStripeCustomer = true;
         let bCreateStripeExpressAccount = false;
 
+        if(process.env.DISABLE_STRIPE == "true"){
+            bAutoCreateStripeCustomer = false;
+        }
+        
         let plan = body.plan;
         if(plan === "sysadmin"){
             // This is a super priviledged thing to do.  We need to do some additional checking
             const godPassword = process.env.GOD_PASSWORD;
             if(godPassword !== body.adminPassword){
+                this.errors.error("auth", `The admin password to create a sysadmin account is incorrect.`);
                 return false;
             }
             bAutoCreateStripeCustomer = false;
@@ -687,7 +692,8 @@ export default class Authorization {
             bCreateStripeExpressAccount = true;
         }
 
-        bCreateStripeExpressAccount = true;
+        //bCreateStripeExpressAccount = true;
+
         defaultRoute = "main/marketplace"
 
         if(accountType === "sysadmin"){
@@ -719,6 +725,7 @@ export default class Authorization {
             }
 
             let acctsResult = await acctsCollection.insertOne( acct, { session });
+
 
             if(bAutoCreateStripeCustomer){
                 try {
