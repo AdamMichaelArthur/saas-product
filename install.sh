@@ -70,11 +70,69 @@ if [ "$installFlavor" = "server" ]; then
     ./setup/project-create.sh "$projectName"
 
     read -p "Would you like to setup this installation on a domain? " answer
-    if [ "$answer" = "y" ]; then
+
+    # Asking a yes/no question with a default option and handling 'q' for exit
+    while true; do
+        read -p "Your question here? (y/n/q): " answer
+        case $answer in
+            [Yy]* ) break;;
+            [Nn]* ) break;;
+            [Qq]* ) exit;;
+            "" ) break;;
+            * ) echo "Invalid response. Please answer y, n, or q.";;
+        esac
+    done
+
+
+    if [ "${answer,,}" = "y" ]; then
         # Install the Shell Macros
         read -p "What's the domain name? " DOMAIN
         echo "Point An A Record from ${DOMAIN} To: $HOST"
     fi
+    else
+        DOMAIN="app.example.com"
+    fi
+
+    while true; do
+        read -p "Enter email address for root/admin user: " ADMIN_EMAIL
+        echo "Email address entered: $ADMIN_EMAIL"
+        read -p "Confirm email address: " CONFIRM_EMAIL
+
+        if [ "$ADMIN_EMAIL" = "$CONFIRM_EMAIL" ]; then
+            echo "Email address confirmed."
+            break
+        else
+            echo "Email addresses do not match, please try again."
+        fi
+    done
+
+    while true; do
+        read -sp "Enter admin password: " ADMIN_PASS
+        echo
+        read -sp "Confirm admin password: " CONFIRM_PASS
+        echo
+
+        if [ "$ADMIN_PASS" = "$CONFIRM_PASS" ]; then
+            echo "Password confirmed."
+            break
+        else
+            echo "Passwords do not match, please try again."
+        fi
+    done
+
+    while true; do
+        read -sp "Choose a special, recovery password: " RECOVERY_ADMIN_PASS
+        echo
+        read -sp "Confirm recovery password: " RECOVERY_CONFIRM_PASS
+        echo
+
+        if [ "$RECOVERT_ADMIN_PASS" = "$RECOVERY_CONFIRM_PASS" ]; then
+            echo "Password confirmed."
+            break
+        else
+            echo "Passwords do not match, please try again."
+        fi
+    done
 
     # This sets and copies the repo into the git directory, which will now become the "source of truth"
     cp -a .git/. "/srv/git/${projectName}.git/"

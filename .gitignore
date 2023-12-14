@@ -5,7 +5,6 @@ apiv2/2.0/endpoints/yourapp'
 **/.env
 **/.package-lock
 # Local Files
-website/
 var/
 static/
 scrap/
