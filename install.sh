@@ -209,6 +209,8 @@ ask_details() {
 
 }
 
+export SECRET_KEY=$(openssl rand -hex 32)
+
 confirm() {
     echo "MongoDB Domain: $DB_DOMAIN"
     echo "MongoDB Port: $DB_PORT"
@@ -250,6 +252,8 @@ AUTH_DB="${AUTH_DB}"
 
 EOF
 
+echo "The secret key is ${SECRET_KEY}"
+
 cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.env"
 
     cd "/srv/env/${projectName}"
@@ -261,7 +265,7 @@ WEBSOCKET_2=$((API_V2_PORT + 2))
 
 # Recovery and Administrator Password
 GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
-SECRET_KEY="abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+SECRET_KEY=${SECRET_KEY}
 
 stripe_key=${STRIPE_KEY}
 
@@ -324,18 +328,25 @@ EOF
     if [ "$response" -eq 200 ]; then
         echo "API is working fine.  Creating admin user"
 
-        curl --location "http://${HOST}:${API_V2_PORT}/register" \
-        --header 'Content-Type: application/json' \
-        --header 'Accept: application/json' \
-        --data-raw "{
-            \"userId\": \"${ADMIN_EMAIL}\",
-            \"pwd\": \"${ADMIN_PASS\",
-            \"plan\": \"sysadmin\",
-            \"adminPassword\": \"${RECOVERY_ADMIN_PASS}\",
-            \"account_type\": \"user\",
-            \"first_name\": \"Adam\",
-            \"last_name\": \"Arthur\"
-        }"
+    echo HOST
+    echo API_V2_PORT
+    echo ADMIN_EMAIL
+    echo ADMIN_PASS
+    echo RECOVERY_ADMIN_PASS
+
+    curl --location "http://${HOST}:${API_V2_PORT}/register" \
+    --header 'Content-Type: application/json' \
+    --header 'Accept: application/json' \
+    --data-raw "{
+        \"userId\": \"${ADMIN_EMAIL}\",
+        \"pwd\": \"${ADMIN_PASS}\",
+        \"plan\": \"sysadmin\",
+        \"adminPassword\": \"${RECOVERY_ADMIN_PASS}\",
+        \"account_type\": \"user\",
+        \"first_name\": \"Adam\",
+        \"last_name\": \"Arthur\"
+    }"
+
 
     else
         echo "API check failed with response code: $response"
