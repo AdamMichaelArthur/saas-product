@@ -142,6 +142,24 @@ if [ "$installFlavor" = "server" ]; then
     # This sets and copies the repo into the git directory, which will now become the "source of truth"
     cp -a .git/. "/srv/git/${projectName}.git/"
 
+    # Init the repo as an empty git repository
+    sudo git init --bare
+
+    # Define group recursively to "users", on the directories
+    sudo chgrp -R users .
+
+    # Define permissions recursively, on the sub-directories
+    # g = group, + add rights, r = read, w = write, X = directories only
+    # . = curent directory as a reference
+    sudo chmod -R g+rwX .
+
+    # Sets the setgid bit on all the directories
+    # https://www.gnu.org/software/coreutils/manual/html_node/Directory-Setuid-and-Setgid.html
+    sudo find . -type d -exec chmod g+s '{}' +
+
+    # Make the directory a shared repo
+    sudo git config core.sharedRepository group
+
     # Now, we will copy the project files into our installation directory
     cp -r * "/srv/www/${projectName}/"
 

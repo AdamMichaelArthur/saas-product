@@ -55,9 +55,9 @@ export default class Websockets {
       { 
         this.bDatabaseConnected = true;
         this.db = db;
-        this.server.listen(122);
+        this.server.listen(process.env.WEBSOCKET_1);
         this.handleConnection();
-        console.log("Websockets Listening on port 122");
+        console.log(`Websockets Listening on port ${process.env.WEBSOCKET_1}`);
       } );
     return;
   }
