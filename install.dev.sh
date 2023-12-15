@@ -616,9 +616,11 @@ cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.
 cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/app/apis/apiv2/.env"
 
 cd "/srv/www/${projectName}/app/apis/apiv1"
+cp -r "/srv/node_modules/${projectName}/app/apis/apiv1/node_modules" "/srv/www/${projectName}/app/apis/apiv1"
 npm ci
 
 cd "/srv/www/${projectName}/app/apis/apiv2"
+cp -r "/srv/node_modules/${projectName}/app/apis/apiv2/node_modules" "/srv/www/${projectName}/app/apis/apiv2"
 npm ci
 
 # Build the react client, if present
