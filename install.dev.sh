@@ -243,9 +243,11 @@ if [ "$installFlavor" = "server" ]; then
     cp -r * "/srv/www/${projectName}/"
 
     # Run NPM Install in our project directories, where required
-    cd "/srv/www/${projectName}/app/apis/apiv1" && npm install --loglevel=error
-    cd "/srv/www/${projectName}/app/apis/apiv2" && npm install --loglevel=error
+    cd "/srv/www/${projectName}/app/apis/apiv1" && npm ci --loglevel=error
+    cd "/srv/www/${projectName}/app/apis/apiv2" && npm ci --loglevel=error
 
+    cp -r "/srv/www/${projectName}/app/apis/apiv2/node_modules" "/srv/node_modules/${projectName}/apiv2"
+    cp -r "/srv/www/${projectName}/app/apis/apiv1/node_modules" "/srv/node_modules/${projectName}/apiv1"
     # Install NPM Modules and Build Angular App
     #cd "/srv/www/${projectName}/app/clients/angular" && npm install
     #ng build
@@ -580,10 +582,10 @@ cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.
 cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/app/apis/apiv2/.env"
 
 cd "/srv/www/${projectName}/app/apis/apiv1"
-npm install 
+npm ci
 
 cd "/srv/www/${projectName}/app/apis/apiv2"
-npm install
+npm ci
 
 # Build the react client, if present
 cd "/srv/www/${projectName}/clients/react"
@@ -594,7 +596,7 @@ npm run build
 
 # Build the react client, if present
 cd "/srv/www/${projectName}/app/clients/angular"
-npm install
+npm ci
 
 # Build the project locally
 ng build
