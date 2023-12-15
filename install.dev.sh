@@ -533,12 +533,6 @@ EOF
     systemctl restart nginx
 
 sudo tee "/srv/git/${projectName}.git/hooks/post-receive" >/dev/null <<EOF
-
-
-
-
-
-
 #!/bin/bash
 
 # Define the base project name
