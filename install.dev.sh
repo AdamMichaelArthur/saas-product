@@ -3,6 +3,20 @@
 # Save our original cwd, we'll need it later
 ORIG_PWD=$PWD
 
+# MongoDB connection details with defaults
+DB_DOMAIN="127.0.0.1"
+DB_PORT="27017"
+DB_USERNAME=""  # Set to empty initially
+DB_PASSWORD=""  # Set to empty initially
+AUTH_DB="admin"  # Default auth db
+
+# Define our default HOST
+HOST="127.0.0.1"
+SECRET_KEY=$(openssl rand -hex 32)
+
+# Fetching the public IP address using an external service
+public_ip=$(curl -s ifconfig.me)
+
 find_available_port_range() {
     local START_PORT=49152  # Starting port for search
     local END_PORT=65534    # Adjusted end port for search to accommodate 10-port range
@@ -27,47 +41,108 @@ find_available_port_range() {
     return 1
 }
 
-# Detecting the operating system
-# The install script behaves differently depending on whether it's a local or remote installation
-OS_TYPE=$(uname -s)
+ask_details() {
+    # Prompt user for optional overrides
+    #echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
+    read -p "Enter MongoDB Domain (default: 127.0.0.1):" inputDomain
+    if [ ! -z "$inputDomain" ]; then
+        DB_DOMAIN="$inputDomain"
+    fi
 
-# Use the OS_TYPE variable for checking the operating system
-if [ "$OS_TYPE" = "Darwin" ]; then
-    # MacOS specific code
-    echo "Operating System is MacOS"
-elif [ "$OS_TYPE" = "Linux" ]; then
-    # Linux specific code
-    echo "Operating System is Linux"
-    # Further checks for Linux distributions can be done here
-else
-    echo "Unsupported operating system: $OS_TYPE"
-    exit 1
-fi
+    #echo "Enter MongoDB Port (default: 27017):" read inputPort
+    read -p "Enter MongoDB Port (default: 27017):" inputPort
+    if [ ! -z "$inputPort" ]; then
+        DB_PORT="$inputPort"
+    fi
 
-read -p "Enter Project Name: " projectName
+    #echo "Enter MongoDB Username (default: none):" read inputUsername
+    read -p "Enter MongoDB Username (default: none):" inputUsername 
+    if [ ! -z "$inputUsername" ]; then
+        DB_USERNAME="$inputUsername"
+    fi
 
+    #echo "Enter MongoDB Password (default: none):" read inputPassword
+    read -p "Enter MongoDB Password (default: none):" inputPassword
+    if [ ! -z "$inputPassword" ]; then
+        DB_PASSWORD="$inputPassword"
+    fi
 
-while true; do
-    read -p "Is this a (d) development installation or a (s) server installation? (d/s): " answer
-    case "${answer,,}" in
-        d)
-            installFlavor="local"
-            break
-            ;;
-        s)
-            installFlavor="server"
-            break
-            ;;
-        *)
-            echo "Invalid response. Please answer l for local or s for server."
-            ;;
+    #echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
+    read -p "Enter MongoDB Authentication Database (default: admin):" inputAuthDb
+    if [ ! -z "$inputAuthDb" ]; then
+        AUTH_DB="$inputAuthDb"
+    fi
+
+    #echo "Enter your Stripe Development Key:" read stripeDevKey
+    read -p "Enter your Stripe Development Key:" stripeDevKey
+    if [ ! -z "$stripeDevKey" ]; then
+        STRIPE_KEY="$stripeDevKey"
+    fi
+}
+
+confirm() {
+    echo "MongoDB Domain: $DB_DOMAIN"
+    echo "MongoDB Port: $DB_PORT"
+    echo "MongoDB Username: $DB_USERNAME"
+    echo "MongoDB Password: $DB_PASSWORD"
+    echo "MongoDB Auth Database: $AUTH_DB"
+    echo "Stripe Dev Key: $STRIPE_KEY"
+    read -p "Are these values correct? (y/n): " confirm
+    case "${confirm,,}" in
+        y) return 0;;
+        n) return 1;;
+        *) echo "Invalid response. Please answer y or n."; return 1;;
     esac
-done
+}
 
-HOST="127.0.0.1"
+define_ports(){
+    # Discover available ports
+    available_port=$(find_available_port_range)
+    echo "Available port range starts at: $available_port"
 
-# Fetching the public IP address using an external service
-public_ip=$(curl -s ifconfig.me)
+    # Define our ports
+    API_V1_PORT=$available_port
+    API_V2_PORT=$((available_port + 5))
+    WEBSOCKET_V2="$((API_V2_PORT + 2))"    
+}
+define_ports();
+
+check_os() {
+    # Detecting the operating system
+    # The install script behaves differently depending on whether it's a local or remote installation
+    OS_TYPE=$(uname -s)
+
+    if [ "$OS_TYPE" = "Darwin" ]; then
+        echo "Operating System is MacOS"
+    elif [ "$OS_TYPE" = "Linux" ]; then
+        echo "Operating System is Linux"
+    else
+        echo "Unsupported operating system: $OS_TYPE"
+        exit 1
+    fi
+}
+check_os()
+
+setProjectName(){
+    read -p "Enter Project Name: " projectName
+    while true; do
+        read -p "Is this a (d) development installation or a (s) server installation? (d/s): " answer
+        case "${answer,,}" in
+            d)
+                installFlavor="local"
+                break
+                ;;
+            s)
+                installFlavor="server"
+                break
+                ;;
+            *)
+                echo "Invalid response. Please answer l for local or s for server."
+                ;;
+        esac
+    done
+}
+setProjectName();
 
 # Check if the install flavor is 'server' and update HOST
 if [ "$installFlavor" = "server" ]; then
@@ -142,6 +217,11 @@ if [ "$installFlavor" = "server" ]; then
         fi
     done
 
+    while true; do
+        ask_details
+        confirm && break
+    done
+
     # Essentially what we're doing here is starting with the GitHub project
     # Creating a brand-new repo, copying the files from the GitHub repo to
     # the new repo.  This creates the ability to have a new project repo
@@ -184,83 +264,7 @@ if [ "$installFlavor" = "server" ]; then
     #ng build
     #cd "/srv/www/${projectName}/app/clients/react" && npm install
 
-    # Discover available ports
-    available_port=$(find_available_port_range)
-    echo "Available port range starts at: $available_port"
 
-    API_V1_PORT=$available_port
-    API_V2_PORT=$((available_port + 5))
-
-    # MongoDB connection details with defaults
-    DB_DOMAIN="127.0.0.1"
-    DB_PORT="27017"
-    DB_USERNAME=""  # Set to empty initially
-    DB_PASSWORD=""  # Set to empty initially
-    AUTH_DB="admin"  # Default auth db
-
-ask_details() {
-
-    # Prompt user for optional overrides
-    #echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
-    read -p "Enter MongoDB Domain (default: 127.0.0.1):" inputDomain
-    if [ ! -z "$inputDomain" ]; then
-        DB_DOMAIN="$inputDomain"
-    fi
-
-    #echo "Enter MongoDB Port (default: 27017):" read inputPort
-    read -p "Enter MongoDB Port (default: 27017):" inputPort
-    if [ ! -z "$inputPort" ]; then
-        DB_PORT="$inputPort"
-    fi
-
-    #echo "Enter MongoDB Username (default: none):" read inputUsername
-    read -p "Enter MongoDB Username (default: none):" inputUsername 
-    if [ ! -z "$inputUsername" ]; then
-        DB_USERNAME="$inputUsername"
-    fi
-
-    #echo "Enter MongoDB Password (default: none):" read inputPassword
-    read -p "Enter MongoDB Password (default: none):" inputPassword
-    if [ ! -z "$inputPassword" ]; then
-        DB_PASSWORD="$inputPassword"
-    fi
-
-    #echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
-    read -p "Enter MongoDB Authentication Database (default: admin):" inputAuthDb
-    if [ ! -z "$inputAuthDb" ]; then
-        AUTH_DB="$inputAuthDb"
-    fi
-
-    #echo "Enter your Stripe Development Key:" read stripeDevKey
-    read -p "Enter your Stripe Development Key:" stripeDevKey
-    if [ ! -z "$stripeDevKey" ]; then
-        STRIPE_KEY="$stripeDevKey"
-    fi
-
-}
-
-export SECRET_KEY=$(openssl rand -hex 32)
-
-confirm() {
-    echo "MongoDB Domain: $DB_DOMAIN"
-    echo "MongoDB Port: $DB_PORT"
-    echo "MongoDB Username: $DB_USERNAME"
-    echo "MongoDB Password: $DB_PASSWORD"
-    echo "MongoDB Auth Database: $AUTH_DB"
-    echo "Stripe Dev Key: $STRIPE_KEY"
-    read -p "Are these values correct? (y/n): " confirm
-    case "${confirm,,}" in
-        y) return 0;;
-        n) return 1;;
-        *) echo "Invalid response. Please answer y or n."; return 1;;
-    esac
-}
-
-while true; do
-    ask_details
-    confirm && break
-done
-    WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
     sudo tee apiv1.env >/dev/null <<EOF
@@ -343,6 +347,7 @@ EOF
 
     cd "/srv/www/${projectName}/app/apis/apiv2/"
     pm2 start npm --name "${projectName}-apiv2" -- run start_prod
+    echo "Running line 350"
     pm2 save
 
     cd "/srv/www/${projectName}/app/apis/apiv1/"
