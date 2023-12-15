@@ -459,6 +459,16 @@ gzip_types
     # This directs all "datasource" api requests to the ApiV1 Node App
     # The "datasource" api will eventually be ported to the new api.  But for now
     # it's a legacy dependency
+
+    location ^~ /v1.0/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_pass http://localhost:${API_V1_PORT}/;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
     location ^~ /api/datasource {
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
