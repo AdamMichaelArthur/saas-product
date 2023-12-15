@@ -372,18 +372,52 @@ EOF
     echo $ADMIN_PASS
     echo $RECOVERY_ADMIN_PASS
 
-    curl --location "http://${HOST}:${API_V2_PORT}/register" \
-    --header 'Content-Type: application/json' \
-    --header 'Accept: application/json' \
-    --data-raw "{
-        \"userId\": \"${ADMIN_EMAIL}\",
-        \"pwd\": \"${ADMIN_PASS}\",
-        \"plan\": \"sysadmin\",
-        \"adminPassword\": \"${RECOVERY_ADMIN_PASS}\",
-        \"account_type\": \"user\",
-        \"first_name\": \"Adam\",
-        \"last_name\": \"Arthur\"
-    }"
+    max_attempts=3
+    attempt=1
+
+    while [ $attempt -le $max_attempts ]; do
+        echo "Attempt $attempt of $max_attempts"
+
+        url="http://${HOST}:${API_V2_PORT}/register"
+        json_payload=$(cat <<EOF
+    {
+        "userId": "${ADMIN_EMAIL}",
+        "pwd": "${ADMIN_PASS}",
+        "plan": "sysadmin",
+        "adminPassword": "${RECOVERY_ADMIN_PASS}",
+        "account_type": "user",
+        "first_name": "Adam",
+        "last_name": "Arthur"
+    }
+    EOF
+    )
+
+        # Displaying the URL and JSON payload for debugging
+        echo "URL: $url"
+        echo "JSON Payload: $json_payload"
+
+        curl --location "$url" \
+            --header 'Content-Type: application/json' \
+            --header 'Accept: application/json' \
+            --data-raw "$json_payload" \
+            --max-time 5
+
+        status=$?
+        if [ $status -eq 0 ]; then
+            echo "Command succeeded"
+            break
+        else
+            echo "Command failed"
+        fi
+
+        attempt=$((attempt+1))
+        sleep 5 # wait for 5 seconds before retrying
+    done
+
+    if [ $attempt -gt $max_attempts ]; then
+        echo "Command failed after $max_attempts attempts."
+    fi
+
 
 
     else
