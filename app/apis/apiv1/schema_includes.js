@@ -13,19 +13,19 @@ require("@ecommerce/productsSchema.js");
 
 require("@ecommerce/customersSchema.js");
 
-require("../api/models/financials/financialsSchema.js");
+require("@models/financials/financialsSchema.js");
 
-require("../api/models/hugo/hugoSchema.js");
+require("@models/hugo/hugoSchema.js");
 
-require("../api/models/navigation/navigationSchema.js");
+require("@models/navigation/navigationSchema.js");
 
-require("../api/models/test/testSchema.js");
+require("@models/test/testSchema.js");
 
-require("../api/models/email/emailSchema.js");
+require("@models/email/emailSchema.js");
 
-require("../api/models/newTriggersSchema.js");
+require("@models/newTriggersSchema.js");
 
-require("../api/models/logging/loggingSchema.js");
+require("@models/logging/loggingSchema.js");
 
 
 //require("../api/models/zzendpointzzSchema.js");

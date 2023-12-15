@@ -114,6 +114,7 @@ function start() {
   server.on("error", onError);
   server.on("listening", onListening);
   server.on("timeout", onTimeout);
+  console.log(117, `Listening on ${port}`)
 
   /**
    * Normalize a port into a number, string, or false.

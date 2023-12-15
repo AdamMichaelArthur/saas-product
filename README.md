@@ -1,13 +1,20 @@
-## Note: My writing style has been described as overly verbose for experienced developers.  That may be true, but my intention is to make the project accessible for newbies as well
+# Installation Guide
 
-# Clone the repo
-git clone https://github.com/AdamMichaelArthur/saas-product.git
+## Prerequisites
+- A cloud server (e.g., Digital Ocean, Amazon Cloud Server, Rackspace Server)
+- Ubuntu 20
+- Node 20
 
+## Installation Steps
+1. Create a cloud server (Digital Ocean recommended).
+2. Point an A record to your server's IP on your domain (e.g., app.mydomain.com).
+3. SSH into the server.
+4. Clone the repo: `git clone https://github.com/AdamMichaelArthur/saas-product.git`
+5. Change directory: `cd saas-product`
+6. Run the installation script: `bash install.sh`
 
-# Installation
-## npm run install
-### This script installs all of the dependencies, initializes a database, sets up initial Stripe Subscription Plans and obtains Email and Slack credentials to enable the administrative communication features.  
+## Note
+- The script currently does not install dependencies.
+- Manual installation required for: nginx, mongodb, node 20, pm2, openssl, certbot.
 
-# Development
-## npm run dev-local
-### Starts the API and the Angular Client.
+## Clone the newly-cloned project to your local machine for development
