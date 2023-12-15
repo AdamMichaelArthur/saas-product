@@ -105,7 +105,7 @@ define_ports(){
     API_V2_PORT=$((available_port + 5))
     WEBSOCKET_V2="$((API_V2_PORT + 2))"    
 }
-define_ports();
+define_ports()
 
 check_os() {
     # Detecting the operating system
@@ -142,7 +142,7 @@ setProjectName(){
         esac
     done
 }
-setProjectName();
+setProjectName()
 
 # Check if the install flavor is 'server' and update HOST
 if [ "$installFlavor" = "server" ]; then
