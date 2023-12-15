@@ -366,11 +366,11 @@ EOF
     if [ "$response" -eq 200 ]; then
         echo "API is working fine.  Creating admin user"
 
-    echo HOST
-    echo API_V2_PORT
-    echo ADMIN_EMAIL
-    echo ADMIN_PASS
-    echo RECOVERY_ADMIN_PASS
+    echo $HOST
+    echo $API_V2_PORT
+    echo $ADMIN_EMAIL
+    echo $ADMIN_PASS
+    echo $RECOVERY_ADMIN_PASS
 
     curl --location "http://${HOST}:${API_V2_PORT}/register" \
     --header 'Content-Type: application/json' \
@@ -461,9 +461,9 @@ gzip_types
     # it's a legacy dependency
 
     location ^~ /v1.0/ {
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host \$http_host;
         proxy_set_header X-NginX-Proxy true;
         proxy_pass http://localhost:${API_V1_PORT}/;
         proxy_set_header X-Forwarded-Proto https;
