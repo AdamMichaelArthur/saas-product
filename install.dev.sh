@@ -389,7 +389,7 @@ EOF
         "first_name": "Adam",
         "last_name": "Arthur"
     }
-    EOF
+EOF
     )
 
         # Displaying the URL and JSON payload for debugging
