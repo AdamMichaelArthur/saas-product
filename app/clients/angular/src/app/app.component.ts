@@ -23,36 +23,16 @@ export class AppComponent {
     ).subscribe((event: NavigationEnd) => {
       const currentPath = event.urlAfterRedirects;
 
-      if(currentPath.toString().includes("#")){
-        return;
-      }
-
-      if(currentPath.toString().includes("?")){
-        return;
-      }
-      
-      console.log(currentPath);
-
-      if (currentPath.includes('/yourfullschool')) {
+      const cookieExists: boolean = cookieService.check('Authorization');
+      if (cookieExists) {
         this.router.navigate([currentPath]);
-        return;
+      } else {
+        this.router.navigate(['/login']);
       }
 
-    if (currentPath.includes('/application')) {
-      this.router.navigate([currentPath]);
-    }
-   else {
-        const cookieExists: boolean = cookieService.check('Authorization');
-        if (cookieExists) {
-          this.router.navigate(['/main/marketplace']);
-        } else {
-          this.router.navigate(['/login']);
-        }
-      }
     });
 
     return;
 
     }
   }
-
