@@ -17,6 +17,8 @@ const app = express();
 const server = new HTTPServer(app);
 const io = new SocketIOServer(server);
 
+console.log(20, "Websockets");
+
 export default class Websockets {
 
   bDatabaseConnected = false;
