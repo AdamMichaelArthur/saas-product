@@ -347,6 +347,8 @@ EOF
 
     cd "/srv/www/${projectName}/app/apis/apiv2/"
     pm2 start npm --name "${projectName}-apiv2" -- run start_prod
+    pm2 start classes/Websockets/websockets.js --node-args="--loader esm-module-alias/loader --no-warnings" --name "{projectName}-websockets"
+
     pm2 save
 
     cd "/srv/www/${projectName}/app/apis/apiv1/"
@@ -355,6 +357,7 @@ EOF
     # We stop it, because we haven't done an NPM Install at this point and it'll just error out.
     pm2 stop "${projectName}-apiv1"
 
+    
     # Define the API endpoint
     ENDPOINT="http://${HOST}:${API_V2_PORT}/public/setup/test"
 

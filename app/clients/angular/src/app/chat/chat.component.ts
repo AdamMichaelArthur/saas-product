@@ -63,7 +63,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
   chatIconClicked($event){
   	this.isChatButtonClicked = !this.isChatButtonClicked;
   }
