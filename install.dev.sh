@@ -246,8 +246,12 @@ if [ "$installFlavor" = "server" ]; then
     cd "/srv/www/${projectName}/app/apis/apiv1" && npm ci --loglevel=error
     cd "/srv/www/${projectName}/app/apis/apiv2" && npm ci --loglevel=error
 
+    mkdir -p "/srv/node_modules/${projectName}/apiv1/node_modules"
+    mkdir -p "/srv/node_modules/${projectName}/apiv2/node_modules"
+
     cp -r "/srv/www/${projectName}/app/apis/apiv2/node_modules" "/srv/node_modules/${projectName}/apiv2/node_modules"
     cp -r "/srv/www/${projectName}/app/apis/apiv1/node_modules" "/srv/node_modules/${projectName}/apiv1/node_modules"
+    
     # Install NPM Modules and Build Angular App
     #cd "/srv/www/${projectName}/app/clients/angular" && npm install
     #ng build
