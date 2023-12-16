@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import 'dotenv/config'
 
 class SocketClient {
     constructor(url) {

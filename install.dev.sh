@@ -10,7 +10,7 @@ DB_PASSWORD=""  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
 
 find_available_port_range() {
-    local START_PORT=49152  # Starting port for search
+    local START_PORT=52152  # Starting port for search
     local END_PORT=65534    # Adjusted end port for search to accommodate 10-port range
     local REQUIRED_CONSECUTIVE=10
 

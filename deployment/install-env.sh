@@ -3,7 +3,7 @@
 # Variables
 USER="root"
 SERVER="app.saas-product.com"
-API_V1_PATH="../saas-product/api/.env"
+API_V1_PATH="../saas-product/apiv1/.env"
 API_V2_PATH="../saas-product/apiv2/.env"
 
 REMOTE_DIR_V1="/srv/env/hammerheadads-client-frontend/apiv1"
