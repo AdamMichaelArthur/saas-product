@@ -95,6 +95,7 @@ cd "${ORIG_PWD}"
 cd app/apis/apiv2
 npm ci
 pm2 start npm --name "${projectName}-apiv2" -- run start
+pm2 start node --name "${projectName}-websockets" -- --loader esm-module-alias/loader --no-warnings classes/Websockets/websockets.js
 pm2 save
 
 cd "${ORIG_PWD}"
