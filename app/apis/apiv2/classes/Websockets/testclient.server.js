@@ -16,11 +16,14 @@ class SocketClient {
     setupListeners() {
         this.socket.on('connect', () => {
             console.log('Connected to the server');
-            this.socket.emit('request_nearby_order_updates', {  GPS: { latitude: 41.02440968559823, longitude: 28.979657313573792 }, 'distance':2000});
         });
 
-        this.socket.on('location_update', (data) => {
-            console.log(23, data);
+        this.socket.on('list_order', (data) => {
+            console.log(23, `list order ${data}`);
+        });
+
+        this.socket.on('remove_order', (data) => {
+            console.log(26, `remove order ${data}`);
         });
 
         this.socket.on('disconnect', () => {
@@ -38,13 +41,15 @@ class SocketClient {
 
     setupPeriodicEvent() {
         setInterval(() => {
-
+            //this.socket.emit('update_document_location', { 'collection': 'items', _id: "65591200b02bcab454693ff7", GPS: [10, 10]});
             //this.socket.emit('request_nearby_order_updates', {  GPS: { latitude: 41.02440968559823, longitude: 28.979657313573792 }, 'distance':2000});
         }, 15000);
     }
 }
 
-const client = new SocketClient(`http://127.0.0.1:${process.env.WEBSOCKET_2}`);
+// node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.js
+console.log(50, "Connnecting to", `http://${process.env.DB_DOMAIN}:${process.env.WEBSOCKET_2}`);
+const client = new SocketClient(`http://${process.env.DB_DOMAIN}:${process.env.WEBSOCKET_2}`);
 
 // Keep the Node.js process running
 setInterval(() => {

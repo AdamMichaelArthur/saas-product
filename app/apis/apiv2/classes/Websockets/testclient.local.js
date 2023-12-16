@@ -47,7 +47,8 @@ class SocketClient {
         }, 15000);
     }
 }
-
+// node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.js
+console.log(50, "Connnecting to", `http://127.0.0.1:${process.env.WEBSOCKET_2}`);
 const client = new SocketClient(`http://127.0.0.1:${process.env.WEBSOCKET_2}`);
 
 // Keep the Node.js process running
