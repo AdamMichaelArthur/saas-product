@@ -680,6 +680,4 @@ echo "Would you like to make this available via https?  Warning: this means anyo
 echo "Use 'git push' and 'git pull' to update any changes to your deployment."
 echo "Visit http://${DOMAIN} to see your deployment.  If after 10 minutes it's not working, something went wrong.  But less than 10 minutes, be patient."
 
-fi
-
 exit
