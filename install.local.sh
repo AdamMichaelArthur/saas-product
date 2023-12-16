@@ -8,8 +8,8 @@ ORIG_PWD=$PWD
 
 #read -p "What domain did you install this on?: " installedDomain
 
-projectName="test63000"
-installedDomain="test63000.saas-product.com"
+read -p "Enter Project Name: " projectName
+read -p "Which domain did you install on?" installedDomain
 
 # read -p "Do you have ssh keys installed from this computer to the server?" sshKeys
 

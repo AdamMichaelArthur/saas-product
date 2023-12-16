@@ -347,7 +347,7 @@ EOF
 
     cd "/srv/www/${projectName}/app/apis/apiv2/"
     pm2 start npm --name "${projectName}-apiv2" -- run start_prod
-    pm2 start classes/Websockets/websockets.js --node-args="--loader esm-module-alias/loader --no-warnings" --name "{projectName}-websockets"
+    pm2 start classes/Websockets/websockets.js --node-args="--loader esm-module-alias/loader --no-warnings" --name "${projectName}-websockets"
 
     pm2 save
 

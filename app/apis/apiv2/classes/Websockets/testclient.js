@@ -47,7 +47,7 @@ class SocketClient {
     }
 }
 
-const client = new SocketClient('http://192.168.0.127:122');
+const client = new SocketClient(`http://127.0.0.1:${process.env.WEBSOCKET_2}`);
 
 // Keep the Node.js process running
 setInterval(() => {
