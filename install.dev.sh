@@ -249,9 +249,9 @@ if [ "$installFlavor" = "server" ]; then
     mkdir -p "/srv/node_modules/${projectName}/apiv1/node_modules"
     mkdir -p "/srv/node_modules/${projectName}/apiv2/node_modules"
 
-    cp -r "/srv/www/${projectName}/app/apis/apiv2/node_modules" "/srv/node_modules/${projectName}/apiv2/node_modules"
-    cp -r "/srv/www/${projectName}/app/apis/apiv1/node_modules" "/srv/node_modules/${projectName}/apiv1/node_modules"
-    
+    cp -r "/srv/www/${projectName}/app/apis/apiv2/node_modules" "/srv/node_modules/${projectName}/apiv2"
+    cp -r "/srv/www/${projectName}/app/apis/apiv1/node_modules" "/srv/node_modules/${projectName}/apiv1"
+
     # Install NPM Modules and Build Angular App
     #cd "/srv/www/${projectName}/app/clients/angular" && npm install
     #ng build
@@ -620,12 +620,12 @@ cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.
 cp "/srv/env/${projectName}/apiv2.env" "/srv/www/${projectName}/app/apis/apiv2/.env"
 
 cd "/srv/www/${projectName}/app/apis/apiv1"
-cp -r "/srv/node_modules/${projectName}/app/apis/apiv1/node_modules" "/srv/www/${projectName}/app/apis/apiv1"
-npm ci
+cp -r "/srv/node_modules/${projectName}/apiv1/node_modules" "/srv/www/${projectName}/app/apis/apiv1"
+npm install
 
 cd "/srv/www/${projectName}/app/apis/apiv2"
-cp -r "/srv/node_modules/${projectName}/app/apis/apiv2/node_modules" "/srv/www/${projectName}/app/apis/apiv2"
-npm ci
+cp -r "/srv/node_modules/${projectName}/apiv2/node_modules" "/srv/www/${projectName}/app/apis/apiv2"
+npm install
 
 # Build the react client, if present
 cd "/srv/www/${projectName}/clients/react"
@@ -668,8 +668,9 @@ git add .
 git commit -m "Moving Updated Post Receive Into Deployment Directory"
 
 # This is going to take a while.
-nohup git push &>/dev/null &
- 
+#nohup git push &>/dev/null &
+ git push
+
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
 echo "The project is building in the background, and should come online when this is finished.  This can take a few minutes."
