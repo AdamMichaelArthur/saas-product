@@ -18,6 +18,12 @@ export default class Gmail extends Google {
 		return true;
 	}
 
+
+  async saveToken(token ={}){
+    this.ensurePath(this, ['user', 'gmail']);
+    this.user.gmail.token = token;
+  }
+
   async getProfile(){
 
     let token = {
