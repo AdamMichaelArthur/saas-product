@@ -261,21 +261,9 @@ EOF
 cd "${ORIG_PWD}"
 cd "app/apis/apiv2/"
 node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.server.js
+node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.local.js
 
-# nginxServersDir="/usr/local/etc/nginx/servers"
-
-# newConfFile="${nginxServersDir}/${projectName}.conf"
-
-# echo "
-# server {
-#     location /${projectName}/ {
-#         proxy_pass http://localhost:${newPort}/;
-#         proxy_http_version 1.1;
-#         proxy_set_header Upgrade \$http_upgrade;
-#         proxy_set_header Connection 'upgrade';
-#         proxy_set_header Host \$host;
-#         proxy_cache_bypass \$http_upgrade;
-#     }
-# }
-# " | sudo tee "$newConfFile"
-
+cd "${ORIG_PWD}/deployment"
+scp -o StrictHostKeyChecking=no "root@${installedDomain}:/etc/nginx/sites-enabled/${projectName}.conf" "${projectName}.conf"
+scp -o StrictHostKeyChecking=no "root@${installedDomain}:/srv/env/${projectName}/apiv1.env" "apiv1.env"
+scp -o StrictHostKeyChecking=no "root@${installedDomain}:/srv/env/${projectName}/apiv2.env" "apiv2.env"
