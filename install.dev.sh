@@ -544,11 +544,11 @@ gzip_types
 
     # This allows us to use a path for our websockets without having to specify a port in our requests
     location ${SOCKET_IO_PATH} {
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+      proxy_set_header Host \$host;
       proxy_pass http://localhost:${WEBSOCKET_V2};
       proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Upgrade \$http_upgrade;
       proxy_set_header Connection "upgrade";
 
     }
