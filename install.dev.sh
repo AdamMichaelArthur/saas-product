@@ -220,7 +220,7 @@ if [ "$installFlavor" = "server" ]; then
 
     # Append the projectName and installedDomain lines to the temporary file
     echo "projectName=${projectName}" >> "$tmpFile"
-    echo "installedDomain=${DB_DOMAIN}" >> "$tmpFile"
+    echo "installedDomain=${DOMAIN}" >> "$tmpFile"
 
     # Append the rest of the original file, starting from the second line
     tail -n +2 "install.local.sh" >> "$tmpFile"
@@ -229,7 +229,6 @@ if [ "$installFlavor" = "server" ]; then
     mv "$tmpFile" "install.local.sh"
     chmod +x "install.local.sh"
 
-    exit
     # Essentially what we're doing here is starting with the GitHub project
     # Creating a brand-new repo, copying the files from the GitHub repo to
     # the new repo.  This creates the ability to have a new project repo
