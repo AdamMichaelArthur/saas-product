@@ -1193,6 +1193,16 @@ export default class Base extends Events {
         return api_key;
     }
 
+    ensurePath(obj, path) {
+        let current = obj;
+        for (let i = 0; i < path.length; i++) {
+            if (current[path[i]] === undefined) {
+                current[path[i]] = {};
+            }
+            current = current[path[i]];
+        }
+    }
+
 }
 
 const Optional = Symbol('optional');
