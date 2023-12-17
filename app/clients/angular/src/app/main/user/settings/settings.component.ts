@@ -16,10 +16,11 @@ import {
 export class SettingsComponent implements OnInit {
 
 	openAIAPIKey = '';
-	linkGmailEndpoint = '/api/google/gmail/authorize';
+	
 	linkbuttonclass = 'link-button';
 	
 	/* Google Services */
+	linkGmailEndpoint = 'https://easy-oauth.saas-product.com/public/callbacks/google/gmail/getAuthorizationUrl';
 	linkDocsEndpoint = '/api/google/docs/getAuthorizationUrl'					// Requests scopes for docs, sheets, drive, presentations
 	linkAnalyticsEndpoint = '/api/google/analytics/getAuthorizationUrl'		
 	searchConsoleEndpoint = '/api/google/search/getAuthorizationUrl'
@@ -30,8 +31,17 @@ export class SettingsComponent implements OnInit {
 		this.getOpenAIAPIKey();
 	}
 
+  /*	In a production app, you'll likely want to setup your own google api projects.
+			gmailAuthorizationUrl($event){
+				console.log(19, $event['redirect_uri']);
+				window.location = $event.redirect_uri;
+			}		
+  */
+
+	/* I've setup a service called "easy-oauth" which is designed to simplify getting auth tokens during development */
 	gmailAuthorizationUrl($event){
-		console.log(19, $event['redirect_uri']);
+		// Make a call to retrieve the token
+		console.log(19, $event);
 		window.location = $event.redirect_uri;
 	}
 
