@@ -267,6 +267,10 @@ cat << EOF > "$angularJson"
 }
 EOF
 
+cd "${ORIG_PWD}"
+cd "app/apis/classes"
+node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.server.js
+
 # nginxServersDir="/usr/local/etc/nginx/servers"
 
 # newConfFile="${nginxServersDir}/${projectName}.conf"

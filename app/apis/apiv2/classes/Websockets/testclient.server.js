@@ -6,8 +6,8 @@ class SocketClient {
         this.socket = io(url, {
             path: process.env.SOCKET_IO_PATH,
             reconnection: true,
-            reconnectionAttempts: Infinity,
-            reconnectionDelay: 1000,
+            reconnectionAttempts: 3,
+            reconnectionDelay: 2000,
             reconnectionDelayMax: 5000,
         });
         this.setupListeners();
@@ -16,7 +16,8 @@ class SocketClient {
 
     setupListeners() {
         this.socket.on('connect', () => {
-            console.log('Connected to the server');
+            console.log('Websocket server and nginx reverse proxy are working');
+            process.exit();
         });
 
         this.socket.on('list_order', (data) => {
@@ -37,6 +38,7 @@ class SocketClient {
 
         this.socket.on('connect_error', (error) => {
             console.error('Connection error:', error.message);
+            process.exit();
         });
     }
 

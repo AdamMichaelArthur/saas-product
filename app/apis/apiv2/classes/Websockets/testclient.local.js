@@ -4,6 +4,7 @@ import 'dotenv/config'
 class SocketClient {
     constructor(url) {
         this.socket = io(url, {
+            path: process.env.SOCKET_IO_PATH,
             reconnection: true,
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
