@@ -298,6 +298,7 @@ PROJECT_NAME=${projectName}
 PORT=${API_V2_PORT}
 WEBSOCKET_1=$((API_V2_PORT + 1))
 WEBSOCKET_2=$((API_V2_PORT + 2))
+SOCKET_IO_PATH="/socket.io/"
 
 # Recovery and Administrator Password
 GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
@@ -538,11 +539,15 @@ gzip_types
         proxy_set_header X-Forwarded-Proto https;
     }   
 
-    location /ws/socket.io/ {
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_pass "http://localhost:${WEBSOCKET_V2}/socket.io/";
+    # This allows us to use a path for our websockets without having to specify a port in our connection request
+    location ${SOCKET_IO_PATH} {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $host;
+      proxy_pass http://localhost:${WEBSOCKET_V2};
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+
     }
 
     location / {
