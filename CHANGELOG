@@ -1,0 +1,16 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.1.0.1] - 2023-12-17
+
+### Added
+- Used SaaS Product to create "easy-oauth.saas-product.com" - a service that acts as a type of proxy between development projects and services, such as Gmail, that use OAuth to authenticate.  It works as 
+follows: the angular client requests a URI from easy-oauth.saas-product.com, easy-oauth.saas-product.com has a callback pinged that has the token, and the original client polls for the availability of this 
+token.  The solution is not intended to be used in production environments, but the purpose is to simplify initial setup of the project.
+
+### Notes
+
+Substantial progress has been made on the automated installation and deployment scripts.  The project is very close to having a "Wordpress" like, simple and easy installation.  It needs to be made more 
+robust, as it still has maybe a 5% failure rate.  
+

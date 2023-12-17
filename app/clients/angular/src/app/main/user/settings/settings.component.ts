@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit {
 
 	    	if ("token" in response) {
 				    console.log("The 'tokens' key exists in the response.");
-				    alert("Gmail Linked");
+
 				    clearTimeout(this.interval);
 				    let request = `api/google/gmail/saveToken`
 				    let payload = {
@@ -67,7 +67,7 @@ export class SettingsComponent implements OnInit {
 				    }
 
 						var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
-						console.log(70, response);
+						alert("Gmail Linked");
 
 				} else {
 				    console.log("The 'tokens' key does not exist in the response.");
@@ -75,7 +75,7 @@ export class SettingsComponent implements OnInit {
 
 
 
-	    }, 15000);
+	    }, 1500);
 	}
 
 
