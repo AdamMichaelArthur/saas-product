@@ -9,6 +9,9 @@ DB_USERNAME=""  # Set to empty initially
 DB_PASSWORD=""  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
 
+# Some defaults
+SOCKET_IO_PATH="/socket.io/"
+
 find_available_port_range() {
     local START_PORT=52152  # Starting port for search
     local END_PORT=65534    # Adjusted end port for search to accommodate 10-port range
@@ -272,7 +275,7 @@ if [ "$installFlavor" = "server" ]; then
 PROJECT_NAME=${projectName}
 PORT=${API_V1_PORT}
 WEBSOCKET_1=$((API_V1_PORT + 1))
-WEBSOCKET_2=$((API_V1_PORT + 2))
+WEBSOCKET_2=$((API_V2_PORT + 2))
 
 # The stripe API key
 stripe_key=${STRIPE_KEY}
@@ -296,7 +299,7 @@ cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.
     sudo tee apiv2.env >/dev/null <<EOF
 PROJECT_NAME=${projectName}
 PORT=${API_V2_PORT}
-WEBSOCKET_1=$((API_V2_PORT + 1))
+WEBSOCKET_1=$((API_V1_PORT + 1))
 WEBSOCKET_2=$((API_V2_PORT + 2))
 SOCKET_IO_PATH="/socket.io/"
 
@@ -539,7 +542,7 @@ gzip_types
         proxy_set_header X-Forwarded-Proto https;
     }   
 
-    # This allows us to use a path for our websockets without having to specify a port in our connection request
+    # This allows us to use a path for our websockets without having to specify a port in our requests
     location ${SOCKET_IO_PATH} {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $host;
