@@ -277,14 +277,25 @@ if [ "$installFlavor" = "server" ]; then
     #ng build
     #cd "/srv/www/${projectName}/app/clients/react" && npm install
 
-    # Discover available ports
-    available_port=$(find_available_port_range)
-    echo "Available port range starts at: $available_port"
+    # This block is intended to guarantee port availability
+    while :; do
+        available_port=$(find_available_port_range)
+        API_V1_PORT=$available_port
+        API_V2_PORT=$((available_port + 5))
+        WEBSOCKET_V2_PORT=$((API_V2_PORT + 2))
 
-    API_V1_PORT=$available_port
-    API_V2_PORT=$((available_port + 5))
+        if ! lsof -i:$API_V1_PORT -i:$API_V2_PORT -i:$WEBSOCKET_V2_PORT &>/dev/null; then
+            echo "Selected ports are available:"
+            echo "API_V1_PORT: $API_V1_PORT"
+            echo "API_V2_PORT: $API_V2_PORT"
+            echo "WEBSOCKET_V2_PORT: $WEBSOCKET_V2_PORT"
+            break
+        else
+            echo "Ports not available, trying next range..."
+            available_port=$((available_port + 127))
+        fi
+    done
 
-    WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
     sudo tee apiv1.env >/dev/null <<EOF
@@ -413,9 +424,9 @@ EOF
         "pwd": "${ADMIN_PASS}",
         "plan": "sysadmin",
         "adminPassword": "${RECOVERY_ADMIN_PASS}",
-        "account_type": "user",
-        "first_name": "Adam",
-        "last_name": "Arthur"
+        "account_type": "default_sysadmin",
+        "first_name": "Default",
+        "last_name": "Sysadmin"
     }
 EOF
     )
@@ -436,6 +447,7 @@ EOF
             break
         else
             echo "Command failed"
+            read -p "Try again?" tryAgain
         fi
 
         attempt=$((attempt+1))
