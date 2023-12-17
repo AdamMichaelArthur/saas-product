@@ -15,15 +15,14 @@ require("@classes/streams/bounties.js")(io);
 
 /* Start the Websocket Server for the Content Bounty Simultaneous iOS App */
 
-if(process.env.NODE_ENV != "development"){
+// if(process.env.NODE_ENV != "development"){
 
-	var iosApp = require("express")();
-	var iosServer = require("http").Server(iosApp);
-	var iosIo = require("socket.io")(iosServer);
+// 	var iosApp = require("express")();
+// 	var iosServer = require("http").Server(iosApp);
+// 	var iosIo = require("socket.io")(iosServer);
 
-	iosServer.listen(process.env.WEBSOCKET_2);
+// 	iosServer.listen(process.env.WEBSOCKET_1);
 
-	require("@classes/streams/simultaneous_record.js")(iosIo);
-
-}
+// 	require("@classes/streams/simultaneous_record.js")(iosIo);
+// }
 
