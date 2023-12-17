@@ -7,6 +7,8 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 
+import { timeout } from 'rxjs/operators';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -19,8 +21,10 @@ export class SettingsComponent implements OnInit {
 	
 	linkbuttonclass = 'link-button';
 	
+	interval = null;
+
 	/* Google Services */
-	linkGmailEndpoint = 'https://easy-oauth.saas-product.com/public/callbacks/google/gmail/getAuthorizationUrl';
+	linkGmailEndpoint = 'https://easy-oauth.saas-product.com/api/public/callbacks/google/gmail/getAuthorizationUrl';
 	linkDocsEndpoint = '/api/google/docs/getAuthorizationUrl'					// Requests scopes for docs, sheets, drive, presentations
 	linkAnalyticsEndpoint = '/api/google/analytics/getAuthorizationUrl'		
 	searchConsoleEndpoint = '/api/google/search/getAuthorizationUrl'
@@ -39,11 +43,41 @@ export class SettingsComponent implements OnInit {
   */
 
 	/* I've setup a service called "easy-oauth" which is designed to simplify getting auth tokens during development */
-	gmailAuthorizationUrl($event){
-		// Make a call to retrieve the token
-		console.log(19, $event);
-		window.location = $event.redirect_uri;
+	async gmailAuthorizationUrl($event) {
+	    // Make a call to retrieve the token
+	    console.log(19, $event);
+	    window.open($event.redirect_uri, '_blank');
+	    clearTimeout(this.interval);
+	    this.interval = setInterval( async () => {
+	    	// Check to see if we've got a token yet
+	    	let request = `https://easy-oauth.saas-product.com/api/public/callbacks/google/gmail/retrieveToken`
+	    	let payload = {
+	    		retrievalKey: $event["retrievalKey"]
+	    	}
+	    	var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
+	    	console.log(54, response);
+
+	    	if ("token" in response) {
+				    console.log("The 'tokens' key exists in the response.");
+				    alert("Gmail Linked");
+				    clearTimeout(this.interval);
+				    let request = `api/google/gmail/saveToken`
+				    let payload = {
+				    	"token": response.token
+				    }
+
+						var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
+						console.log(70, response);
+
+				} else {
+				    console.log("The 'tokens' key does not exist in the response.");
+				}
+
+
+
+	    }, 15000);
 	}
+
 
 	docsAuthorizationUrl($event){
 		window.location = $event.redirect_uri;
