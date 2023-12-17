@@ -682,6 +682,23 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 #nohup git push &>/dev/null &
  git push
 
+# Create a temporary file
+tmpFile=$(mktemp)
+
+# Copy the shebang line from the original file to the temporary file
+head -n 1 "install.local.sh" > "$tmpFile"
+
+# Append the projectName and installedDomain lines to the temporary file
+echo "projectName=${projectName}" >> "$tmpFile"
+echo "installedDomain=${DB_DOMAIN}" >> "$tmpFile"
+
+# Append the rest of the original file, starting from the second line
+tail -n +2 "install.local.sh" >> "$tmpFile"
+
+# Replace the original file with the modified temporary file
+mv "$tmpFile" "install.local.sh"
+chmod +x "install.local.sh"
+
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
 echo "The project is building in the background, and should come online when this is finished.  This can take a few minutes."
@@ -690,5 +707,6 @@ echo "This assume that you have your ssh keys installed to this server."
 echo "Would you like to make this available via https?  Warning: this means anyone with the link can download the repo."
 echo "Use 'git push' and 'git pull' to update any changes to your deployment."
 echo "Visit http://${DOMAIN} to see your deployment.  If after 10 minutes it's not working, something went wrong.  But less than 10 minutes, be patient."
+
 
 exit

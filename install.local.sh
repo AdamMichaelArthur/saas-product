@@ -1,17 +1,8 @@
 #!/bin/bash
 
+
 ORIG_PWD=$PWD
 
-# echo 'This installation script assumes you have already installed this on a server, and you are setting up your local development copy'
-
-#read -p "Enter Project Name: " projectName
-
-#read -p "What domain did you install this on?: " installedDomain
-
-read -p "Enter Project Name: " projectName
-read -p "Which domain did you install on?" installedDomain
-
-# read -p "Do you have ssh keys installed from this computer to the server?" sshKeys
 
 scp -o StrictHostKeyChecking=no root@$installedDomain:/srv/www/$projectName/app/apis/apiv1/.env app/apis/apiv1
 scp -o StrictHostKeyChecking=no root@$installedDomain:/srv/www/$projectName/app/apis/apiv2/.env app/apis/apiv2
@@ -268,7 +259,7 @@ cat << EOF > "$angularJson"
 EOF
 
 cd "${ORIG_PWD}"
-cd "app/apis/classes"
+cd "app/apis/apiv2/"
 node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.server.js
 
 # nginxServersDir="/usr/local/etc/nginx/servers"
