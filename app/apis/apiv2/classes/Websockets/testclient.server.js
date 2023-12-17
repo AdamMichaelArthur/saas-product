@@ -4,6 +4,7 @@ import 'dotenv/config'
 class SocketClient {
     constructor(url) {
         this.socket = io(url, {
+            path: process.env.SOCKET_IO_PATH,
             reconnection: true,
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
@@ -49,7 +50,7 @@ class SocketClient {
 
 // node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.js
 console.log(50, "Connnecting to", `http://${process.env.DB_DOMAIN}:${process.env.WEBSOCKET_2}`);
-const client = new SocketClient(`http://${process.env.DB_DOMAIN}:${process.env.WEBSOCKET_2}`);
+const client = new SocketClient(`https://${process.env.DB_DOMAIN}`);
 
 // Keep the Node.js process running
 setInterval(() => {
