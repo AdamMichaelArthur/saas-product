@@ -212,6 +212,24 @@ if [ "$installFlavor" = "server" ]; then
         confirm && break
     done
 
+    # Create a temporary file
+    tmpFile=$(mktemp)
+
+    # Copy the shebang line from the original file to the temporary file
+    head -n 1 "install.local.sh" > "$tmpFile"
+
+    # Append the projectName and installedDomain lines to the temporary file
+    echo "projectName=${projectName}" >> "$tmpFile"
+    echo "installedDomain=${DB_DOMAIN}" >> "$tmpFile"
+
+    # Append the rest of the original file, starting from the second line
+    tail -n +2 "install.local.sh" >> "$tmpFile"
+
+    # Replace the original file with the modified temporary file
+    mv "$tmpFile" "install.local.sh"
+    chmod +x "install.local.sh"
+
+    exit
     # Essentially what we're doing here is starting with the GitHub project
     # Creating a brand-new repo, copying the files from the GitHub repo to
     # the new repo.  This creates the ability to have a new project repo
@@ -682,22 +700,7 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 #nohup git push &>/dev/null &
  git push
 
-# Create a temporary file
-tmpFile=$(mktemp)
 
-# Copy the shebang line from the original file to the temporary file
-head -n 1 "install.local.sh" > "$tmpFile"
-
-# Append the projectName and installedDomain lines to the temporary file
-echo "projectName=${projectName}" >> "$tmpFile"
-echo "installedDomain=${DB_DOMAIN}" >> "$tmpFile"
-
-# Append the rest of the original file, starting from the second line
-tail -n +2 "install.local.sh" >> "$tmpFile"
-
-# Replace the original file with the modified temporary file
-mv "$tmpFile" "install.local.sh"
-chmod +x "install.local.sh"
 
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
