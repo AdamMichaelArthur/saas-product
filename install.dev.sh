@@ -277,14 +277,14 @@ if [ "$installFlavor" = "server" ]; then
     #ng build
     #cd "/srv/www/${projectName}/app/clients/react" && npm install
 
-    # This block is intended to guarantee port availability
+    # Discover available ports
+    available_port=$(find_available_port_range)
+    echo "Available port range starts at: $available_port"
 
-        available_port=$(find_available_port_range)
-        API_V1_PORT=$available_port
-        API_V2_PORT=$((available_port + 5))
-        WEBSOCKET_V2_PORT=$((API_V2_PORT + 2))
+    API_V1_PORT=$available_port
+    API_V2_PORT=$((available_port + 5))
 
-
+    WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
     sudo tee apiv1.env >/dev/null <<EOF
@@ -414,8 +414,8 @@ EOF
         "plan": "sysadmin",
         "adminPassword": "${RECOVERY_ADMIN_PASS}",
         "account_type": "user",
-        "first_name": "Default",
-        "last_name": "Sysadmin"
+        "first_name": "Adam",
+        "last_name": "Arthur"
     }
 EOF
     )
@@ -436,7 +436,6 @@ EOF
             break
         else
             echo "Command failed"
-            read -p "Try again?" tryAgain
         fi
 
         attempt=$((attempt+1))
