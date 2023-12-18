@@ -294,8 +294,11 @@ export default class Authorization {
         if (this.database.user.account_type !== "account" && this.database.user.account_type !== "user") {
             let acct;
             var accountTypeClass = `acct = new global.Permissions${Voca.titleCase(Voca.camelCase(this.database.user.account_type))}Prototype()`;
-            eval(accountTypeClass)
-           
+            try {
+                eval(accountTypeClass)
+            } catch(err){
+                return this.errors.error("invalid_account_type");
+            }
             if (acct.inheritParentMenus) {
                 obj.navigationMenuItems = obj.navigationMenuItems.concat(acct.navigationMenuItems);
             } else {

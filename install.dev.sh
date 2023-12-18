@@ -413,7 +413,7 @@ EOF
         "pwd": "${ADMIN_PASS}",
         "plan": "sysadmin",
         "adminPassword": "${RECOVERY_ADMIN_PASS}",
-        "account_type": "default_sysadmin",
+        "account_type": "user",
         "first_name": "Default",
         "last_name": "Sysadmin"
     }
