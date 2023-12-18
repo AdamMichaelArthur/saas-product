@@ -13,7 +13,7 @@ AUTH_DB="admin"  # Default auth db
 SOCKET_IO_PATH="/socket.io/"
 
 find_available_port_range() {
-    local START_PORT=52152  # Starting port for search
+    local START_PORT=$((RANDOM % (65534 - 52152 + 1) + 52152))
     local END_PORT=65534    # Adjusted end port for search to accommodate 10-port range
     local REQUIRED_CONSECUTIVE=10
 
@@ -278,23 +278,12 @@ if [ "$installFlavor" = "server" ]; then
     #cd "/srv/www/${projectName}/app/clients/react" && npm install
 
     # This block is intended to guarantee port availability
-    while :; do
+
         available_port=$(find_available_port_range)
         API_V1_PORT=$available_port
         API_V2_PORT=$((available_port + 5))
         WEBSOCKET_V2_PORT=$((API_V2_PORT + 2))
 
-        if ! lsof -i:$API_V1_PORT -i:$API_V2_PORT -i:$WEBSOCKET_V2_PORT &>/dev/null; then
-            echo "Selected ports are available:"
-            echo "API_V1_PORT: $API_V1_PORT"
-            echo "API_V2_PORT: $API_V2_PORT"
-            echo "WEBSOCKET_V2_PORT: $WEBSOCKET_V2_PORT"
-            break
-        else
-            echo "Ports not available, trying next range..."
-            available_port=$((available_port + 127))
-        fi
-    done
 
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
