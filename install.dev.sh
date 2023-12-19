@@ -687,6 +687,7 @@ systemctl restart nginx
 # Start our PM2 processes
 pm2 start ${projectName}-apiv1
 pm2 start ${projectName}-apiv2
+pm2 start ${projectName}-websockets
 
 EOF
 

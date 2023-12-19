@@ -1,3 +1,11 @@
+# What is SaaS Product
+The goal of Saas Product is to enable the extremely rapid development of SaaS businesses.  It is part framework, part starter project.  It comes with pre-built integrations with Stripe, Gmail and Slack and has a complete and full featured implementations of the most common requirements of any SaaS product, enabling developers
+to focus on functionality.
+
+Out of the box, you get:
+- A proper subscription management system that integrates with Stripe.  It makes setting up subscription tiers and managing access to those tiers easy.
+- A user management system designed from the ground up to enable "account" based solutions with user seats.   
+
 # Installation Guide
 
 ## Prerequisites
