@@ -431,7 +431,7 @@ EOF
     )
 
 # Assuming the cookie file is named 'cookies.txt'
-#cookie_file="cookies.txt"
+cookie_file="cookies.txt"
 
 # Your new URL and other options
 #new_url="http://example.com/newrequest"
