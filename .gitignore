@@ -1,7 +1,7 @@
 # Setup some .gitignore
 
 notes/
-/server-nodemon
+**/server-nodemon/
 # Demo Project Files
 apiv2/2.0/endpoints/fooddeliveryapp'
 apiv2/2.0/endpoints/yourapp'
@@ -41,7 +41,8 @@ app.yml
 
 
 # Dependency directories
-node_modules/
+**/node_modules/
+
 
 # Log files and directories
 logs/

@@ -69,6 +69,11 @@ ask_details() {
     fi
 
     #echo "Enter your Stripe Development Key:" read stripeDevKey
+    echo "Get A Test API Key -> https://dashboard.stripe.com/test/apikeys"
+    echo "Don't have a Stripe account?  Leave it blank and the Stripe functionality will be disabled"
+    echo "Note: If you plan on using any of the subscription / payment features, I strongly recommend"
+    echo "you get a Stripe Account and API Key before beginning development"
+    
     read -p "Enter your Stripe Development Key:" stripeDevKey
     if [ ! -z "$stripeDevKey" ]; then
         STRIPE_KEY="$stripeDevKey"

@@ -563,6 +563,7 @@ export default class ProtectedRoutes extends Base {
         let database = global.database;
         let responsePackage = new Response();
         
+
         let query = { created_by: user._id }
         let limit = 4;
 
@@ -584,7 +585,9 @@ export default class ProtectedRoutes extends Base {
 
         responsePackage.responsePackage.count = count;
         
-        this.language.sendPackage(req, res, obj.response.responsePackage)
+        console.log(566, responsePackage);
+
+        this.language.sendPackage(req, res, responsePackage)
     });
 
     this.app.use("/messages", async (req, res, next) => {
@@ -602,7 +605,7 @@ export default class ProtectedRoutes extends Base {
         responsePackage.responsePackage.messages = notifications;
         responsePackage.responsePackage.count = count;
         
-        this.language.sendPackage(req, res, obj.response.responsePackage)
+        this.language.sendPackage(req, res, responsePackage)
     });    
 
     this.app.use("/events", async (req, res, next) => {
