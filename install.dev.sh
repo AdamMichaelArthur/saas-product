@@ -430,15 +430,17 @@ EOF
 EOF
     )
 
-        # Displaying the URL and JSON payload for debugging
-        echo "URL: $url"
-        echo "JSON Payload: $json_payload"
+# Assuming the cookie file is named 'cookies.txt'
+#cookie_file="cookies.txt"
 
-        curl --location "$url" \
-            --header 'Content-Type: application/json' \
-            --header 'Accept: application/json' \
-            --data-raw "$json_payload" \
-            --max-time 5
+# Your new URL and other options
+#new_url="http://example.com/newrequest"
+
+# Make a new curl call using the cookies from the cookie file
+curl --location "$new_url" \
+     --cookie "$cookie_file" \
+     --header 'Accept: application/json' \
+
 
         status=$?
         if [ $status -eq 0 ]; then
@@ -455,8 +457,6 @@ EOF
     if [ $attempt -gt $max_attempts ]; then
         echo "Command failed after $max_attempts attempts."
     fi
-
-
 
     else
         echo "API check failed with response code: $response"
@@ -710,7 +710,17 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 #nohup git push &>/dev/null &
  git push
 
+##################################################################################################
+# Calling /administration/plans/getPlans for the first time causes Stripe plans to get initialized
+##################################################################################################
 
+cookie_file="cookies.txt"  # Define the file to store cookies
+setPlansUrl=="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
+curl --location "$url" \
+     --cookie-jar "$cookie_file" \
+     --header 'Accept: application/json'
+
+##################################################################################################
 
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 

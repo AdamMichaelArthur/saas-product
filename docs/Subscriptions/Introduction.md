@@ -8,7 +8,10 @@ but major changes must be done in code.
 Initialization
 --------------
 
-Subscription Plans must be initialized.
+Subscription Plans must be initialized.  To initialize your Stripe plans, first make sure the stripe_key is set in the .env file
+Then, using Postman or CURL, make a call to /administration/plans/getPlans
+
+The installation script will call this automatically, if a valid stripe key is provided.
 
 User
 ----
