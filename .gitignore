@@ -1,5 +1,7 @@
 # Setup some .gitignore
 
+notes/
+/server-nodemon
 # Demo Project Files
 apiv2/2.0/endpoints/fooddeliveryapp'
 apiv2/2.0/endpoints/yourapp'

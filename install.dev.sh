@@ -295,7 +295,12 @@ WEBSOCKET_1=$((API_V1_PORT + 1))
 WEBSOCKET_2=$((API_V2_PORT + 2))
 
 # The stripe API key
+# We disable stripe by default
 stripe_key=${STRIPE_KEY}
+DISABLE_STRIPE=true
+
+# API_VERSION 
+API_VERSION=""
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}

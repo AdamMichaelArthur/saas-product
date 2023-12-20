@@ -16,6 +16,18 @@ var voca = require("voca");
 
 	It would be a big project to remove mongoose at this point, and the payoff
 	isn't worth it at this time.  But maybe someday...
+
+    Tue Dec 19 2023
+
+    This API has been largely deprecated by a version 2, but the datasource functionality remains.  It has a lot of delicate
+    features that have been fine tuned over years.  So it's not a simple thing to just rewrite it.  The plan is to migrate the
+    code.
+
+    The first step in that process is to remove this files dependency on mongoose.  I started my MongoDBB journey with Mongoose,
+    but today I will only work with native drivers.  Any limitations that existed when I started (MongoDB 2.0) have largely been
+    fixed natively by MongoDB 6.0+
+
+    Anyway, long story short: I won't be using Mongoose in the future, and will be removoing it from my codebases. 
 */
 
 module.exports = class Mongo {
@@ -44,14 +56,15 @@ module.exports = class Mongo {
 		if(id != null){
 			merged["_id"] = id;
 		}
-
-		//console.log(61, merged);
 		
+		let collection = this.model.collection;
+
 		try {
 			if(update  == false){
 				try  {
 				console.log(44, merged);
-				model = await this.model.create(merged)
+				//model = await this.model.create(merged)
+				model = await collection.insertOne(merged);
 				return model;
 			} catch (err){
 				console.log(46, err);
@@ -59,7 +72,8 @@ module.exports = class Mongo {
 			}
 			}
 			
-			model = await this.model.updateOne(merged, merged, { upsert: true })
+			//model = await this.model.updateOne(merged, merged, { upsert: true })
+			model = await collection.updateOne(merged, { $set: merged }, { upsert: true });
 
 			if(model.nModified == 0){
 				if(model.ok == 0)
@@ -89,6 +103,8 @@ module.exports = class Mongo {
 		
 		var user = this.user;
 
+		let collection = this.model.collection;
+
 		var tmpmodels = [];
 		if(typeof this.user != 'undefined'){
 		for(var i = 0; i < models.length; i++){
@@ -116,7 +132,7 @@ module.exports = class Mongo {
 		}
 
 		try {
-			var result = await this.model.insertMany(tmpmodels)
+			var result = await collection.insertMany(tmpmodels);
 		} catch(err) {
 			console.log(96, err);
 			return false;
@@ -130,15 +146,7 @@ module.exports = class Mongo {
 
 		const bulkData = [];  
 
-		// models.map(model => (
-	 //        {
-	 //            updateOne: {
-	 //                filter: {},
-	 //                update: model,
-	 //                upsert: true
-	 //            }
-	 //        }
-	 //    ));
+		let collection = this.model.collection;
 
 		for(var i = 0; i < models.length; i++){
 			var model = models[i]
@@ -185,8 +193,6 @@ module.exports = class Mongo {
 				}
 			}
 
-
-
 			var filterCpy = { ... filter }
 
 			if(exclude_search != null){
@@ -225,8 +231,7 @@ module.exports = class Mongo {
 			bulkData.push(updateObj)
 		}
 
-		//console.log(345, util.inspect(bulkData, false, null, true /* enable colors */));
-	    var result = await this.model.bulkWrite(bulkData, {ordered : false });
+	    var result = await collection.bulkWrite(bulkData, {ordered : false });
 
 	    return result.result;
 	}

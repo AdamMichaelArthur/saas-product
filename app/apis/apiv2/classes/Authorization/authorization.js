@@ -618,6 +618,11 @@ export default class Authorization {
 
     async registerUser(userId, pwd, body, req, res){
 
+        if((typeof userId == 'undefined')||(typeof pwd == 'undefined')){
+            this.errors.error("auth", `You must supply a userId and pwd in a JSON Body`);
+            return false;
+        }
+        
         console.log(509, "Attemping to create account", userId);
         let bAutoCreateStripeCustomer = true;
         let bCreateStripeExpressAccount = false;
@@ -644,6 +649,7 @@ export default class Authorization {
         if(availablePlans == null){
             if(plan !== "sysadmin"){
                 console.error("Stripe plans have not been initialized properly, or the database is corrupted.");
+                this.errors.error("stripe", `Stripe plans have not been initialized properly, or the database is corrupted. Set environment variable DISABLE_STRIPE=true to make this error go away, or link a Stripe account`);
                 return false;
             } else {
                 availablePlans = { plans: [] };
