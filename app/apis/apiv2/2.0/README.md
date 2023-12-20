@@ -1,3 +1,4 @@
+
 What is the "n" directory for?
 
 The 'n' stands for node, and is intended to allow the project to use different technologies
