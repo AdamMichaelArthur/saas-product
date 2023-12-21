@@ -982,6 +982,23 @@ echo "CUSTOMER_ID is ${CUSTOMER_ID}"
 #echo $SUBSCRIPTION_RESPONSE
 
 ##################################################################################################
+# Get our plans, so we can grab a price_d
+##################################################################################################
+json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
+--cookie "cookies.txt" \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json')
+
+echo json_response
+
+# Extracting priceId values
+price_ids=$(echo "$json_response" | grep -o '"priceId": *"[^"]*' | awk -F '"' '{print $4}')
+
+echo "Price IDS"
+# Print each priceId
+echo "$price_ids"
+
+##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
 ##################################################################################################
 response=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}")
