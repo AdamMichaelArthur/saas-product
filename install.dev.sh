@@ -953,10 +953,16 @@ CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
 
 CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
   -u $STRIPE_KEY: \
-  --data-urlencode email="free@${DOMAIN}" \
-  -d test_clock=$CLOCK_ID \
-  -d payment_method=pm_card_visa \
-  -d "invoice_settings[default_payment_method]"=pm_card_visa)
+  --data-raw "{
+    \"email\":\"free@${DOMAIN}\",
+    \"test_clock\":\"${CLOCK_ID}\",
+    \"payment_method\":\"pm_card_visa\",
+    \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
+  }"
+
+echo CUSTOMER_RESPONSE
+
+echo ""
 
 CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 
