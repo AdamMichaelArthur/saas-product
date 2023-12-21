@@ -951,11 +951,15 @@ CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
   -u $STRIPE_KEY: \
   -d email="free@${DOMAIN}")
 
+echo "######"
+
+echo "^^^^^^^^"
+
 CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
   -u $STRIPE_KEY: \
   --data-raw "{
     \"email\":\"free@${DOMAIN}\",
-    \"test_clock\":\"${CLOCK_ID}\",
+    \"test_clock\":\"${TEST_CLOCK_ID}\",
     \"payment_method\":\"pm_card_visa\",
     \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
   }")
