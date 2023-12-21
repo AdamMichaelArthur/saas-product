@@ -2,7 +2,8 @@
 
 # Save our original cwd, we'll need it later
 ORIG_PWD=$PWD
-chmod 777 .
+chmod 777 . || { echo "Failed to change permissions"; exit 1; }
+
 # MongoDB connection details with defaults
 DB_DOMAIN="127.0.0.1"
 DB_PORT="27017"
@@ -445,7 +446,7 @@ EOF
             --max-time 5
 
         exit
-        
+
         status=$?
         if [ $status -eq 0 ]; then
             echo "Command succeeded"
@@ -716,7 +717,19 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 #nohup git push &>/dev/null &
  git push
 
+##################################################################################################
+# Calling /administration/plans/getPlans for the first time causes Stripe plans to get initialized
+##################################################################################################
 
+echo $STRIPE_KEY
+cd $ORIG_PWD
+setPlansUrl=="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
+echo "Attemping to set stripe plans"
+echo $setPlansUrl
+curl --location "$url" \
+     --cookie-jar "cookies.txt" \
+     --header 'Accept: application/json'
+##################################################################################################
 
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
