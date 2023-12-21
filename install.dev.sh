@@ -293,9 +293,9 @@ if [ "$installFlavor" = "server" ]; then
 
     # Enable or disable stripe, depending on whether a key was provided
     ENABLE_STRIPE_COMMENT="#"
-    if [ -n "$STRIPE_KEY" ]; then
-        ENABLE_STRIPE_COMMENT=""
-    fi
+    # if [ -n "$STRIPE_KEY" ]; then
+    #     ENABLE_STRIPE_COMMENT=""
+    # fi
 
     WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
@@ -900,7 +900,7 @@ fi
 # Creating Test Accounts
 ##################################################################################################
 
-curl --location "https://${DOMAIN}/api/register" \
+user1=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "free-account-cookie.txt" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -909,20 +909,20 @@ curl --location "https://${DOMAIN}/api/register" \
     \"pwd\":\"password\",
     \"first_name\": \"Free\",
     \"last_name\":\"Account\"
-}"
+}")
 
-curl --location "https://${DOMAIN}/api/register" \
+user2=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "pro-account-cookie.txt" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
 --data-raw "{
     \"userId\":\"pro@${DOMAIN}\",
-    \"pwd\":\"Passwords\",
+    \"pwd\":\"password\",
     \"first_name\": \"Pro\",
     \"last_name\":\"Account\"
-}"
+}")
 
-curl --location "https://${DOMAIN}/api/register" \
+user3=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "enterprise-account-cookie.txt" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -931,7 +931,7 @@ curl --location "https://${DOMAIN}/api/register" \
     \"pwd\":\"password\",
     \"first_name\": \"Enterprise\",
     \"last_name\":\"Account\"
-}"
+}")
 
 ##################################################################################################
 # Creating A Test Clock
