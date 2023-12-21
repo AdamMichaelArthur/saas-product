@@ -729,11 +729,15 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 echo $STRIPE_KEY
 cd $ORIG_PWD
 setPlansUrl="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
-echo "Attemping to set stripe plans"
-echo $setPlansUrl
-curl --location "$url" \
-     --cookie "cookies.txt" \
-     --header 'Accept: application/json'
+echo "Waiting 10 seconds for the process to initialize"
+sleep 10
+if [ -n "$STRIPE_KEY" ]; then
+    echo "Attemping to set stripe plans"
+    echo $setPlansUrl
+    curl --location "$url" \
+         --cookie "cookies.txt" \
+         --header 'Accept: application/json'
+fi
 ##################################################################################################
 
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
