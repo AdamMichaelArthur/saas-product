@@ -774,15 +774,14 @@ fi
 ##################################################################################################
 
 
-    stripeWebhook=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
-
-    echo "Our stripe webbook is ${stripeWebhook}"
-    echo "Our stripe API Key is ${}"
+    stripeWebhookResponse=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
+    stripeWebhookUrl="https://${DOMAIN}/api/public/callbacks/stripe/event"
+    echo "Our stripe webbook is: https://${DOMAIN}/api/public/callbacks/stripe/event"
+    echo "Our stripe API Key is ${STRIPE_KEY}"
     # Assuming 'response' contains the HTTP status code
-    response=$(curl -o /dev/null -s -w "%{http_code}\n" [Your API Call Here])
 
     # Check if the response is 200 OK
-    if [ "$response" -eq 200 ]; then
+    if [ "$stripeWebhookResponse" -eq 200 ]; then
         echo "API is working fine. Let's setup our callback"
         # Commands to create admin user
     else
@@ -797,7 +796,7 @@ response=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}")
 
 if [ "$response" -eq 404 ]; then
     # Place your code block here
-    echo "Received a 404 response"
+    echo "The Angular App isn't working correctly"
     # This sometimes happens in the original build of the frontend fails.
     # The most common reason for this is deploying on a new server with limited resource
     # and can be fixed by creating a system swap file
