@@ -1075,7 +1075,7 @@ SUBSCRIPTION_RESPONSE_1=$(curl https://api.stripe.com/v1/subscriptions \
 
 echo $SUBSCRIPTION_RESPONSE_1
 echo "Sleeping for 2 seconds to avoid rate limits"
-SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 sleep 2
 echo "The subscription id for free ${SUBSCRIPTION_ID_1}"
 
@@ -1085,7 +1085,8 @@ SUBSCRIPTION_RESPONSE_2=$(curl https://api.stripe.com/v1/subscriptions \
  -d items[0][price]=$price_id_2)
 
 echo "Sleeping for 2 seconds to avoid rate limits"
-SUBSCRIPTION_ID_2=$(echo "$SUBSCRIPTION_RESPONSE_2" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+SUBSCRIPTION_ID_2=$(echo "$SUBSCRIPTION_RESPONSE_2" | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
 sleep 2
 echo "The subscription id for pro ${SUBSCRIPTION_ID_2}"
 
@@ -1095,7 +1096,8 @@ SUBSCRIPTION_RESPONSE_3=$(curl https://api.stripe.com/v1/subscriptions \
  -d items[0][price]=$price_id_3)
 
 echo "Sleeping for 2 seconds to avoid rate limits"
-SUBSCRIPTION_ID_3=$(echo "$SUBSCRIPTION_RESPONSE_3" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+SUBSCRIPTION_ID_3=$(echo "$SUBSCRIPTION_RESPONSE_3" | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
 sleep 2
 echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 
