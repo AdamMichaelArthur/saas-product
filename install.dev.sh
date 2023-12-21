@@ -972,17 +972,8 @@ CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*
 
 echo "CUSTOMER_ID is ${CUSTOMER_ID}"
 
-# Create a Subscription
-#SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
-#  -u $STRIPE_KEY: \
-#  -d customer=$CUSTOMER_ID \
-#  -d items[0][price]="your_price_id" \
-#  -d test_clock=$TEST_CLOCK_ID)
-#
-#echo $SUBSCRIPTION_RESPONSE
-
 ##################################################################################################
-# Get our plans, so we can grab a price_d
+# Get our plans, so we can grab our price_ids
 ##################################################################################################
 json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
 --cookie "enterprise-account-cookie.txt" \
@@ -1002,6 +993,18 @@ price_id_3=$(echo "$price_ids" | sed -n 3p)
 echo "Price ID 1: $price_id_1"
 echo "Price ID 2: $price_id_2"
 echo "Price ID 3: $price_id_3"
+
+##################################################################################################
+# Create our Subscriptions
+##################################################################################################
+
+SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
+ -u $STRIPE_KEY: \
+ -d customer=$CUSTOMER_ID \
+ -d items[0][price]=$price_id_1 \
+ -d test_clock=$TEST_CLOCK_ID)
+
+echo $SUBSCRIPTION_RESPONSE
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
