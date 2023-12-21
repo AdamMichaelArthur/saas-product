@@ -989,14 +989,16 @@ json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json')
 
-echo json_response
+echo $json_response
 
 # Extracting priceId values
 price_ids=$(echo "$json_response" | grep -o '"priceId": *"[^"]*' | awk -F '"' '{print $4}')
 
 echo "Price IDS"
 # Print each priceId
-echo "$price_ids"
+echo "${price_ids}"
+
+echo $price_ids
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
