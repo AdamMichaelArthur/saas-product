@@ -948,17 +948,38 @@ echo "The test clock id is ${TEST_CLOCK_ID}"
 
 # Create a Customer
 
-CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
+CUSTOMER_RESPONSE_1=$(curl https://api.stripe.com/v1/customers \
   -u ${STRIPE_KEY}: \
-  --data-urlencode email="fee@${DOMAIN}" \
+  --data-urlencode email="free@${DOMAIN}" \
   -d test_clock=$TEST_CLOCK_ID \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
+CUSTOMER_RESPONSE_2=$(curl https://api.stripe.com/v1/customers \
+  -u ${STRIPE_KEY}: \
+  --data-urlencode email="pro@${DOMAIN}" \
+  -d test_clock=$TEST_CLOCK_ID \
+  -d payment_method=pm_card_visa \
+  -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
-echo $CUSTOMER_RESPONSE
+CUSTOMER_RESPONSE_3=$(curl https://api.stripe.com/v1/customers \
+  -u ${STRIPE_KEY}: \
+  --data-urlencode email="enterprise@${DOMAIN}" \
+  -d test_clock=$TEST_CLOCK_ID \
+  -d payment_method=pm_card_visa \
+  -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
-CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+echo $CUSTOMER_RESPONSE_1
+
+echo $CUSTOMER_RESPONSE_2
+
+echo $CUSTOMER_RESPONSE_3
+
+CUSTOMER_ID_1=$(echo $CUSTOMER_RESPONSE_1 | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
+CUSTOMER_ID_2=$(echo $CUSTOMER_RESPONSE_2 | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
+CUSTOMER_ID_3=$(echo $CUSTOMER_RESPONSE_3 | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 
 echo "CUSTOMER_ID is ${CUSTOMER_ID}"
 
@@ -988,12 +1009,26 @@ echo "Price ID 3: $price_id_3"
 # Create our Subscriptions
 ##################################################################################################
 
-SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
+SUBSCRIPTION_RESPONSE_1=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
- -d customer=$CUSTOMER_ID \
+ -d customer=$CUSTOMER_ID_1 \
  -d items[0][price]=$price_id_1)
 
-echo $SUBSCRIPTION_RESPONSE
+echo $SUBSCRIPTION_RESPONSE_1
+
+SUBSCRIPTION_RESPONSE_2=$(curl https://api.stripe.com/v1/subscriptions \
+ -u $STRIPE_KEY: \
+ -d customer=$CUSTOMER_ID_2 \
+ -d items[0][price]=$price_id_2)
+
+echo $SUBSCRIPTION_RESPONSE_3
+
+SUBSCRIPTION_RESPONSE_3=$(curl https://api.stripe.com/v1/subscriptions \
+ -u $STRIPE_KEY: \
+ -d customer=$CUSTOMER_ID_3 \
+ -d items[0][price]=$price_id_3)
+
+echo $SUBSCRIPTION_RESPONSE_3
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
