@@ -899,6 +899,10 @@ fi
 ##################################################################################################
 # Creating Test Accounts
 ##################################################################################################
+echo "Sleeping for 10 seconds"
+sleep 10
+
+echo "Creating Account 1"
 
 user1=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "free-account-cookie.txt" \
@@ -911,6 +915,12 @@ user1=$(curl --location "https://${DOMAIN}/api/register" \
     \"last_name\":\"Account\"
 }")
 
+echo "Response:"
+echo $user1
+echo "End response"
+
+echo "\nCreating Account 2"
+
 user2=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "pro-account-cookie.txt" \
 --header 'Content-Type: application/json' \
@@ -921,6 +931,12 @@ user2=$(curl --location "https://${DOMAIN}/api/register" \
     \"first_name\": \"Pro\",
     \"last_name\":\"Account\"
 }")
+
+echo "Response:"
+echo $user2
+echo "End response"
+
+echo "Creating Account 3"
 
 user3=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "enterprise-account-cookie.txt" \
@@ -933,9 +949,14 @@ user3=$(curl --location "https://${DOMAIN}/api/register" \
     \"last_name\":\"Account\"
 }")
 
+echo "Response:"
+echo $user3
+echo "End response"
 ##################################################################################################
 # Creating A Test Clock
 ##################################################################################################
+
+echo "Creating Test Clocks"
 
 response=$(curl https://api.stripe.com/v1/test_helpers/test_clocks \
   -u ${STRIPE_KEY}: \
@@ -948,6 +969,8 @@ echo "The test clock id is ${TEST_CLOCK_ID}"
 
 # Create a Customer
 
+echo "Creating Customer 1"
+
 CUSTOMER_RESPONSE_1=$(curl https://api.stripe.com/v1/customers \
   -u ${STRIPE_KEY}: \
   --data-urlencode email="free@${DOMAIN}" \
@@ -955,12 +978,16 @@ CUSTOMER_RESPONSE_1=$(curl https://api.stripe.com/v1/customers \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
+echo "Creating Customer 2"
+
 CUSTOMER_RESPONSE_2=$(curl https://api.stripe.com/v1/customers \
   -u ${STRIPE_KEY}: \
   --data-urlencode email="pro@${DOMAIN}" \
   -d test_clock=$TEST_CLOCK_ID \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
+
+echo "Creating Customer 3"
 
 CUSTOMER_RESPONSE_3=$(curl https://api.stripe.com/v1/customers \
   -u ${STRIPE_KEY}: \
@@ -992,6 +1019,8 @@ echo "CUSTOMER_ID_3 is ${CUSTOMER_ID_3}"
 ##################################################################################################
 
 echo "Calling https://${DOMAIN}/api/plans/getPlans"
+echo "Sleeping for 10 seconds"
+sleep 10
 
 json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
 --cookie "enterprise-account-cookie.txt" \
