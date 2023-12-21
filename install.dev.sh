@@ -918,6 +918,8 @@ user1=$(curl --location "https://${DOMAIN}/api/register" \
 echo "Response:"
 echo $user1
 echo "End response"
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
 
 echo "\nCreating Account 2"
 
@@ -935,6 +937,8 @@ user2=$(curl --location "https://${DOMAIN}/api/register" \
 echo "Response:"
 echo $user2
 echo "End response"
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
 
 echo "Creating Account 3"
 
@@ -952,6 +956,9 @@ user3=$(curl --location "https://${DOMAIN}/api/register" \
 echo "Response:"
 echo $user3
 echo "End response"
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
+
 ##################################################################################################
 # Creating A Test Clock
 ##################################################################################################
