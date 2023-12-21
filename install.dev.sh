@@ -754,7 +754,7 @@ if [ -n "$STRIPE_KEY" ]; then
     sleep 10
     echo "Attemping to set stripe plans"
     echo $getApiKeyUrl
-    curl --location "$setPlansUrl" \
+    curl --location "$getApiKeyUrl" \
          --cookie "cookies.txt" \
          --header 'Accept: application/json'
 fi
