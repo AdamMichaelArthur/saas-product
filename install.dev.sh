@@ -773,7 +773,9 @@ fi
 
 ##################################################################################################
 
-
+##################################################################################################
+# Setting up Stripe Webhooks
+##################################################################################################
     stripeWebhookResponse=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
     stripeWebhookUrl="https://${DOMAIN}/api/public/callbacks/stripe/event/api_key/${apiKey}"
     echo "Our stripe webbook is: ${stripeWebhookUrl}"
@@ -892,6 +894,43 @@ fi
         echo "API call failed with status: $response"
         # Handle failure case
     fi
+
+##################################################################################################
+# Creating Test Accounts
+##################################################################################################
+
+curl --location "https://${DOMAIN}/api/register" \
+--cookie-jar "free-account-cookie.txt" \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data-raw "{
+    \"userId\":\"free@${DOMAIN}.com\",
+    \"pwd\":\"password\",
+    \"first_name\": \"Free\",
+    \"last_name\":\"Account\"
+}"
+
+curl --location "https://${DOMAIN}/api/register" \
+--cookie-jar "pro-account-cookie.txt" \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data-raw "{
+    \"userId\":\"pro@${DOMAIN}.com\",
+    \"pwd\":\"Passwords\",
+    \"first_name\": \"Pro\",
+    \"last_name\":\"Account\"
+}"
+
+curl --location "https://${DOMAIN}/api/register" \
+--cookie-jar "enterprise-account-cookie.txt" \
+--header 'Content-Type: application/json' \
+--header 'Accept: application/json' \
+--data-raw "{
+    \"userId\":\"enterprise@${DOMAIN}.com\",
+    \"pwd\":\"password\",
+    \"first_name\": \"Enterprise\",
+    \"last_name\":\"Account\"
+}"
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
