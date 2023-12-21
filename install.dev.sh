@@ -445,8 +445,6 @@ EOF
             --cookie-jar "cookies.txt" \
             --max-time 5
 
-        exit
-
         status=$?
         if [ $status -eq 0 ]; then
             echo "Command succeeded"
