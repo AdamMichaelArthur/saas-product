@@ -456,12 +456,16 @@ EOF
             echo "Command succeeded"
             break
         else
+            # Restart mongod
+            systemctl restart mongod
+            sleep 10 # wait for 10 seconds before retrying
             echo "Command failed.  Restarting process and waiting 10 seconds, then trying again"
             pm2 restart "${projectName}-apiv2"
+            sleep 10
         fi
 
         attempt=$((attempt+1))
-        sleep 10 # wait for 5 seconds before retrying
+        sleep 5 
     done
 
     if [ $attempt -gt $max_attempts ]; then
@@ -750,7 +754,7 @@ if [ "$response" -eq 404 ]; then
     # This sometimes happens in the original build of the frontend fails.
     # The most common reason for this is deploying on a new server with limited resource
     # and can be fixed by creating a system swap file
-    
+
 fi
 
 
