@@ -1021,12 +1021,9 @@ fi
 
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
-echo "The project is building in the background, and should come online when this is finished.  This can take a few minutes."
-echo "Run: 'git clone ssh://root@${HOST}:/srv/git/${projectName}.git' on your development server to clone the deployed project."
-echo "This assume that you have your ssh keys installed to this server."
-echo "Would you like to make this available via https?  Warning: this means anyone with the link can download the repo."
-echo "Use 'git push' and 'git pull' to update any changes to your deployment."
-echo "Visit http://${DOMAIN} to see your deployment.  If after 10 minutes it's not working, something went wrong.  But less than 10 minutes, be patient."
+
+echo "git clone ssh://root@${HOST}:/srv/git/${projectName}.git"
+echo "Visit https://${DOMAIN}"
 
 
 exit
