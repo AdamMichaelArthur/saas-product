@@ -2,6 +2,7 @@
 
 # Save our original cwd, we'll need it later
 ORIG_PWD=$PWD
+chmod 777 .
 # MongoDB connection details with defaults
 DB_DOMAIN="127.0.0.1"
 DB_PORT="27017"
@@ -433,11 +434,13 @@ EOF
         # Displaying the URL and JSON payload for debugging
         echo "URL: $url"
         echo "JSON Payload: $json_payload"
+        cd $ORIG_PWD
 
         curl --location "$url" \
             --header 'Content-Type: application/json' \
             --header 'Accept: application/json' \
             --data-raw "$json_payload" \
+            --cookie-jar "cookies.txt" \
             --max-time 5
 
         status=$?
