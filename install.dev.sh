@@ -1001,7 +1001,7 @@ echo "Price ID 3: $price_id_3"
 SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
  -d customer=$CUSTOMER_ID \
- -d items[0][price]=$price_id_1
+ -d items[0][price]=$price_id_1)
 
 echo $SUBSCRIPTION_RESPONSE
 
