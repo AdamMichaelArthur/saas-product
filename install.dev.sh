@@ -948,25 +948,15 @@ echo "The test clock id is ${TEST_CLOCK_ID}"
 
 # Create a Customer
 
-curl https://api.stripe.com/v1/customers \
+CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
   -u ${STRIPE_KEY}: \
   --data-urlencode email="fee@${DOMAIN}" \
   -d test_clock=$TEST_CLOCK_ID \
   -d payment_method=pm_card_visa \
-  -d "invoice_settings[default_payment_method]"=pm_card_visa
+  -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
-# CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
-#   -u ${STRIPE_KEY}: \
-#   --data-raw "{
-#     \"email\":\"free@${DOMAIN}\",
-#     \"test_clock\":\"${TEST_CLOCK_ID}\",
-#     \"payment_method\":\"pm_card_visa\",
-#     \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
-#   }")
 
-echo CUSTOMER_RESPONSE
-
-echo ""
+echo $CUSTOMER_RESPONSE
 
 CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 
