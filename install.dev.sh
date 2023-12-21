@@ -985,7 +985,7 @@ echo "CUSTOMER_ID is ${CUSTOMER_ID}"
 # Get our plans, so we can grab a price_d
 ##################################################################################################
 json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
---cookie "cookies.txt" \
+--cookie "enterprise-account-cookie.txt" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json')
 
@@ -994,11 +994,14 @@ echo $json_response
 # Extracting priceId values
 price_ids=$(echo "$json_response" | grep -o '"priceId": *"[^"]*' | awk -F '"' '{print $4}')
 
-echo "Price IDS"
-# Print each priceId
-echo "${price_ids}"
+price_id_1=$(echo "$price_ids" | sed -n 1p)
+price_id_2=$(echo "$price_ids" | sed -n 2p)
+price_id_3=$(echo "$price_ids" | sed -n 3p)
 
-echo $price_ids
+# Print each variable
+echo "Price ID 1: $price_id_1"
+echo "Price ID 2: $price_id_2"
+echo "Price ID 3: $price_id_3"
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
