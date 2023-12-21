@@ -981,18 +981,26 @@ CUSTOMER_ID_2=$(echo $CUSTOMER_RESPONSE_2 | grep -o '"id": *"[^"]*' | grep -o '[
 
 CUSTOMER_ID_3=$(echo $CUSTOMER_RESPONSE_3 | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 
-echo "CUSTOMER_ID is ${CUSTOMER_ID}"
+echo "CUSTOMER_ID_1 is ${CUSTOMER_ID_1}"
+
+echo "CUSTOMER_ID_3 is ${CUSTOMER_ID_2}"
+
+echo "CUSTOMER_ID_3 is ${CUSTOMER_ID_3}"
 
 ##################################################################################################
 # Get our plans, so we can grab our price_ids
 ##################################################################################################
+
+echo "Calling https://${DOMAIN}/api/plans/getPlans"
+
 json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
 --cookie "enterprise-account-cookie.txt" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json')
 
+echo "Response:"
 echo $json_response
-
+echo "End Response"
 # Extracting priceId values
 price_ids=$(echo "$json_response" | grep -o '"priceId": *"[^"]*' | awk -F '"' '{print $4}')
 
