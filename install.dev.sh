@@ -948,14 +948,21 @@ echo "The test clock id is ${TEST_CLOCK_ID}"
 
 # Create a Customer
 
-CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
-  -u ${STRIPE_KEY}: \
-  --data-raw "{
-    \"email\":\"free@${DOMAIN}\",
-    \"test_clock\":\"${TEST_CLOCK_ID}\",
-    \"payment_method\":\"pm_card_visa\",
-    \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
-  }")
+curl https://api.stripe.com/v1/customers \
+  -u "sk_test_RLsQWtkQk2l6N8VEpOFKPKXN:" \
+  --data-urlencode email="jenny.rosen12345@example.com" \
+  -d test_clock=$TEST_CLOCK_ID \
+  -d payment_method=pm_card_visa \
+  -d "invoice_settings[default_payment_method]"=pm_card_visa
+
+# CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
+#   -u ${STRIPE_KEY}: \
+#   --data-raw "{
+#     \"email\":\"free@${DOMAIN}\",
+#     \"test_clock\":\"${TEST_CLOCK_ID}\",
+#     \"payment_method\":\"pm_card_visa\",
+#     \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
+#   }")
 
 echo CUSTOMER_RESPONSE
 
