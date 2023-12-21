@@ -958,7 +958,7 @@ CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
     \"test_clock\":\"${CLOCK_ID}\",
     \"payment_method\":\"pm_card_visa\",
     \"invoice_settings[default_payment_method]\":\"pm_card_visa\"
-  }"
+  }")
 
 echo CUSTOMER_RESPONSE
 
