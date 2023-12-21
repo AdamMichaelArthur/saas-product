@@ -904,7 +904,7 @@ curl --location "https://${DOMAIN}/api/register" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
 --data-raw "{
-    \"userId\":\"free@${DOMAIN}.com\",
+    \"userId\":\"free@${DOMAIN}\",
     \"pwd\":\"password\",
     \"first_name\": \"Free\",
     \"last_name\":\"Account\"
@@ -915,7 +915,7 @@ curl --location "https://${DOMAIN}/api/register" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
 --data-raw "{
-    \"userId\":\"pro@${DOMAIN}.com\",
+    \"userId\":\"pro@${DOMAIN}\",
     \"pwd\":\"Passwords\",
     \"first_name\": \"Pro\",
     \"last_name\":\"Account\"
@@ -926,11 +926,40 @@ curl --location "https://${DOMAIN}/api/register" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
 --data-raw "{
-    \"userId\":\"enterprise@${DOMAIN}.com\",
+    \"userId\":\"enterprise@${DOMAIN}\",
     \"pwd\":\"password\",
     \"first_name\": \"Enterprise\",
     \"last_name\":\"Account\"
 }"
+
+##################################################################################################
+# Creating A Test Clock
+##################################################################################################
+
+response=$(curl https://api.stripe.com/v1/test_helpers/test_clocks \
+  -u ${STRIPE_KEY}: \
+  -d frozen_time=$(date +%s))
+
+# Extracting the id
+TEST_CLOCK_ID=$(echo $response | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
+echo "The test clock id is ${TEST_CLOCK_ID}"
+
+# Create a Customer
+CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
+  -u $STRIPE_KEY: \
+  -d email="free@${DOMAIN}")
+
+CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
+# Create a Subscription
+#SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
+#  -u $STRIPE_KEY: \
+#  -d customer=$CUSTOMER_ID \
+#  -d items[0][price]="your_price_id" \
+#  -d test_clock=$TEST_CLOCK_ID)
+#
+#echo $SUBSCRIPTION_RESPONSE
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
