@@ -880,7 +880,6 @@ fi
       -d "enabled_events[]=invoice.voided" \
       -d "enabled_events[]=invoiceitem.created" \
       -d "enabled_events[]=invoiceitem.deleted" \
-      -d "enabled_events[]=invoiceitem.updated" \
       -d "enabled_events[]=issuing_authorization.created" \
       -d "enabled_events[]=issuing_authorization.updated" \
       -d "enabled_events[]=issuing_card.created" \
