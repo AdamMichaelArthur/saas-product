@@ -725,16 +725,15 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 ##################################################################################################
 # Calling /administration/plans/getPlans for the first time causes Stripe plans to get initialized
 ##################################################################################################
-
-echo $STRIPE_KEY
-cd $ORIG_PWD
-setPlansUrl="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
-echo "Waiting 10 seconds for the process to initialize"
-sleep 10
 if [ -n "$STRIPE_KEY" ]; then
+    echo $STRIPE_KEY
+    cd $ORIG_PWD
+    setPlansUrl="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
+    echo "Waiting 10 seconds for the process to initialize"
+    sleep 10
     echo "Attemping to set stripe plans"
     echo $setPlansUrl
-    curl --location "$url" \
+    curl --location "$setPlansUrl" \
          --cookie "cookies.txt" \
          --header 'Accept: application/json'
 fi
