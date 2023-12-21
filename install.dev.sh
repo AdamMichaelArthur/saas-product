@@ -456,11 +456,12 @@ EOF
             echo "Command succeeded"
             break
         else
-            echo "Command failed"
+            echo "Command failed.  Restarting process and waiting 10 seconds, then trying again"
+            pm2 restart "${projectName}-apiv2"
         fi
 
         attempt=$((attempt+1))
-        sleep 5 # wait for 5 seconds before retrying
+        sleep 10 # wait for 5 seconds before retrying
     done
 
     if [ $attempt -gt $max_attempts ]; then
