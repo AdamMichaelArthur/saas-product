@@ -1077,7 +1077,7 @@ echo $SUBSCRIPTION_RESPONSE_1
 echo "Sleeping for 2 seconds to avoid rate limits"
 SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
 sleep 2
-echo "The subscription id for free {$SUBSCRIPTION_ID_1}"
+echo "The subscription id for free ${SUBSCRIPTION_ID_1}"
 
 SUBSCRIPTION_RESPONSE_2=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
@@ -1087,7 +1087,7 @@ SUBSCRIPTION_RESPONSE_2=$(curl https://api.stripe.com/v1/subscriptions \
 echo "Sleeping for 2 seconds to avoid rate limits"
 SUBSCRIPTION_ID_2=$(echo "$SUBSCRIPTION_RESPONSE_2" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
 sleep 2
-echo "The subscription id for pro {$SUBSCRIPTION_ID_2}"
+echo "The subscription id for pro ${SUBSCRIPTION_ID_2}"
 
 SUBSCRIPTION_RESPONSE_3=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
@@ -1097,36 +1097,41 @@ SUBSCRIPTION_RESPONSE_3=$(curl https://api.stripe.com/v1/subscriptions \
 echo "Sleeping for 2 seconds to avoid rate limits"
 SUBSCRIPTION_ID_3=$(echo "$SUBSCRIPTION_RESPONSE_3" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
 sleep 2
-echo "The subscription id for enterprise {$SUBSCRIPTION_ID_3}"
+echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 
 ##################################################################################################
 # Updating the database
 ##################################################################################################
 
-echo $CUSTOMER_ID_1
-echo $SUBSCRIPTION_ID_1
+echo "Customer id 1: ${CUSTOMER_ID_1} END"
+echo "Subscription id 1: ${SUBSCRIPTION_ID_1} END"
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "free-account-cookie.txt" \
---data "{
+--data-raw "{
     \"stripe_id\": \"${CUSTOMER_ID_1}\",
     \"subscription_id\": \"${SUBSCRIPTION_ID_1}\",
     \"plan\":\"free\"
 }"
 
+echo "Customer id 2: ${CUSTOMER_ID_2} END"
+echo "Subscription id 2: ${SUBSCRIPTION_ID_2} END"
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
---data "{
+--data-raw "{
     \"stripe_id\": \"${CUSTOMER_ID_2}\",
     \"subscription_id\": \"${SUBSCRIPTION_ID_2}\",
     \"plan\":\"pro\"
 }"
 
+echo "Customer id 1: ${CUSTOMER_ID_3} END"
+echo "Subscription id 1: ${SUBSCRIPTION_ID_3} END"
+
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
---data "{
+--data-raw "{
     \"stripe_id\": \"${CUSTOMER_ID_3}\",
     \"subscription_id\": \"${SUBSCRIPTION_ID_3}\",
     \"plan\":\"enterprise\"
