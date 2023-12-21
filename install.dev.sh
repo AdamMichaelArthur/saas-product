@@ -291,6 +291,12 @@ if [ "$installFlavor" = "server" ]; then
     API_V1_PORT=$available_port
     API_V2_PORT=$((available_port + 5))
 
+    # Enable or disable stripe, depending on whether a key was provided
+    ENABLE_STRIPE_COMMENT="#"
+    if [ -n "$STRIPE_KEY" ]; then
+        ENABLE_STRIPE_COMMENT=""
+    fi
+
     WEBSOCKET_V2="$((API_V2_PORT + 2))"
     # Create our .env files, and load them with our first variables
     cd "/srv/env/${projectName}"
@@ -304,7 +310,7 @@ WEBSOCKET_2=$((API_V2_PORT + 2))
 # The stripe API key
 # We disable stripe by default
 stripe_key=${STRIPE_KEY}
-DISABLE_STRIPE=true
+${ENABLE_STRIPE_COMMENT}DISABLE_STRIPE=true
 
 # API_VERSION 
 API_VERSION=""
@@ -337,7 +343,7 @@ GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
 SECRET_KEY=${SECRET_KEY}
 
 stripe_key=${STRIPE_KEY}
-DISABLE_STRIPE=true
+${ENABLE_STRIPE_COMMENT}DISABLE_STRIPE=true
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
@@ -721,11 +727,11 @@ git commit -m "Moving Updated Post Receive Into Deployment Directory"
 
 echo $STRIPE_KEY
 cd $ORIG_PWD
-setPlansUrl=="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
+setPlansUrl="http://${HOST}:${API_V2_PORT}/administration/plans/getPlans"
 echo "Attemping to set stripe plans"
 echo $setPlansUrl
 curl --location "$url" \
-     --cookie-jar "cookies.txt" \
+     --cookie "cookies.txt" \
      --header 'Accept: application/json'
 ##################################################################################################
 
