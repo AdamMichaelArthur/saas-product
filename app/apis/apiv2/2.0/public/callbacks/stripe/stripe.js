@@ -17,6 +17,19 @@ export default class Stripe extends Base {
 
 
   */
+
+async test() {
+    
+    if (typeof this.api_key !== 'undefined') {
+        
+    } else {
+        // In this case, we send a 200 back to the client, but we decline to actually do anything
+        // We don't want to be inserting data into our database unless we are certain of its source
+        return true;
+    }    
+    this.response.reply(this.body);
+} 
+
 async event() {
 
     this.authenticated = false;
