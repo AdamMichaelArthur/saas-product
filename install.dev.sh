@@ -739,6 +739,21 @@ if [ -n "$STRIPE_KEY" ]; then
 fi
 ##################################################################################################
 
+##################################################################################################
+# Doing a final check to see if the Angular frontend built.  If not, we're going to try again
+##################################################################################################
+response=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}")
+
+if [ "$response" -eq 404 ]; then
+    # Place your code block here
+    echo "Received a 404 response"
+    # This sometimes happens in the original build of the frontend fails.
+    # The most common reason for this is deploying on a new server with limited resource
+    # and can be fixed by creating a system swap file
+    
+fi
+
+
 echo -e "\n\n\n██████╗░░█████╗░███╗░░██╗███████╗\n██╔══██╗██╔══██╗████╗░██║██╔════╝\n██║░░██║██║░░██║██╔██╗██║█████╗░░\n██║░░██║██║░░██║██║╚████║██╔══╝░░\n██████╔╝╚█████╔╝██║░╚███║███████╗\n╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝\n\n"
 
 echo "The project is building in the background, and should come online when this is finished.  This can take a few minutes."
