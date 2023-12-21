@@ -747,19 +747,48 @@ fi
 ##################################################################################################
 # Calling /administration/plans/getApiKey to generate an API Key for the primary admin user
 ##################################################################################################
-if [ -n "$STRIPE_KEY" ]; then
-    echo $STRIPE_KEY
+
     cd $ORIG_PWD
     getApiKeyUrl="http://${HOST}:${API_V2_PORT}/administration/getApiKey"
     sleep 2
     echo "Attemping to intialize Api Key for priamry sysadmin user"
     echo $getApiKeyUrl
-    curl --location "$getApiKeyUrl" \
-         --cookie "cookies.txt" \
-         --max-time 5 \
-         --header 'Accept: application/json'
-fi
+
+    # Make the API call and store the response
+    response=$(curl --location "$getApiKeyUrl" \
+             --cookie "cookies.txt" \
+             --max-time 5 \
+             --header 'Accept: application/json')
+
+    # Extract the apiKey value from the JSON response
+    apiKey=$(echo $response | grep -o '"api_key":"[^"]*' | grep -o '[^"]*$')
+
+    # Check if the apiKey is not null or empty
+    if [ -n "$apiKey" ]; then
+        echo "Extracted apiKey: $apiKey"
+        # Use the apiKey as needed
+    else
+        echo "apiKey not found in the response"
+    fi
+
 ##################################################################################################
+
+
+    stripeWebhook=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
+
+    echo "Our stripe webbook is ${stripeWebhook}"
+    echo "Our stripe API Key is ${}"
+    # Assuming 'response' contains the HTTP status code
+    response=$(curl -o /dev/null -s -w "%{http_code}\n" [Your API Call Here])
+
+    # Check if the response is 200 OK
+    if [ "$response" -eq 200 ]; then
+        echo "API is working fine. Let's setup our callback"
+        # Commands to create admin user
+    else
+        echo "API call failed with status: $response"
+        # Handle failure case
+    fi
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
