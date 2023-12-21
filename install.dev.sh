@@ -457,6 +457,7 @@ EOF
             break
         else
             # Restart mongod
+            echo "Attempint to restart mongodb"
             systemctl restart mongod
             sleep 10 # wait for 10 seconds before retrying
             echo "Command failed.  Restarting process and waiting 10 seconds, then trying again"
@@ -950,7 +951,16 @@ CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
   -u $STRIPE_KEY: \
   -d email="free@${DOMAIN}")
 
+CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
+  -u $STRIPE_KEY: \
+  --data-urlencode email="free@${DOMAIN}" \
+  -d test_clock=$CLOCK_ID \
+  -d payment_method=pm_card_visa \
+  -d "invoice_settings[default_payment_method]"=pm_card_visa)
+
 CUSTOMER_ID=$(echo $CUSTOMER_RESPONSE | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
+
+echo "CUSTOMER_ID is ${CUSTOMER_ID}"
 
 # Create a Subscription
 #SUBSCRIPTION_RESPONSE=$(curl https://api.stripe.com/v1/subscriptions \
