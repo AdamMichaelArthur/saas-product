@@ -336,6 +336,7 @@ GOD_PASSWORD=${RECOVERY_ADMIN_PASS}
 SECRET_KEY=${SECRET_KEY}
 
 stripe_key=${STRIPE_KEY}
+DISABLE_STRIPE=true
 
 # MongoDB Connection Details
 DB_DOMAIN=${DB_DOMAIN}
@@ -443,6 +444,8 @@ EOF
             --cookie-jar "cookies.txt" \
             --max-time 5
 
+        exit
+        
         status=$?
         if [ $status -eq 0 ]; then
             echo "Command succeeded"
