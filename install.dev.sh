@@ -1107,21 +1107,22 @@ echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 
 echo "Customer id 1: ${CUSTOMER_ID_1} END"
 echo "Subscription id 1: ${SUBSCRIPTION_ID_1} END"
+
+DOMAIN=test509.saas-product.com
+CUSTOMER_ID_1=cus_PENmpdoIqKgv3I
+SUBSCRIPTION_ID_1=sub_1OPv1RGzpSbuU0iy6pFH9LxP
+
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "free-account-cookie.txt" \
---data-raw "{
-    \"stripe_id\": \"${CUSTOMER_ID_1}\",
-    \"subscription_id\": \"${SUBSCRIPTION_ID_1}\",
-    \"plan\":\"free\"
-}"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${SUBSCRIPTION_ID_1}\", \"plan\":\"free\" }"
 
-echo "Customer id 2: ${CUSTOMER_ID_2} END"
-echo "Subscription id 2: ${SUBSCRIPTION_ID_2} END"
+echo "Customer id 2:-${CUSTOMER_ID_2}-END"
+echo "Subscription id 2:-${SUBSCRIPTION_ID_2}-END"
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
---data-raw "{
+--data-raw "{ 
     \"stripe_id\": \"${CUSTOMER_ID_2}\",
     \"subscription_id\": \"${SUBSCRIPTION_ID_2}\",
     \"plan\":\"pro\"
@@ -1133,10 +1134,10 @@ echo "Subscription id 1: ${SUBSCRIPTION_ID_3} END"
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
---data-raw "{
+--data-raw "{ 
     \"stripe_id\": \"${CUSTOMER_ID_3}\",
     \"subscription_id\": \"${SUBSCRIPTION_ID_3}\",
-    \"plan\":\"enterprise\"
+    \"plan\":\"enterprise\" 
 }"
 
 ##################################################################################################
