@@ -744,6 +744,23 @@ fi
 ##################################################################################################
 
 ##################################################################################################
+# Calling /administration/plans/getApiKey to generate an API Key for the primary admin user
+##################################################################################################
+if [ -n "$STRIPE_KEY" ]; then
+    echo $STRIPE_KEY
+    cd $ORIG_PWD
+    getApiKeyUrl="http://${HOST}:${API_V2_PORT}/administration//getApiKey"
+    echo "Waiting 10 seconds for the process to initialize"
+    sleep 10
+    echo "Attemping to set stripe plans"
+    echo $getApiKeyUrl
+    curl --location "$setPlansUrl" \
+         --cookie "cookies.txt" \
+         --header 'Accept: application/json'
+fi
+##################################################################################################
+
+##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
 ##################################################################################################
 response=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}")
@@ -754,7 +771,6 @@ if [ "$response" -eq 404 ]; then
     # This sometimes happens in the original build of the frontend fails.
     # The most common reason for this is deploying on a new server with limited resource
     # and can be fixed by creating a system swap file
-
 fi
 
 
