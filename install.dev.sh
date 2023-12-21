@@ -739,6 +739,7 @@ if [ -n "$STRIPE_KEY" ]; then
     echo $setPlansUrl
     curl --location "$setPlansUrl" \
          --cookie "cookies.txt" \
+         --max-time 5 \
          --header 'Accept: application/json'
 fi
 ##################################################################################################
@@ -749,13 +750,13 @@ fi
 if [ -n "$STRIPE_KEY" ]; then
     echo $STRIPE_KEY
     cd $ORIG_PWD
-    getApiKeyUrl="http://${HOST}:${API_V2_PORT}/administration//getApiKey"
-    echo "Waiting 10 seconds for the process to initialize"
-    sleep 10
-    echo "Attemping to set stripe plans"
+    getApiKeyUrl="http://${HOST}:${API_V2_PORT}/administration/getApiKey"
+    sleep 2
+    echo "Attemping to intialize Api Key for priamry sysadmin user"
     echo $getApiKeyUrl
     curl --location "$getApiKeyUrl" \
          --cookie "cookies.txt" \
+         --max-time 5 \
          --header 'Accept: application/json'
 fi
 ##################################################################################################
