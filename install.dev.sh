@@ -947,16 +947,9 @@ TEST_CLOCK_ID=$(echo $response | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 echo "The test clock id is ${TEST_CLOCK_ID}"
 
 # Create a Customer
-CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
-  -u $STRIPE_KEY: \
-  -d email="free@${DOMAIN}")
-
-echo "######"
-
-echo "^^^^^^^^"
 
 CUSTOMER_RESPONSE=$(curl https://api.stripe.com/v1/customers \
-  -u $STRIPE_KEY: \
+  -u ${STRIPE_KEY}: \
   --data-raw "{
     \"email\":\"free@${DOMAIN}\",
     \"test_clock\":\"${TEST_CLOCK_ID}\",
