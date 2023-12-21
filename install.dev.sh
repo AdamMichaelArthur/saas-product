@@ -969,6 +969,9 @@ response=$(curl https://api.stripe.com/v1/test_helpers/test_clocks \
   -u ${STRIPE_KEY}: \
   -d frozen_time=$(date +%s))
 
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
+
 # Extracting the id
 TEST_CLOCK_ID=$(echo $response | grep -o '"id": *"[^"]*' | grep -o '[^"]*$')
 
@@ -985,6 +988,9 @@ CUSTOMER_RESPONSE_1=$(curl https://api.stripe.com/v1/customers \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
+
 echo "Creating Customer 2"
 
 CUSTOMER_RESPONSE_2=$(curl https://api.stripe.com/v1/customers \
@@ -994,6 +1000,9 @@ CUSTOMER_RESPONSE_2=$(curl https://api.stripe.com/v1/customers \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
 
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
+
 echo "Creating Customer 3"
 
 CUSTOMER_RESPONSE_3=$(curl https://api.stripe.com/v1/customers \
@@ -1002,6 +1011,9 @@ CUSTOMER_RESPONSE_3=$(curl https://api.stripe.com/v1/customers \
   -d test_clock=$TEST_CLOCK_ID \
   -d payment_method=pm_card_visa \
   -d "invoice_settings[default_payment_method]"=pm_card_visa)
+
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
 
 echo $CUSTOMER_RESPONSE_1
 
@@ -1034,6 +1046,9 @@ json_response=$(curl --location "https://${DOMAIN}/api/plans/getPlans" \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json')
 
+echo "Sleeping for 2 seconds to avoid rate limits"
+sleep 2
+
 echo "Response:"
 echo $json_response
 echo "End Response"
@@ -1059,20 +1074,63 @@ SUBSCRIPTION_RESPONSE_1=$(curl https://api.stripe.com/v1/subscriptions \
  -d items[0][price]=$price_id_1)
 
 echo $SUBSCRIPTION_RESPONSE_1
+echo "Sleeping for 2 seconds to avoid rate limits"
+SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+sleep 2
+echo "The subscription id for free {$SUBSCRIPTION_ID_1}"
 
 SUBSCRIPTION_RESPONSE_2=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
  -d customer=$CUSTOMER_ID_2 \
  -d items[0][price]=$price_id_2)
 
-echo $SUBSCRIPTION_RESPONSE_3
+echo "Sleeping for 2 seconds to avoid rate limits"
+SUBSCRIPTION_ID_2=$(echo "$SUBSCRIPTION_RESPONSE_2" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+sleep 2
+echo "The subscription id for pro {$SUBSCRIPTION_ID_2}"
 
 SUBSCRIPTION_RESPONSE_3=$(curl https://api.stripe.com/v1/subscriptions \
  -u $STRIPE_KEY: \
  -d customer=$CUSTOMER_ID_3 \
  -d items[0][price]=$price_id_3)
 
-echo $SUBSCRIPTION_RESPONSE_3
+echo "Sleeping for 2 seconds to avoid rate limits"
+SUBSCRIPTION_ID_3=$(echo "$SUBSCRIPTION_RESPONSE_3" | grep -o '"id": *"[^"]*' | awk -F '"' '{print $4}')
+sleep 2
+echo "The subscription id for enterprise {$SUBSCRIPTION_ID_3}"
+
+##################################################################################################
+# Updating the database
+##################################################################################################
+
+echo $CUSTOMER_ID_1
+echo $SUBSCRIPTION_ID_1
+curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
+--header 'Content-Type: application/json' \
+--cookie "free-account-cookie.txt" \
+--data "{
+    \"stripe_id\": \"${CUSTOMER_ID_1}\",
+    \"subscription_id\": \"${SUBSCRIPTION_ID_1}\",
+    \"plan\":\"free\"
+}"
+
+curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
+--header 'Content-Type: application/json' \
+--cookie "pro-account-cookie.txt" \
+--data "{
+    \"stripe_id\": \"${CUSTOMER_ID_2}\",
+    \"subscription_id\": \"${SUBSCRIPTION_ID_2}\",
+    \"plan\":\"pro\"
+}"
+
+curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
+--header 'Content-Type: application/json' \
+--cookie "enterprise-account-cookie.txt" \
+--data "{
+    \"stripe_id\": \"${CUSTOMER_ID_3}\",
+    \"subscription_id\": \"${SUBSCRIPTION_ID_3}\",
+    \"plan\":\"enterprise\"
+}"
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
