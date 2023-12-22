@@ -126,8 +126,6 @@ rm -rf "/srv/node_modules/${projectName}"
 rm -rf "/srv/git/${projectName}.git"
 pm2 list | grep "${projectName}" | awk '{print $4}'; pm2 list | grep $projectName | awk '{print $4}' | xargs -I {} pm2 delete {}
 
-exit;
-
 while true; do
     read -p "Is this a (d) development installation or a (s) server installation? (d/s): " answer
     case "${answer,,}" in
