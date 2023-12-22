@@ -52,6 +52,8 @@ async event() {
 
     let objectType = this.body.data.object.object;
 
+    console.log("stripe.js", 55, objectType);
+
     // There is some inconsistency in where the customer id value is stored.  This adjusts for that inconsistency
     if (objectType === "customer") {
         stripe_id = this.body.data.object.id;
@@ -59,10 +61,16 @@ async event() {
         stripe_id = this.body.data.object.customer;
     }
 
+    console.log("stripe.js", 64, stripe_id);
+
     // By framework protocol, we expect every account document to have a stripe_id
     const query = { "stripe_id": stripe_id }
 
     const account = await collection.findOne(query);
+
+    console.log("stripe.js", 71, query);
+
+    console.log("stripe.js", 73, account);
 
     // If we are unable to find an attached customer id, there are two possibilities: this is an event not associated with the platform, or there 
     // was a breakdown.  We assume the former.  We drop it into a collection for debugging, just in case it's the latter and we need to diagnose
@@ -71,7 +79,7 @@ async event() {
         delete this.body.api_key;
         this.database.mongo.collection = "unaffiliated_stripe_events";
         this.database.mongo.insertOne(this.body);
-      return true;
+         return true;
     }
 
     let user;

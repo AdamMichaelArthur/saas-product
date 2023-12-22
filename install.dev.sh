@@ -1110,13 +1110,12 @@ sid_1=$(echo $SUBSCRIPTION_RESPONSE_1 | grep -o '"id": "[^"]*' | grep -o '[^"]*$
 sid_2=$(echo $SUBSCRIPTION_RESPONSE_2 | grep -o '"id": "[^"]*' | grep -o '[^"]*$' | head -n 1)
 sid_3=$(echo $SUBSCRIPTION_RESPONSE_3 | grep -o '"id": "[^"]*' | grep -o '[^"]*$' | head -n 1)
 
-echo "Customer id 1:-${CUSTOMER_ID_1}-END"
-echo "Subscription id 1:-${sid_1}-END"
-
+echo "Customer id 2:-${CUSTOMER_ID_1}-END"
+echo "Subscription id 2:-${sid_1}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
---cookie "free-account-cookie.txt" \                                                                          
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
+--cookie "pro-account-cookie.txt" \
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"pro\" }"
 
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
 
@@ -1126,6 +1125,7 @@ curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerTo
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
 --data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
+
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
 
 echo "Customer id 1: ${CUSTOMER_ID_3} END"
