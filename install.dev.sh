@@ -1105,9 +1105,9 @@ echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 # Updating the database
 ##################################################################################################
 
-SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4)
-SUBSCRIPTION_ID_2=$(echo "$SUBSCRIPTION_RESPONSE_2" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4)
-SUBSCRIPTION_ID_3=$(echo "$SUBSCRIPTION_RESPONSE_3" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4)
+SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
+SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
+SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
 
 echo "Customer id 1: ${CUSTOMER_ID_1} END"
 echo "Subscription id 1: ${SUBSCRIPTION_ID_1} END"
