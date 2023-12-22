@@ -1,6 +1,5 @@
 #!/bin/bash
-#mkdir -p ~/tmp
-cd ~/
+
 # Save our original cwd, we'll need it later
 ORIG_PWD=$PWD
 chmod 777 . || { echo "Failed to change permissions"; exit 1; }
