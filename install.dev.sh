@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ufw disable
+
 # Save our original cwd, we'll need it later
 ORIG_PWD=$PWD
 chmod 777 . || { echo "Failed to change permissions"; exit 1; }
@@ -10,6 +12,7 @@ DB_PORT="27017"
 DB_USERNAME=""  # Set to empty initially
 DB_PASSWORD=""  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
+DB_NAME=$projectName
 
 # Some defaults
 SOCKET_IO_PATH="/socket.io/"
@@ -50,6 +53,11 @@ ask_details() {
     read -p "Enter MongoDB Port (default: 27017):" inputPort
     if [ ! -z "$inputPort" ]; then
         DB_PORT="$inputPort"
+    fi
+
+    read -p "Enter Database Name (default: ${DB_NAME}):" inputDbName
+    if [ ! -z "$inputDbName" ]; then
+        DB_NAME="$inputDbName"
     fi
 
     #echo "Enter MongoDB Username (default: none):" read inputUsername
@@ -336,7 +344,7 @@ DB_DOMAIN=${DB_DOMAIN}
 DB_PORT="${DB_PORT}"
 DB_USERNAME="${DB_USERNAME}"
 DB_PASSWORD="${DB_PASSWORD}"
-DB_NAME="${projectName}"
+DB_NAME="${DB_NAME}"
 AUTH_DB="${AUTH_DB}"
 DISABLE_BOX="true"
 
@@ -366,7 +374,7 @@ DB_DOMAIN=${DB_DOMAIN}
 DB_PORT="${DB_PORT}"
 DB_USERNAME="${DB_USERNAME}"
 DB_PASSWORD="${DB_PASSWORD}"
-DB_NAME="${projectName}"
+DB_NAME="${DB_NAME}"
 AUTH_DB="${AUTH_DB}"
 DB_REPLICASET = "rs0"
 directConnection = "true"
