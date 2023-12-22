@@ -1108,10 +1108,6 @@ echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 echo "Customer id 1: ${CUSTOMER_ID_1} END"
 echo "Subscription id 1: ${SUBSCRIPTION_ID_1} END"
 
-DOMAIN=test509.saas-product.com
-CUSTOMER_ID_1=cus_PENmpdoIqKgv3I
-SUBSCRIPTION_ID_1=sub_1OPv1RGzpSbuU0iy6pFH9LxP
-
 curl --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "free-account-cookie.txt" \
