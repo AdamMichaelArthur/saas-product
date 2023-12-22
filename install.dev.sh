@@ -121,9 +121,9 @@ read -p "Enter Project Name: " projectName
 # Remove this project in case it already exists
 # But do a check first and ask
 echo "Getting Ready To Reset"
-pm2 delete "${projectName-apiv2}"
-pm2 delete "${projectName-apiv1}"
-pm2 delete "${projectName-websockets}"
+pm2 delete "${projectName}-apiv2"
+pm2 delete "${projectName}-apiv1"
+pm2 delete "${projectName}-websockets"
 
 sleep 10
 
