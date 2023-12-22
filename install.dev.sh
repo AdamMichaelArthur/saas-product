@@ -1105,39 +1105,40 @@ echo "The subscription id for enterprise ${SUBSCRIPTION_ID_3}"
 # Updating the database
 ##################################################################################################
 
-SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
-SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
-SUBSCRIPTION_ID_1=$(echo "$SUBSCRIPTION_RESPONSE_1" | grep -o '"id": *"[^"]*' | cut -d '"' -f 4 | awk 'NR==1 {print; exit}')
+
+sid_1=$(echo $SUBSCRIPTION_RESPONSE_1 | grep -o '"id": "[^"]*' | grep -o '[^"]*$' | head -n 1)
+sid_2=$(echo $SUBSCRIPTION_RESPONSE_2 | grep -o '"id": "[^"]*' | grep -o '[^"]*$' | head -n 1)
+sid_3=$(echo $SUBSCRIPTION_RESPONSE_3 | grep -o '"id": "[^"]*' | grep -o '[^"]*$' | head -n 1)
 
 echo "Customer id 1: ${CUSTOMER_ID_1} END"
-echo "Subscription id 1: ${SUBSCRIPTION_ID_1} END"
+echo "Subscription id 1: ${sid_1} END"
 
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 
 --cookie "free-account-cookie.txt" \                                                                          
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${SUBSCRIPTION_ID_1}\", \"plan\":\"free\" }"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
 
 echo "Customer id 2:-${CUSTOMER_ID_2}-END"
-echo "Subscription id 2:-${SUBSCRIPTION_ID_2}-END"
+echo "Subscription id 2:-${sid_2}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
 --data-raw "{ 
     \"stripe_id\": \"${CUSTOMER_ID_2}\",
-    \"subscription_id\": \"${SUBSCRIPTION_ID_2}\",
+    \"subscription_id\": \"${sid_2}\",
     \"plan\":\"pro\"
 }"
 
 echo "Customer id 1: ${CUSTOMER_ID_3} END"
-echo "Subscription id 1: ${SUBSCRIPTION_ID_3} END"
+echo "Subscription id 1: ${sid_3} END"
 
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
 --data-raw "{ 
     \"stripe_id\": \"${CUSTOMER_ID_3}\",
-    \"subscription_id\": \"${SUBSCRIPTION_ID_3}\",
+    \"subscription_id\": \"${sid_3}\",
     \"plan\":\"enterprise\" 
 }"
 
