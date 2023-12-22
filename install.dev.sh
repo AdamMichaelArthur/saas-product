@@ -120,11 +120,20 @@ read -p "Enter Project Name: " projectName
 
 # Remove this project in case it already exists
 # But do a check first and ask
+echo "Getting Ready To Reset"
+pm2 delete "${projectName-apiv2}"
+pm2 delete "${projectName-apiv1}"
+pm2 delete "${projectName-websockets}"
+
+sleep 10
+
 rm "/etc/nginx/sites-enabled/${projectName}.conf"
 rm -rf "/srv/www/${projectName}"
 rm -rf "/srv/node_modules/${projectName}"
 rm -rf "/srv/git/${projectName}.git"
 pm2 list | grep "${projectName}" | awk '{print $4}'; pm2 list | grep $projectName | awk '{print $4}' | xargs -I {} pm2 delete {}
+
+sleep 10
 
 while true; do
     read -p "Is this a (d) development installation or a (s) server installation? (d/s): " answer
@@ -789,6 +798,7 @@ sleep 10
 
 echo "Creating Account 1"
 
+
 user1=$(curl --location "https://${DOMAIN}/api/register" \
 --cookie-jar "free-account-cookie.txt" \
 --header 'Content-Type: application/json' \
@@ -799,6 +809,14 @@ user1=$(curl --location "https://${DOMAIN}/api/register" \
     \"first_name\": \"Free\",
     \"last_name\":\"Account\"
 }")
+
+echo "Calling"
+echo "https://${DOMAIN}/api/register {
+    \"userId\":\"free@${DOMAIN}\",
+    \"pwd\":\"password\",
+    \"first_name\": \"Free\",
+    \"last_name\":\"Account\"
+}"
 
 echo "Response:"
 echo $user1
@@ -819,6 +837,14 @@ user2=$(curl --location "https://${DOMAIN}/api/register" \
     \"last_name\":\"Account\"
 }")
 
+echo "Calling"
+echo "https://${DOMAIN}/api/register {
+    \"userId\":\"pro@${DOMAIN}\",
+    \"pwd\":\"password\",
+    \"first_name\": \"Free\",
+    \"last_name\":\"Account\"
+}"
+
 echo "Response:"
 echo $user2
 echo "End response"
@@ -837,6 +863,14 @@ user3=$(curl --location "https://${DOMAIN}/api/register" \
     \"first_name\": \"Enterprise\",
     \"last_name\":\"Account\"
 }")
+
+echo "Calling"
+echo "https://${DOMAIN}/api/register {
+    \"userId\":\"enterprise@${DOMAIN}\",
+    \"pwd\":\"password\",
+    \"first_name\": \"Free\",
+    \"last_name\":\"Account\"
+}"
 
 echo "Response:"
 echo $user3
