@@ -775,128 +775,6 @@ fi
 ##################################################################################################
 
 ##################################################################################################
-# Setting up Stripe Webhooks
-##################################################################################################
-    stripeWebhookResponse=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
-    stripeWebhookUrl="https://${DOMAIN}/api/public/callbacks/stripe/event/api_key/${apiKey}"
-    echo "Our stripe webbook is: ${stripeWebhookUrl}"
-    echo "Our stripe API Key is ${STRIPE_KEY}"
-    # Assuming 'response' contains the HTTP status code
-
-    # Check if the response is 200 OK
-    if [ "$stripeWebhookResponse" -eq 200 ]; then
-        echo "API is working fine. Let's setup our callback"
-        
-
-    curl https://api.stripe.com/v1/webhook_endpoints \
-      -u ${STRIPE_KEY}: \
-      -d "url=${stripeWebhookUrl}" \
-      -d "enabled_events[]=account.updated" \
-      -d "enabled_events[]=account.application.authorized" \
-      -d "enabled_events[]=account.application.deauthorized" \
-      -d "enabled_events[]=account.external_account.created" \
-      -d "enabled_events[]=account.external_account.deleted" \
-      -d "enabled_events[]=account.external_account.updated" \
-      -d "enabled_events[]=application_fee.created" \
-      -d "enabled_events[]=application_fee.refunded" \
-      -d "enabled_events[]=application_fee.refund.updated" \
-      -d "enabled_events[]=balance.available" \
-      -d "enabled_events[]=billing_portal.configuration.created" \
-      -d "enabled_events[]=billing_portal.configuration.updated" \
-      -d "enabled_events[]=billing_portal.session.created" \
-      -d "enabled_events[]=capability.updated" \
-      -d "enabled_events[]=cash_balance.funds_available" \
-      -d "enabled_events[]=charge.captured" \
-      -d "enabled_events[]=charge.expired" \
-      -d "enabled_events[]=charge.failed" \
-      -d "enabled_events[]=charge.pending" \
-      -d "enabled_events[]=charge.refunded" \
-      -d "enabled_events[]=charge.succeeded" \
-      -d "enabled_events[]=charge.updated" \
-      -d "enabled_events[]=charge.dispute.closed" \
-      -d "enabled_events[]=charge.dispute.created" \
-      -d "enabled_events[]=charge.dispute.funds_reinstated" \
-      -d "enabled_events[]=charge.dispute.funds_withdrawn" \
-      -d "enabled_events[]=charge.dispute.updated" \
-      -d "enabled_events[]=charge.refund.updated" \
-      -d "enabled_events[]=checkout.session.async_payment_failed" \
-      -d "enabled_events[]=checkout.session.async_payment_succeeded" \
-      -d "enabled_events[]=checkout.session.completed" \
-      -d "enabled_events[]=checkout.session.expired" \
-      -d "enabled_events[]=coupon.created" \
-      -d "enabled_events[]=coupon.deleted" \
-      -d "enabled_events[]=coupon.updated" \
-      -d "enabled_events[]=credit_note.created" \
-      -d "enabled_events[]=credit_note.updated" \
-      -d "enabled_events[]=credit_note.voided" \
-      -d "enabled_events[]=customer.created" \
-      -d "enabled_events[]=customer.deleted" \
-      -d "enabled_events[]=customer.updated" \
-      -d "enabled_events[]=customer.discount.created" \
-      -d "enabled_events[]=customer.discount.deleted" \
-      -d "enabled_events[]=customer.discount.updated" \
-      -d "enabled_events[]=customer.source.created" \
-      -d "enabled_events[]=customer.card.created" \
-      -d "enabled_events[]=customer.bank_account.created" \
-      -d "enabled_events[]=customer.source.deleted" \
-      -d "enabled_events[]=customer.card.deleted" \
-      -d "enabled_events[]=customer.bank_account.deleted" \
-      -d "enabled_events[]=customer.source.expiring" \
-      -d "enabled_events[]=customer.source.updated" \
-      -d "enabled_events[]=customer.card.updated" \
-      -d "enabled_events[]=customer.bank_account.updated" \
-      -d "enabled_events[]=customer.subscription.created" \
-      -d "enabled_events[]=customer.subscription.deleted" \
-      -d "enabled_events[]=customer.subscription.paused" \
-      -d "enabled_events[]=customer.subscription.pending_update_applied" \
-      -d "enabled_events[]=customer.subscription.pending_update_expired" \
-      -d "enabled_events[]=customer.subscription.resumed" \
-      -d "enabled_events[]=customer.subscription.trial_will_end" \
-      -d "enabled_events[]=customer.subscription.updated" \
-      -d "enabled_events[]=customer.tax_id.created" \
-      -d "enabled_events[]=customer.tax_id.deleted" \
-      -d "enabled_events[]=customer.tax_id.updated" \
-      -d "enabled_events[]=customer_cash_balance_transaction.created" \
-      -d "enabled_events[]=file.created" \
-      -d "enabled_events[]=financial_connections.account.created" \
-      -d "enabled_events[]=financial_connections.account.deactivated" \
-      -d "enabled_events[]=financial_connections.account.disconnected" \
-      -d "enabled_events[]=financial_connections.account.reactivated" \
-      -d "enabled_events[]=financial_connections.account.refreshed_balance" \
-      -d "enabled_events[]=identity.verification_session.canceled" \
-      -d "enabled_events[]=identity.verification_session.created" \
-      -d "enabled_events[]=identity.verification_session.processing" \
-      -d "enabled_events[]=identity.verification_session.requires_input" \
-      -d "enabled_events[]=identity.verification_session.verified" \
-      -d "enabled_events[]=invoice.created" \
-      -d "enabled_events[]=invoice.deleted" \
-      -d "enabled_events[]=invoice.finalization_failed" \
-      -d "enabled_events[]=invoice.finalized" \
-      -d "enabled_events[]=invoice.marked_uncollectible" \
-      -d "enabled_events[]=invoice.paid" \
-      -d "enabled_events[]=invoice.payment_action_required" \
-      -d "enabled_events[]=invoice.payment_failed" \
-      -d "enabled_events[]=invoice.payment_succeeded" \
-      -d "enabled_events[]=invoice.sent" \
-      -d "enabled_events[]=invoice.upcoming" \
-      -d "enabled_events[]=invoice.updated" \
-      -d "enabled_events[]=invoice.voided" \
-      -d "enabled_events[]=invoiceitem.created" \
-      -d "enabled_events[]=invoiceitem.deleted" \
-      -d "enabled_events[]=issuing_authorization.created" \
-      -d "enabled_events[]=issuing_authorization.updated" \
-      -d "enabled_events[]=issuing_card.created" \
-      -d "enabled_events[]=issuing_card.updated" \
-      -d "enabled_events[]=issuing_cardholder.created" \
-      -d "enabled_events[]=issuing_cardholder.updated" \
-      -d "enabled_events[]=issuing_dispute.closed"
-
-    else
-        echo "API call failed with status: $response"
-        # Handle failure case
-    fi
-
-##################################################################################################
 # Creating Test Accounts
 ##################################################################################################
 echo "Sleeping for 10 seconds"
@@ -1115,7 +993,7 @@ echo "Subscription id 2:-${sid_1}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "free-account-cookie.txt" \
---data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_1}\", \"subscription_id_1\": \"${sid_1}\", \"plan_1\":\"pro\" }"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan_1\":\"pro\" }"
 
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
 
@@ -1124,7 +1002,7 @@ echo "Subscription id 2:-${sid_2}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
---data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_2}\", \"subscription_id_1\": \"${sid_2}\", \"plan_1\":\"pro\" }"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
 
 echo "{ \"stripe_id_1\": \"${CUSTOMER_ID_2}\", \"subscription_id_1\": \"${sid_2}\", \"plan_1\":\"pro\" }"
 
@@ -1135,8 +1013,129 @@ curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerTo
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
 --data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_3}\", \"subscription_id_1\": \"${sid_3}\", \"plan\":\"enterprise_1\" }"
-echo "{ \"stripe_id_1\": \"${CUSTOMER_ID_3}\", \"subscription_id_1\": \"${sid_3}\", \"plan\":\"enterprise_1\" }"
+echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", \"plan\":\"enterprise\" }"
 
+##################################################################################################
+# Setting up Stripe Webhooks
+##################################################################################################
+    stripeWebhookResponse=$(curl -o /dev/null -s -w "%{http_code}\n" "https://${DOMAIN}/api/public/callbacks/stripe/event")
+    stripeWebhookUrl="https://${DOMAIN}/api/public/callbacks/stripe/event/api_key/${apiKey}"
+    echo "Our stripe webbook is: ${stripeWebhookUrl}"
+    echo "Our stripe API Key is ${STRIPE_KEY}"
+    # Assuming 'response' contains the HTTP status code
+
+    # Check if the response is 200 OK
+    if [ "$stripeWebhookResponse" -eq 200 ]; then
+        echo "API is working fine. Let's setup our callback"
+        
+
+    curl https://api.stripe.com/v1/webhook_endpoints \
+      -u ${STRIPE_KEY}: \
+      -d "url=${stripeWebhookUrl}" \
+      -d "enabled_events[]=account.updated" \
+      -d "enabled_events[]=account.application.authorized" \
+      -d "enabled_events[]=account.application.deauthorized" \
+      -d "enabled_events[]=account.external_account.created" \
+      -d "enabled_events[]=account.external_account.deleted" \
+      -d "enabled_events[]=account.external_account.updated" \
+      -d "enabled_events[]=application_fee.created" \
+      -d "enabled_events[]=application_fee.refunded" \
+      -d "enabled_events[]=application_fee.refund.updated" \
+      -d "enabled_events[]=balance.available" \
+      -d "enabled_events[]=billing_portal.configuration.created" \
+      -d "enabled_events[]=billing_portal.configuration.updated" \
+      -d "enabled_events[]=billing_portal.session.created" \
+      -d "enabled_events[]=capability.updated" \
+      -d "enabled_events[]=cash_balance.funds_available" \
+      -d "enabled_events[]=charge.captured" \
+      -d "enabled_events[]=charge.expired" \
+      -d "enabled_events[]=charge.failed" \
+      -d "enabled_events[]=charge.pending" \
+      -d "enabled_events[]=charge.refunded" \
+      -d "enabled_events[]=charge.succeeded" \
+      -d "enabled_events[]=charge.updated" \
+      -d "enabled_events[]=charge.dispute.closed" \
+      -d "enabled_events[]=charge.dispute.created" \
+      -d "enabled_events[]=charge.dispute.funds_reinstated" \
+      -d "enabled_events[]=charge.dispute.funds_withdrawn" \
+      -d "enabled_events[]=charge.dispute.updated" \
+      -d "enabled_events[]=charge.refund.updated" \
+      -d "enabled_events[]=checkout.session.async_payment_failed" \
+      -d "enabled_events[]=checkout.session.async_payment_succeeded" \
+      -d "enabled_events[]=checkout.session.completed" \
+      -d "enabled_events[]=checkout.session.expired" \
+      -d "enabled_events[]=coupon.created" \
+      -d "enabled_events[]=coupon.deleted" \
+      -d "enabled_events[]=coupon.updated" \
+      -d "enabled_events[]=credit_note.created" \
+      -d "enabled_events[]=credit_note.updated" \
+      -d "enabled_events[]=credit_note.voided" \
+      -d "enabled_events[]=customer.created" \
+      -d "enabled_events[]=customer.deleted" \
+      -d "enabled_events[]=customer.updated" \
+      -d "enabled_events[]=customer.discount.created" \
+      -d "enabled_events[]=customer.discount.deleted" \
+      -d "enabled_events[]=customer.discount.updated" \
+      -d "enabled_events[]=customer.source.created" \
+      -d "enabled_events[]=customer.card.created" \
+      -d "enabled_events[]=customer.bank_account.created" \
+      -d "enabled_events[]=customer.source.deleted" \
+      -d "enabled_events[]=customer.card.deleted" \
+      -d "enabled_events[]=customer.bank_account.deleted" \
+      -d "enabled_events[]=customer.source.expiring" \
+      -d "enabled_events[]=customer.source.updated" \
+      -d "enabled_events[]=customer.card.updated" \
+      -d "enabled_events[]=customer.bank_account.updated" \
+      -d "enabled_events[]=customer.subscription.created" \
+      -d "enabled_events[]=customer.subscription.deleted" \
+      -d "enabled_events[]=customer.subscription.paused" \
+      -d "enabled_events[]=customer.subscription.pending_update_applied" \
+      -d "enabled_events[]=customer.subscription.pending_update_expired" \
+      -d "enabled_events[]=customer.subscription.resumed" \
+      -d "enabled_events[]=customer.subscription.trial_will_end" \
+      -d "enabled_events[]=customer.subscription.updated" \
+      -d "enabled_events[]=customer.tax_id.created" \
+      -d "enabled_events[]=customer.tax_id.deleted" \
+      -d "enabled_events[]=customer.tax_id.updated" \
+      -d "enabled_events[]=customer_cash_balance_transaction.created" \
+      -d "enabled_events[]=file.created" \
+      -d "enabled_events[]=financial_connections.account.created" \
+      -d "enabled_events[]=financial_connections.account.deactivated" \
+      -d "enabled_events[]=financial_connections.account.disconnected" \
+      -d "enabled_events[]=financial_connections.account.reactivated" \
+      -d "enabled_events[]=financial_connections.account.refreshed_balance" \
+      -d "enabled_events[]=identity.verification_session.canceled" \
+      -d "enabled_events[]=identity.verification_session.created" \
+      -d "enabled_events[]=identity.verification_session.processing" \
+      -d "enabled_events[]=identity.verification_session.requires_input" \
+      -d "enabled_events[]=identity.verification_session.verified" \
+      -d "enabled_events[]=invoice.created" \
+      -d "enabled_events[]=invoice.deleted" \
+      -d "enabled_events[]=invoice.finalization_failed" \
+      -d "enabled_events[]=invoice.finalized" \
+      -d "enabled_events[]=invoice.marked_uncollectible" \
+      -d "enabled_events[]=invoice.paid" \
+      -d "enabled_events[]=invoice.payment_action_required" \
+      -d "enabled_events[]=invoice.payment_failed" \
+      -d "enabled_events[]=invoice.payment_succeeded" \
+      -d "enabled_events[]=invoice.sent" \
+      -d "enabled_events[]=invoice.upcoming" \
+      -d "enabled_events[]=invoice.updated" \
+      -d "enabled_events[]=invoice.voided" \
+      -d "enabled_events[]=invoiceitem.created" \
+      -d "enabled_events[]=invoiceitem.deleted" \
+      -d "enabled_events[]=issuing_authorization.created" \
+      -d "enabled_events[]=issuing_authorization.updated" \
+      -d "enabled_events[]=issuing_card.created" \
+      -d "enabled_events[]=issuing_card.updated" \
+      -d "enabled_events[]=issuing_cardholder.created" \
+      -d "enabled_events[]=issuing_cardholder.updated" \
+      -d "enabled_events[]=issuing_dispute.closed"
+
+    else
+        echo "API call failed with status: $response"
+        # Handle failure case
+    fi
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
 ##################################################################################################
