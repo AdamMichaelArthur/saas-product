@@ -1114,8 +1114,8 @@ echo "Customer id 2:-${CUSTOMER_ID_1}-END"
 echo "Subscription id 2:-${sid_1}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
---cookie "pro-account-cookie.txt" \
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"pro\" }"
+--cookie "free-account-cookie.txt" \
+--data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_1}\", \"subscription_id_1\": \"${sid_1}\", \"plan_1\":\"pro\" }"
 
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
 
@@ -1124,9 +1124,9 @@ echo "Subscription id 2:-${sid_2}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "pro-account-cookie.txt" \
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
+--data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_2}\", \"subscription_id_1\": \"${sid_2}\", \"plan_1\":\"pro\" }"
 
-echo "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
+echo "{ \"stripe_id_1\": \"${CUSTOMER_ID_2}\", \"subscription_id_1\": \"${sid_2}\", \"plan_1\":\"pro\" }"
 
 echo "Customer id 1: ${CUSTOMER_ID_3} END"
 echo "Subscription id 1: ${sid_3} END"
@@ -1134,8 +1134,8 @@ echo "Subscription id 1: ${sid_3} END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", \"plan\":\"enterprise\" }"
-echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", \"plan\":\"enterprise\" }"
+--data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_3}\", \"subscription_id_1\": \"${sid_3}\", \"plan\":\"enterprise_1\" }"
+echo "{ \"stripe_id_1\": \"${CUSTOMER_ID_3}\", \"subscription_id_1\": \"${sid_3}\", \"plan\":\"enterprise_1\" }"
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
