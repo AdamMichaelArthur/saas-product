@@ -845,8 +845,7 @@ echo "Creating Test Clocks"
 
 response=$(curl https://api.stripe.com/v1/test_helpers/test_clocks \
   -u ${STRIPE_KEY}: \
-  -d frozen_time=$(date +%s)) \
-  -d name="${projectName}"
+  -d frozen_time=$(date +%s))
 
 echo "Sleeping for 2 seconds to avoid rate limits"
 sleep 2
