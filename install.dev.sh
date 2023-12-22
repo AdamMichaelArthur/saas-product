@@ -993,7 +993,7 @@ echo "Subscription id 2:-${sid_1}-END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "free-account-cookie.txt" \
---data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan_1\":\"pro\" }"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"pro\" }"
 
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_1}\", \"subscription_id\": \"${sid_1}\", \"plan\":\"free\" }"
 
@@ -1004,7 +1004,7 @@ curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerTo
 --cookie "pro-account-cookie.txt" \
 --data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
 
-echo "{ \"stripe_id_1\": \"${CUSTOMER_ID_2}\", \"subscription_id_1\": \"${sid_2}\", \"plan_1\":\"pro\" }"
+echo "{ \"stripe_id\": \"${CUSTOMER_ID_2}\", \"subscription_id\": \"${sid_2}\", \"plan\":\"pro\" }"
 
 echo "Customer id 1: ${CUSTOMER_ID_3} END"
 echo "Subscription id 1: ${sid_3} END"
@@ -1012,7 +1012,7 @@ echo "Subscription id 1: ${sid_3} END"
 curl -v --location "https://${DOMAIN}/api/testclocks/attachStripeClockCustomerToAccount" \
 --header 'Content-Type: application/json' \
 --cookie "enterprise-account-cookie.txt" \
---data-raw "{ \"stripe_id_1\": \"${CUSTOMER_ID_3}\", \"subscription_id_1\": \"${sid_3}\", \"plan\":\"enterprise_1\" }"
+--data-raw "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", \"plan\":\"enterprise\" }"
 echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", \"plan\":\"enterprise\" }"
 
 ##################################################################################################
