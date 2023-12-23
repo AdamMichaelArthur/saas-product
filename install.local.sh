@@ -1,6 +1,6 @@
 #!/bin/bash
-projectName=test31
-installedDomain=test31.saas-product.com
+
+npm install -g chokidar
 
 ORIG_PWD=$PWD
 
