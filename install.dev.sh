@@ -1283,7 +1283,7 @@ echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", 
 # Initialize our PM2 Ecosystem
 ##################################################################################################
 
-cd "srv/www/${projectName}/setup"
+cd "/srv/www/${projectName}/setup"
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
