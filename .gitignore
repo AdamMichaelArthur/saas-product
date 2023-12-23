@@ -39,6 +39,7 @@ firefox.sh
 opera.sh
 app.yml
 
+ecosystem.saas-product.config.js
 
 # Dependency directories
 **/node_modules/

@@ -88,13 +88,15 @@ ask_details() {
 
     # Create backup directory if it doesn't exist
     mkdir -p $backupDir
+    
+    echo "mongo --host ${DB_DOMAIN} --port ${DB_PORT} --username ${DB_USERNAME} --password ${DB_PASSWORD} --authenticationDatabase ${AUTH_DB} --eval \"db.getSiblingDB('$DB_NAME').dropDatabase()\""
+    echo "mongodump --host ${DB_DOMAIN} --port ${DB_PORT} --username ${DB_USERNAME} --password ${DB_PASSWORD} --authenticationDatabase ${AUTH_DB} --db ${DB_NAME} --out ${backupDir}/dbbackup"
 
     # Perform mongodump
-    mongodump --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --db $DB_NAME --out $backupDir/dbbackup 
-    
+    mongodump --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --db $DB_NAME --out $backupDir/dbbackup
+
     # Drop the database, if it exists
-    mongo --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --eval "db.getSiblingDB('$DB_NAME').dropDatabase()" --replicaSet $DB_REPLICASET --directConnection $directConnection --socketTimeoutMS $socketTimeoutMS --connectTimeoutMS $connectTimeoutMS
-    
+    mongo --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --eval "db.getSiblingDB('$DB_NAME').dropDatabase()"
     #echo "Enter your Stripe Development Key:" read stripeDevKey
     echo "Get A Test API Key -> https://dashboard.stripe.com/test/apikeys"
     echo "Don't have a Stripe account?  Leave it blank and the Stripe functionality will be disabled"
@@ -678,22 +680,22 @@ gzip_types
     # When combined with our "server-nodemon" project, which uses scp to sync files between the local dev environment and the server
     # dev environment, you effectively create live-reloading on the server.
     # For node processes, you can use pm2's "watch" functionality instead of using nodemon.
-    location / {
-        proxy_pass http://localhost:54231;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
+    # location / {
+    #     proxy_pass http://localhost:54231;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_set_header Connection 'upgrade';
+    #     proxy_set_header Host $host;
+    #     proxy_cache_bypass $http_upgrade;
+    # }
 
     # This server block is more appropriate for a production setup.  But, since this is a development setup
     # We are installing live server reload by default.
-    #location / {
-    #    try_files \$uri \$uri/ /index.html =404;
-    #    index index.html index.htm index.nginx-debian.html;
-    #    root /srv/www/${projectName}/app/clients/angular/dist/saas-product;
-    #}
+    location / {
+       try_files \$uri \$uri/ /index.html =404;
+       index index.html index.htm index.nginx-debian.html;
+       root /srv/www/${projectName}/app/clients/angular/dist/saas-product;
+    }
 
     ssl_certificate /etc/letsencrypt/live/saas-product.com-0001/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/saas-product.com-0001/privkey.pem;
