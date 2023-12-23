@@ -158,6 +158,7 @@ echo "You may see errors here -- that's ok."
 pm2 delete "${projectName}-apiv2"
 pm2 delete "${projectName}-apiv1"
 pm2 delete "${projectName}-websockets"
+pm2 delete "${projectName}-angular"
 
 sleep 10
 
@@ -735,6 +736,12 @@ server {
 }
 
 EOF
+
+echo "Copying ${SITES_ENABLED}/${projectName}.conf ${ORIG_PWD}/tmp/deployment/${projectName}.conf"
+cp "${SITES_ENABLED}/${projectName}.conf ${ORIG_PWD}/tmp/deployment/${projectName}.conf"
+cd $ORIG_PWD/tmp
+git add .
+git commit -m "Added nginx configuration file to deployment directory"
 
     # See if our configuration file is ok
     nginx -t
