@@ -77,6 +77,24 @@ ask_details() {
         AUTH_DB="$inputAuthDb"
     fi
 
+    DB_REPLICASET="rs0"
+    directConnection="true"
+    socketTimeoutMS="360"
+    connectTimeoutMS="360"
+
+    # Backup the dataabse, if it exists
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    backupDir=~/backups/$projectName/dbbackup_$timestamp
+
+    # Create backup directory if it doesn't exist
+    mkdir -p $backupDir
+
+    # Perform mongodump
+    mongodump --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --db $DB_NAME --out $backupDir/dbbackup 
+    
+    # Drop the database, if it exists
+    mongo --host $DB_DOMAIN --port $DB_PORT --username $DB_USERNAME --password $DB_PASSWORD --authenticationDatabase $AUTH_DB --eval "db.getSiblingDB('$DB_NAME').dropDatabase()" --replicaSet $DB_REPLICASET --directConnection $directConnection --socketTimeoutMS $socketTimeoutMS --connectTimeoutMS $connectTimeoutMS
+    
     #echo "Enter your Stripe Development Key:" read stripeDevKey
     echo "Get A Test API Key -> https://dashboard.stripe.com/test/apikeys"
     echo "Don't have a Stripe account?  Leave it blank and the Stripe functionality will be disabled"
