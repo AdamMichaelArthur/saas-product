@@ -9,8 +9,8 @@ chmod 777 . || { echo "Failed to change permissions"; exit 1; }
 # MongoDB connection details with defaults
 DB_DOMAIN="127.0.0.1"
 DB_PORT="27017"
-DB_USERNAME=""  # Set to empty initially
-DB_PASSWORD=""  # Set to empty initially
+DB_USERNAME="admin"  # Set to empty initially
+DB_PASSWORD="admin"  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
 
 # Some defaults
@@ -60,19 +60,23 @@ ask_details() {
     fi
 
     #echo "Enter MongoDB Username (default: none):" read inputUsername
-    read -p "Enter MongoDB Username (default: none):" inputUsername 
+    read -p "Enter MongoDB Username (default: ${DB_USERNAME}):" inputUsername 
     if [ ! -z "$inputUsername" ]; then
         DB_USERNAME="$inputUsername"
     fi
 
+    echo "Username set to ${DB_USERNAME}"
+
     #echo "Enter MongoDB Password (default: none):" read inputPassword
-    read -p "Enter MongoDB Password (default: none):" inputPassword
+    read -p "Enter MongoDB Password (default: ${DB_PASSWORD}):" inputPassword
     if [ ! -z "$inputPassword" ]; then
         DB_PASSWORD="$inputPassword"
     fi
 
+    echo "Password set to ${DB_PASSWORD}"
+    
     #echo "Enter MongoDB Authentication Database (default: admin):" read inputAuthDb
-    read -p "Enter MongoDB Authentication Database (default: admin):" inputAuthDb
+    read -p "Enter MongoDB Authentication Database (default: ${AUTH_DB}):" inputAuthDb
     if [ ! -z "$inputAuthDb" ]; then
         AUTH_DB="$inputAuthDb"
     fi
@@ -380,8 +384,9 @@ echo "The secret key is ${SECRET_KEY}"
 ###
 # Create a PM2 Ecosystem File
 ###
-cd $ORIG_PWD
-sudo tee "setup/ecosystem.config.js" >/dev/null <<EOF
+cd $ORIG_PWD/setup
+echo "Creating ${ORIG_PWD}/setup/ecosystem.config.js"
+sudo tee "ecosystem.config.js" >/dev/null <<EOF
 module.exports = {
   apps: [
     {
@@ -817,7 +822,7 @@ pm2 start ${projectName}-websockets
 EOF
 
 cp "/srv/git/${projectName}.git/hooks/post-receive" $ORIG_PWD/tmp/deployment/post-receive
-cd $ORIG_PWD/tmp
+cd $ORIG_PWD
 git add .
 git commit -m "Moving Updated Post Receive Into Deployment Directory"
 
