@@ -573,10 +573,6 @@ EOF
 
     if [ $attempt -gt $max_attempts ]; then
         echo "Command failed after $max_attempts attempts."
-    fi
-
-
-
     else
         echo "API check failed with response code: $response"
     fi
