@@ -1287,6 +1287,7 @@ cd "/srv/www/${projectName}/setup"
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
+pm2 start "${projectName}-angular"
 
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
