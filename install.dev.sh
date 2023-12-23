@@ -409,6 +409,8 @@ module.exports = {
   ]
 };
 EOF
+git add .
+git commit -m "Created ecosystem.config.js file"
 
 cd "/srv/env/${projectName}"
 cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.env"
@@ -1269,7 +1271,7 @@ echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", 
 # Initialize our PM2 Ecosystem
 ##################################################################################################
 
-cd "${ORIG_PWD}/setup"
+cd "srv/www/${projectName}/setup"
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
