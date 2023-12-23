@@ -483,7 +483,7 @@ EOF
     pm2 stop "${projectName}-apiv1"
 
     cd "/srv/www/${projectName}/app/clients/angular"
-    pm2 start "ng serve --host 0.0.0.0 --disable-host-check --port ${CLIENT_PORT} --public-host https://app.saas-product.com" --name "${projectName}-angular"
+    pm2 start "ng serve --host 0.0.0.0 --disable-host-check --port ${CLIENT_PORT} --public-host https://${DOMAIN}" --name "${projectName}-angular"
     pm2 stop "${projectName}-angular"
 
     # Define the API endpoint
