@@ -402,11 +402,11 @@ module.exports = {
       name: '${projectName}-websockets',
       watch: true
     }
-    # ,
-    # {
-    #   name: '${projectName}-client',
-    #   watch: true
-    # }
+    //,
+    // {
+    //   name: '${projectName}-client',
+    //   watch: true
+    // }
   ]
 };
 EOF
