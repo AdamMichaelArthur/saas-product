@@ -737,8 +737,9 @@ server {
 
 EOF
 
-echo "Copying ${SITES_ENABLED}/${projectName}.conf ${ORIG_PWD}/tmp/deployment/${projectName}.conf"
-cp "${SITES_ENABLED}/${projectName}.conf ${ORIG_PWD}/tmp/deployment/${projectName}.conf"
+echo "Copying ${SITES_ENABLED}/${projectName}.conf to ${ORIG_PWD}/tmp/deployment/${projectName}.conf"
+cp "${SITES_ENABLED}/${projectName}.conf" "${ORIG_PWD}/tmp/deployment/${projectName}.conf"
+
 cd $ORIG_PWD/tmp
 git add .
 git commit -m "Added nginx configuration file to deployment directory"
