@@ -384,7 +384,8 @@ echo "The secret key is ${SECRET_KEY}"
 ###
 # Create a PM2 Ecosystem File
 ###
-cd $ORIG_PWD/setup
+cd $ORIG_PWD/tmp/setup
+echo "Attempting to create ecosystem file ${ORIG_PWD}/setup"
 echo "Creating ${ORIG_PWD}/tmp/setup/ecosystem.config.js"
 sudo tee "ecosystem.config.js" >/dev/null <<EOF
 module.exports = {
