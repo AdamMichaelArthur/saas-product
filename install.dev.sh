@@ -148,6 +148,7 @@ DB_NAME=$projectName
 # Remove this project in case it already exists
 # But do a check first and ask
 echo "Getting Ready To Reset"
+echo "You may see errors here -- that's ok."
 pm2 delete "${projectName}-apiv2"
 pm2 delete "${projectName}-apiv1"
 pm2 delete "${projectName}-websockets"
