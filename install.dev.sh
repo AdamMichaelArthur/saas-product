@@ -410,8 +410,6 @@ module.exports = {
   ]
 };
 EOF
-git add .
-git commit -m "Created ecosystem.config.js file"
 
 cd "/srv/env/${projectName}"
 cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.env"
@@ -825,13 +823,15 @@ pm2 start ${projectName}-websockets
 EOF
 
 cp "/srv/git/${projectName}.git/hooks/post-receive" $ORIG_PWD/tmp/deployment/post-receive
-cd $ORIG_PWD
+cd $ORIG_PWD/tmp
 git add .
 git commit -m "Moving Updated Post Receive Into Deployment Directory"
 
+echo "830: cwd is ${PWD}"
 # This is going to take a while.
 #nohup git push &>/dev/null &
  git push
+ cd $ORIG_PWD
 
 ##################################################################################################
 # Calling /administration/plans/getPlans for the first time causes Stripe plans to get initialized
