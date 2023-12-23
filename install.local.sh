@@ -1,8 +1,6 @@
 #!/bin/bash
 
-
 ORIG_PWD=$PWD
-
 
 scp -o StrictHostKeyChecking=no root@$installedDomain:/srv/www/$projectName/app/apis/apiv1/.env app/apis/apiv1
 scp -o StrictHostKeyChecking=no root@$installedDomain:/srv/www/$projectName/app/apis/apiv2/.env app/apis/apiv2

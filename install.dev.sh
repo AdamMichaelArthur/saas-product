@@ -12,7 +12,6 @@ DB_PORT="27017"
 DB_USERNAME=""  # Set to empty initially
 DB_PASSWORD=""  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
-DB_NAME=$projectName
 
 # Some defaults
 SOCKET_IO_PATH="/socket.io/"
@@ -126,6 +125,8 @@ fi
 
 read -p "Enter Project Name: " projectName
 
+DB_NAME=$projectName
+
 # Remove this project in case it already exists
 # But do a check first and ask
 echo "Getting Ready To Reset"
@@ -223,6 +224,8 @@ if [ "$installFlavor" = "server" ]; then
             echo "Passwords do not match, please try again."
         fi
     done
+
+    RECOVERY_ADMIN_PASS=ADMIN_PASS
 
     while true; do
         read -sp "Choose a special, recovery password: " RECOVERY_ADMIN_PASS
@@ -352,6 +355,35 @@ EOF
 
 echo "The secret key is ${SECRET_KEY}"
 
+###
+# Create a PM2 Ecosystem File
+###
+cd $ORIG_PWD
+sudo tee "setup/ecosystem/config.js" >/dev/null <<EOF
+module.exports = {
+  apps: [
+    {
+      name: '${projectName}-apiv1',
+      watch: true
+    },
+    {
+      name: '${projectName}-apiv2',
+      watch: true
+    },
+    {
+      name: '${projectName}-websockets',
+      watch: true
+    }
+    # ,
+    # {
+    #   name: '${projectName}-client',
+    #   watch: true
+    # }
+  ]
+};
+EOF
+
+cd "/srv/env/${projectName}"
 cp "/srv/env/${projectName}/apiv1.env" "/srv/www/${projectName}/app/apis/apiv1/.env"
 
     cd "/srv/env/${projectName}"
@@ -621,11 +653,28 @@ gzip_types
 
     }
 
+    # Uncomment this if you want to use live-server-reloading
+    # This enables you to proxy ng serve behind nginx
+    # by running ng serve --host 0.0.0.0  --port 54231 --disable-host-check --public-host https://app.saas-product.com (example)
+    # When combined with our "server-nodemon" project, which uses scp to sync files between the local dev environment and the server
+    # dev environment, you effectively create live-reloading on the server.
+    # For node processes, you can use pm2's "watch" functionality instead of using nodemon.
     location / {
-        try_files \$uri \$uri/ /index.html =404;
-        index index.html index.htm index.nginx-debian.html;
-        root /srv/www/${projectName}/app/clients/angular/dist/saas-product;
+        proxy_pass http://localhost:54231;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
     }
+
+    # This server block is more appropriate for a production setup.  But, since this is a development setup
+    # We are installing live server reload by default.
+    #location / {
+    #    try_files \$uri \$uri/ /index.html =404;
+    #    index index.html index.htm index.nginx-debian.html;
+    #    root /srv/www/${projectName}/app/clients/angular/dist/saas-product;
+    #}
 
     ssl_certificate /etc/letsencrypt/live/saas-product.com-0001/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/saas-product.com-0001/privkey.pem;
@@ -1185,6 +1234,16 @@ echo "{ \"stripe_id\": \"${CUSTOMER_ID_3}\", \"subscription_id\": \"${sid_3}\", 
         echo "API call failed with status: $response"
         # Handle failure case
     fi
+
+##################################################################################################
+# Initialize our PM2 Ecosystem
+##################################################################################################
+
+cd "${ORIG_PWD}/setup"
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+
 ##################################################################################################
 # Doing a final check to see if the Angular frontend built.  If not, we're going to try again
 ##################################################################################################

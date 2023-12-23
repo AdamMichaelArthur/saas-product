@@ -57,7 +57,7 @@ export default class Sysadmin extends Enterprise {
 				route: "/sysadmin/planmanagement",
 				permissions: "sysadmin",
 				path: "",
-				icon: "list_alt",
+				icon: "build",
 				collapse: "autobot", 
    			 	priority: 11,
 				limit: 9999999
@@ -67,42 +67,43 @@ export default class Sysadmin extends Enterprise {
 				route: "/sysadmin/prompts",
 				permissions: "sysadmin",
 				path: "",
-				icon: "list_alt",
+				icon: "edit_note",
+				collapse: "autobot", 
+   			 	priority: 11,
+				limit: 9999999
+			 },
+			{
+				title: "Reports",
+				route: "/sysadmin/reports",
+				permissions: "sysadmin",
+				path: "",
+				icon: "bar_chart",
 				collapse: "autobot", 
    			 	priority: 11,
 				limit: 9999999
 			},
 			{
-				title: "Quality Check",
-				route: "/sysadmin/quality",
+				title: "Transactions",
+				route: "/sysadmin/transactions",
 				permissions: "sysadmin",
 				path: "",
-				icon: "list_alt",
+				icon: "account_balance_wallet",
+				collapse: "autobot", 
+   			 	priority: 11,
+				limit: 9999999
+			},
+			{
+				title: "Data Import",
+				route: "/sysadmin/import",
+				permissions: "sysadmin",
+				path: "",
+				icon: "cloud_upload",
 				collapse: "autobot", 
    			 	priority: 11,
 				limit: 9999999
 			}
-			//,
-			// {
-			// 	title: "Reports",
-			// 	route: "/sysadmin/reports",
-			// 	permissions: "sysadmin",
-			// 	path: "",
-			// 	icon: "bar_chart",
-			// 	collapse: "autobot", 
-   // 			 	priority: 11,
-			// 	limit: 9999999
-			// },
-			// {
-			// 	title: "Transactions",
-			// 	route: "/sysadmin/transactions",
-			// 	permissions: "sysadmin",
-			// 	path: "",
-			// 	icon: "attach_money",
-			// 	collapse: "autobot", 
-   // 			 	priority: 11,
-			// 	limit: 9999999
-			// }
+
+			
 		);
 		
 		// We don't necessarily want the plans under the sysadmin to have their navigation shown
