@@ -88,7 +88,7 @@ ask_details() {
 
     # Create backup directory if it doesn't exist
     mkdir -p $backupDir
-    
+
     echo "mongo --host ${DB_DOMAIN} --port ${DB_PORT} --username ${DB_USERNAME} --password ${DB_PASSWORD} --authenticationDatabase ${AUTH_DB} --eval \"db.getSiblingDB('$DB_NAME').dropDatabase()\""
     echo "mongodump --host ${DB_DOMAIN} --port ${DB_PORT} --username ${DB_USERNAME} --password ${DB_PASSWORD} --authenticationDatabase ${AUTH_DB} --db ${DB_NAME} --out ${backupDir}/dbbackup"
 
@@ -338,6 +338,7 @@ if [ "$installFlavor" = "server" ]; then
 
     API_V1_PORT=$available_port
     API_V2_PORT=$((available_port + 5))
+    CLIENT_PORT=$((available_port + 12))
 
     # Enable or disable stripe, depending on whether a key was provided
     ENABLE_STRIPE_COMMENT="#"
@@ -380,7 +381,7 @@ echo "The secret key is ${SECRET_KEY}"
 # Create a PM2 Ecosystem File
 ###
 cd $ORIG_PWD
-sudo tee "setup/ecosystem/config.js" >/dev/null <<EOF
+sudo tee "setup/ecosystem.config.js" >/dev/null <<EOF
 module.exports = {
   apps: [
     {
@@ -474,7 +475,10 @@ EOF
     # We stop it, because we haven't done an NPM Install at this point and it'll just error out.
     pm2 stop "${projectName}-apiv1"
 
-    
+    cd "/srv/www/${projectName}/app/clients/angular"
+    pm2 start "ng serve --host 0.0.0.0 --disable-host-check --port ${CLIENT_PORT} --public-host https://app.saas-product.com" --name "${projectName}-angular"
+    pm3 stop "${projectName}-angular"
+
     # Define the API endpoint
     ENDPOINT="http://${HOST}:${API_V2_PORT}/public/setup/test"
 
@@ -676,17 +680,17 @@ gzip_types
 
     # Uncomment this if you want to use live-server-reloading
     # This enables you to proxy ng serve behind nginx
-    # by running ng serve --host 0.0.0.0  --port 54231 --disable-host-check --public-host https://app.saas-product.com (example)
+    # by running ng serve --host 0.0.0.0  --port ${CLIENT_PORT} --disable-host-check --public-host https://app.saas-product.com (example)
     # When combined with our "server-nodemon" project, which uses scp to sync files between the local dev environment and the server
     # dev environment, you effectively create live-reloading on the server.
     # For node processes, you can use pm2's "watch" functionality instead of using nodemon.
     # location / {
-    #     proxy_pass http://localhost:54231;
+    #     proxy_pass http://localhost:${CLIENT_PORT};
     #     proxy_http_version 1.1;
-    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_set_header Upgrade \$http_upgrade;
     #     proxy_set_header Connection 'upgrade';
-    #     proxy_set_header Host $host;
-    #     proxy_cache_bypass $http_upgrade;
+    #     proxy_set_header Host \$host;
+    #     proxy_cache_bypass \$http_upgrade;
     # }
 
     # This server block is more appropriate for a production setup.  But, since this is a development setup
