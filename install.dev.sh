@@ -483,7 +483,7 @@ EOF
 
     cd "/srv/www/${projectName}/app/clients/angular"
     pm2 start "ng serve --host 0.0.0.0 --disable-host-check --port ${CLIENT_PORT} --public-host https://app.saas-product.com" --name "${projectName}-angular"
-    pm3 stop "${projectName}-angular"
+    pm2 stop "${projectName}-angular"
 
     # Define the API endpoint
     ENDPOINT="http://${HOST}:${API_V2_PORT}/public/setup/test"
@@ -494,7 +494,20 @@ EOF
     sleep 3
 
     # Using curl to make the API call and check for 200 OK response
-    response=$(curl -o /dev/null -s -w "%{http_code}\n" "$ENDPOINT")
+    TIMEOUT=10 # Timeout in seconds
+    MAX_RETRIES=3 # Maximum number of retries
+
+    for (( i=0; i<MAX_RETRIES; i++ )); do
+        response=$(curl -o /dev/null -s -w "%{http_code}\n" --connect-timeout $TIMEOUT "$ENDPOINT")
+        
+        if [ $response -eq 200 ]; then
+            echo "Success with response code: $response"
+            break
+        else
+            echo "Error with response code: $response, retrying..."
+            sleep 1 # Wait for 1 second before retrying
+        fi
+    done
 
     # Check if the response is 200 OK
     if [ "$response" -eq 200 ]; then
