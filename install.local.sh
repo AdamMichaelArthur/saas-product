@@ -1,4 +1,6 @@
 #!/bin/bash
+projectName=test31
+installedDomain=test31.saas-product.com
 
 ORIG_PWD=$PWD
 
@@ -78,13 +80,16 @@ cd "${ORIG_PWD}"
 cd app/apis/apiv1
 npm ci
 pm2 start nodemon --name "${projectName}-apiv1"
+pm2 stop "${projectName}-apiv1"
 pm2 save
 
 cd "${ORIG_PWD}"
 cd app/apis/apiv2
 npm ci
 pm2 start npm --name "${projectName}-apiv2" -- run start
+pm2 stop "${projectName}-apiv2"
 pm2 start node --name "${projectName}-websockets" -- --loader esm-module-alias/loader --no-warnings classes/Websockets/websockets.js
+pm2 stop "${projectName}-websockets"
 pm2 save
 
 cd "${ORIG_PWD}"
@@ -93,6 +98,7 @@ npm ci
 pm2 stop "${projectName}-angular"
 pm2 delete "${projectName}-angular"
 pm2 start ng --name "${projectName}-angular" -- serve
+pm2 stop "${projectName}-angular"
 pm2 save
 
 cd "${ORIG_PWD}"
@@ -258,6 +264,7 @@ EOF
 
 cd "${ORIG_PWD}"
 cd "app/apis/apiv2/"
+pm2 restart "${projectName}-websockets"
 node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.server.js
 node --loader esm-module-alias/loader --no-warnings classes/Websockets/testclient.local.js
 
@@ -265,3 +272,14 @@ cd "${ORIG_PWD}/deployment"
 scp -o StrictHostKeyChecking=no "root@${installedDomain}:/etc/nginx/sites-enabled/${projectName}.conf" "${projectName}.conf"
 scp -o StrictHostKeyChecking=no "root@${installedDomain}:/srv/env/${projectName}/apiv1.env" "apiv1.env"
 scp -o StrictHostKeyChecking=no "root@${installedDomain}:/srv/env/${projectName}/apiv2.env" "apiv2.env"
+
+echo "The project should be live on https://localhost:${newPort}"
+
+cd setup
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+pm2 restart "${projectName}-angular"
+pm2 restart "${projectName}-apiv1"
+pm2 restart "${projectName}-apiv2"
+pm2 logs 
