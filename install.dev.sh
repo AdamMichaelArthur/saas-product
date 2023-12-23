@@ -491,6 +491,7 @@ EOF
     echo $ENDPOINT
 
     # Sleeping for a few seconds, to give the API time to initialize
+    echo "Sleeping for 3 seconds"
     sleep 3
 
     # Using curl to make the API call and check for 200 OK response
@@ -498,6 +499,7 @@ EOF
     MAX_RETRIES=3 # Maximum number of retries
 
     for (( i=0; i<MAX_RETRIES; i++ )); do
+        echo "Making connection attempt to ${ENDPOINT}"
         response=$(curl -o /dev/null -s -w "%{http_code}\n" --connect-timeout $TIMEOUT "$ENDPOINT")
         
         if [ $response -eq 200 ]; then
@@ -510,8 +512,8 @@ EOF
     done
 
     # Check if the response is 200 OK
-    if [ "$response" -eq 200 ]; then
-        echo "API is working fine.  Creating admin user"
+    # if [ "$response" -eq 200 ]; then
+    #     echo "API is working fine.  Creating admin user"
 
     echo $HOST
     echo $API_V2_PORT
