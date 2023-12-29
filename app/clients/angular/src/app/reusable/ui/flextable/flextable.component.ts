@@ -2,8 +2,9 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, Renderer2, Inpu
 import { FlexTableOptions } from './flextable-options';
 import { BaseService } from '../../../legacy/base/base.service'
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-flextable',
@@ -14,6 +15,7 @@ import { ComponentFactoryResolver, Injectable, ViewContainerRef, Type } from '@a
 export class FlextableComponent implements AfterViewChecked {
 
   red = 'red';
+  green = 'green';
   
   @Input() options!: Partial<FlexTableOptions>;
   @Output() dataLoaded = new EventEmitter<void>();
@@ -28,7 +30,11 @@ export class FlextableComponent implements AfterViewChecked {
   private startWidth = 0;
 
   constructor(private renderer: Renderer2, private service: BaseService,
-    private componentFactoryResolver: ComponentFactoryResolver, private viewContainerRef: ViewContainerRef) {}
+    private componentFactoryResolver: ComponentFactoryResolver, private viewContainerRef: ViewContainerRef, private router: Router) {}
+
+  getImagePopoverContent(imageLink) {
+    return `<img src='${imageLink}' alt='Image'>`;
+  }
 
   tableData = {
     displayHeaders: [],
@@ -70,6 +76,8 @@ export class FlextableComponent implements AfterViewChecked {
   async refreshTable(){
     console.log(59, "Refreshing");
 
+    this.selectedRowIndex = null;
+    
     this.initializeDropdownFilters();
 
     var data: any = await this.service.getInitialDataTableList(this.options.datasource, 10, this.options.columns, this.options.scope, this.options.filter, this.options.sort, this.options.aggregate);
@@ -407,9 +415,11 @@ export class FlextableComponent implements AfterViewChecked {
 
     Promise.all(promises)
       .then((results) => {
-        for (let result of results) {
+        for (var i = 0; i < results.length; i++) {
+          let result = results[i];
           for (var y = 0; y < this.options.filters.length; y++) {
-            if (this.options.filters[y].datasource == result.datasource) {
+            if (i == y) {
+              console.log(416, y, result);    
               this.filterLabelsAr[y] = this.filterLabelsAr[y].concat(
                 result[result.datasource]
               );
@@ -483,11 +493,14 @@ export class FlextableComponent implements AfterViewChecked {
 
     this.filter = this.combinedFilter;
 
+    var match = {}
+
     if(typeof this.options.aggregate !== 'undefined'){
     var aggregate: any = this.options.aggregate
     if(Object.keys(aggregate).length > 0){
 
-      var match = { "$match": this.filter }
+      let filterKeys = Object.keys(this.filter);
+      match = { "$match": this.filter }
       
       if(Object.keys(this.aggregateOrig).length == 0) {  
         this.aggregateOrig = aggregate;
@@ -495,16 +508,22 @@ export class FlextableComponent implements AfterViewChecked {
          aggregate = this.aggregateOrig
       }
 
-      if(Object.keys(this.filter).length > 2){
-        // I don't remember why I did this, but there was a good reason.  I'm sure it'll become apparent during testing
-        var output = aggregate.slice(2);
-        aggregate = output;
-      }
+      // if(Object.keys(this.filter).length > 2){
+      //   // I don't remember why I did this, but there was a good reason.  I'm sure it'll become apparent during testing
+      //   var output = aggregate.slice(2);
+      //   aggregate = output;
+      // }
+
+      
+
     } else {
         var aggregate: any = false;
     }}
 
-    var data: any = await this.service.getInitialDataTableList(this.options.datasource, 10, this.options.columns, this.options.scope, this.filter, "", aggregate);
+    let tmpAr = [ ... aggregate ]
+    tmpAr.unshift(match)
+
+    var data: any = await this.service.getInitialDataTableList(this.options.datasource, 10, this.options.columns, this.options.scope, this.filter, "", tmpAr );
     this.tableData = data;
     this.harmonizeRowsAndHeaders(data[this.options.datasource]);
         
@@ -533,7 +552,7 @@ export class FlextableComponent implements AfterViewChecked {
   }
 
   onTextClicked(event){
-    console.log(354, "Text Clicked");
+    
   }
 
   onNumberClicked(event){
@@ -561,9 +580,14 @@ export class FlextableComponent implements AfterViewChecked {
   }
 
   clickedColumnIndex: number | null = null;
+  
+  @Output() rowDeletedEvent = new EventEmitter<object>();
+
   bIsDeleting = false;
   async deleteIconClicked(event, rowIndex){
 
+    this.selectedRowIndex = null;
+    
     if(this.bIsDeleting){
       console.warn("Only one delete operation should be done at a time");
       return;
@@ -603,6 +627,8 @@ export class FlextableComponent implements AfterViewChecked {
       return;
     }
 
+
+
     this.service.loadingDataTablePagination(page_endpoint, this.options.columns).subscribe(
         (data: any) => {
             this.tableData = data;
@@ -620,6 +646,8 @@ export class FlextableComponent implements AfterViewChecked {
   //     return response
   //   }), catchError(this.handleError))
   // }
+
+    this.rowDeletedEvent.emit(rowIndex);
   }
 
   async deleteSelectedRecords(){
@@ -657,12 +685,14 @@ export class FlextableComponent implements AfterViewChecked {
   /*   This sends the request to the backend and emits the response to the host component to handle any result 
        As of 6/6/23 I am using proxy rules to send these to the old backend
   */
-  @Output() tableBtnClicked = new EventEmitter<object>(); /* Used to notify the host component the results of the network request, so it can be further handled */
+  @Output() rowTableBtnClicked = new EventEmitter<object>(); /* Used to notify the host component the results of the network request, so it can be further handled */
+
   tableButtonClicked(event, rowIndex, buttonName: any = ""){
     let _id = this.getIdByRow(rowIndex);
     let row = this.getRowByIndex(rowIndex);
-    console.log(648, row);
-    this.tableBtnClicked.emit({ _id: _id, "row": row, "buttonName": buttonName });
+    console.log(648, { _id: _id, "row": row, "buttonName": buttonName });
+    console.log(680, this.rowTableBtnClicked);
+    this.rowTableBtnClicked.emit({ _id: _id, "row": row, "buttonName": buttonName });
     console.log(637, "Table Button Clicked", buttonName, event);
     // let _id = this.getIdByRow(rowIndex);
     // this.service.dynamicButton(this.options.datasource, _id, action).subscribe(
@@ -746,14 +776,28 @@ export class FlextableComponent implements AfterViewChecked {
   }
 
   networkActionCompleted(buttonInfo){
-    
-    console.log(745, buttonInfo);
 
     this.refreshTable()
     let _id = this.getIdByRow(buttonInfo.rowIndex);
     let row = this.getRowByIndex(buttonInfo.rowIndex);
-    this.tableBtnClicked.emit({ _id: _id, "row": row, "buttonName": buttonInfo.buttonName });
+    this.rowTableBtnClicked.emit({ _id: _id, "row": row, "buttonName": buttonInfo.buttonName });
 
+  }
+
+  @Output() rowLinkClicked = new EventEmitter<object>();
+  selectedRowIndex: number | null = null;
+  handleLinkClick(event: MouseEvent, path: string, id: string, rowIndex: number): void {
+
+    console.log(780, rowIndex);
+    this.selectedRowIndex = rowIndex;
+    // Your additional logic here
+    event.preventDefault();
+    if(this.options.linkColumnPreventDefault === true){
+      
+      this.rowLinkClicked.emit( { path: path, id: id, rowIndex: rowIndex } )
+    } else {
+      this.router.navigate([path, 'id', id]);  
+    }
   }
 
   test12345 = false;

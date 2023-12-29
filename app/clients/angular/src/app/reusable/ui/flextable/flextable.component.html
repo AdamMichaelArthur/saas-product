@@ -78,7 +78,7 @@
           We must determine if this column is intended to be a link -->
      <div *ngLet="tableData[options.datasource][cellYPos]['_id'] as _id">
         <div *ngFor="let linkedColumn of options.linkColumns">
-           <div *ngIf="linkedColumn['column'] == columnName"><a routerLink="{{linkedColumn['path']}}/id/{{_id}}">{{cell.value['data']}}</a></div>
+           <div *ngIf="linkedColumn['column'] == columnName" ><a href="#" (click)="handleLinkClick($event, linkedColumn['path'], _id, cellYPos)">{{cell.value['data']}}</a></div>
         </div>
      </div>
       <div *ngIf="!options.linkColumns">
@@ -105,7 +105,7 @@
         <span *ngIf="linkedColumn['column'] == columnName">
           <span *ngLet="tableData[options.datasource][cellYPos]['_id'] as _id">
             <!-- This is a linked cell -->
-            <a routerLink="{{linkedColumn['path']}}/id/{{_id}}">{{ cell.value['data'] }}</a>
+            <a href="#" (click)="handleLinkClick($event, linkedColumn['path'], _id, cellYPos)">{{ cell.value['data'] }}</a>
           </span>
         </span>
 
@@ -205,7 +205,7 @@
     <tbody>
       <tr class="table-tr-spacing" *ngFor="let row of tableData.rows; let rowIndex = index" >
 
-        <td *ngFor="let cell of row | keyvalue; let cellIndex = index" [class.red]="clickedColumnIndex === rowIndex">
+        <td *ngFor="let cell of row | keyvalue; let cellIndex = index" [class.red]="clickedColumnIndex === rowIndex" [class.green]="selectedRowIndex === rowIndex">
 
           <!-- {{cell.value['formDefinition'] | json}} -->
           <ng-container *ngIf="cellIndex > -1">
@@ -273,10 +273,24 @@
               </ng-template>
 
               <mat-checkbox *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'checkbox'" [checked]="cell.value['data']" (change)="onSelectCheckboxClicked($event, rowIndex)"></mat-checkbox>
-              <select class="form-select custom-select-padding full-width-mobile" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'select'" (change)="onSelectClicked($event, rowIndex)"
-              >
+
+              <!-- We present two options here: the default, which is to drop array elements into a dropdown select, or to present them as icons -->
+
+              <div *ngIf="!options.arrayAsIcon">
+              <select class="form-select custom-select-padding full-width-mobile" *ngIf="cell.value['formDefinition']['formType']['controlType'] == 'select'" (change)="onSelectClicked($event, rowIndex)">
                 <option *ngFor="let option of cell.value['data']">{{option}}</option>
               </select>
+              </div>
+                
+              <!-- This causes a massive performance hit.  Not sure why, but if I can't fix it, it makes this not viable -->
+               <div *ngIf="options?.arrayAsIcon" class="d-flex flex-row">
+                <div *ngFor="let imageLink of cell.value?.['data']" class="me-2">
+                  <a [href]="imageLink" target="_blank">
+                    <i class="fas fa-image"></i>
+                  </a>
+                </div>
+              </div>
+
             </ng-template>
           </div>
           </ng-container>
@@ -288,7 +302,7 @@
           <ng-template #doNotRenderCell><!-- Do nothing--></ng-template>
         </td>
 
-        <td [class.red]="clickedColumnIndex === rowIndex">
+        <td [class.red]="clickedColumnIndex === rowIndex" [class.green]="selectedRowIndex === rowIndex">
           <span *ngIf="options.bAllowDeletion" class="delete-icon material-icons link-span" (click)="deleteIconClicked($event, rowIndex)"> delete </span>
             <span *ngFor="let icon of options.iconColumns">
                 <span *ngIf="icon['column'] == 'icons'"  class="material-icons spacing  link-span" (click)="activatePanel($event, rowIndex, icon['component'])">{{icon['icon']}}</span>

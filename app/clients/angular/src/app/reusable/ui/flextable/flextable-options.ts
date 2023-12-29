@@ -42,6 +42,8 @@ export interface FlexTableOptions {
 
   linkColumns: Array<object>,
 
+  linkColumnPreventDefault: boolean,   // Prevents the default link-click behavior.  Typically set as true because there is a need to overwrite this behavior
+                                       // in the parent component
   filter: object,
 
   currencyCode: string,
@@ -77,6 +79,10 @@ export interface FlexTableOptions {
 
  	menuIcons: Array<string>,        	    // These are used to make clickable menu icons for the table
                                     		// You can add a series of additional options here
+
+  arrayAsIcon: Array<object>,           // When we have an array, this will generate an icon to
+                                        // represent each element.  Typically use
+
  	menuIconOptions: Array<string>,    		// These are the options for the menu icon.
 
  	tooltipIcons: Array<string>,       		// These are icons that display the {{row}} as a tooltip

@@ -59,9 +59,9 @@ export class HeaderComponent implements OnInit {
 	   		this.pointsBalance = data;
 	   })
 
-	   setInterval( ()=> {
-	   		this.updateCountdown()
-	   }, 1000);
+	   // setInterval( ()=> {
+	   // 		this.updateCountdown()
+	   // }, 1000);
 
 	  }
 

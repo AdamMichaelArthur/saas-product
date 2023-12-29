@@ -16,7 +16,13 @@
   align-items: center; /* Vertically center align items */
 }
 
+.delete-icon {
+  position: relative;
+  z-index: 9999; /* High value to ensure it's on top */
+  color: white; /* To ensure text visibility */
+  padding: 5px; /* Optional, for better visibility */
 
+}
 
 .link-span {
   cursor: pointer;
@@ -59,6 +65,11 @@
 .red {
   opacity: 80%;
 background-color: #ffcccc;
+}
+
+.green {
+  opacity: 80%;
+background-color: #ccffcc;
 }
 
 .spacing {
