@@ -77,10 +77,10 @@
                 
 
                     <div class="col-12" *ngIf="!bRecoverAccount" >
-                      <p class="small mb-0">Don't have account? <a [routerLink]="['/application']" [queryParams]="{ref: 'login', ad: 'none'}">Apply Online</a></p>
-                      <!-- <p class="small mb-0">Don't have account? <a href="" routerLink="/register">Create an account</a></p>
+                      <!-- <p class="small mb-0">Don't have account? <a [routerLink]="['/application']" [queryParams]="{ref: 'login', ad: 'none'}">Apply Online</a></p> -->
+                      <p class="small mb-0">Don't have account? <a href="" routerLink="/register">Create an account</a></p>
                       <p class="small mb-0"><a href="" [routerLink]="['/register']" [queryParams]="{ account_type: 'affiliate' }">Become An Affiliate </a>| <a href="" (click)="recoverAccount($event)">Recover Account</a></p>
- -->                    </div>
+                     </div>
                   </form>
 
                 </div>

@@ -584,8 +584,6 @@ export default class ProtectedRoutes extends Base {
         responsePackage.responsePackage['paywallStartDate'] = paywallStart;
 
         responsePackage.responsePackage.count = count;
-        
-        console.log(566, responsePackage);
 
         this.language.sendPackage(req, res, responsePackage)
     });

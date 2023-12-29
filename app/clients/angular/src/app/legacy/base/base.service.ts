@@ -176,9 +176,7 @@ export class BaseService {
     //if(false === post){
 
     //} else {
-      console.log(179, "Should make network request", api_url);
       let rVal = await this.http.post(api_url, postBody, this.httpOptions).toPromise();
-      console.log(181, rVal);
       return rVal;
       try {
         return await this.http.post(api_url, postBody, this.httpOptions).toPromise();

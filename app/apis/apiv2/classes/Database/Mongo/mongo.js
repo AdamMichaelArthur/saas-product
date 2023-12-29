@@ -104,12 +104,8 @@ export default class Mongo extends Database {
 	}
 
 	async insertOne(obj){
-		
+		console.log(107, "insertOne", "mongo.js");
 		var doc = new DocumentStandard(this.user, obj).getStandardDocument();
-		console.log(106, this.user);
-		console.log(107, obj);
-
-		console.log(111, this.collection, result)
 		try {
 			var result = await this.db.collection(this.collection).insertOne(doc);
 			

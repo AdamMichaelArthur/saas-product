@@ -703,7 +703,7 @@ export default class Authorization {
 
         //bCreateStripeExpressAccount = true;
 
-        defaultRoute = "main/marketplace"
+        defaultRoute = "main/contacts"
 
         if(accountType === "sysadmin"){
             defaultRoute = "main/sysadmin/home"

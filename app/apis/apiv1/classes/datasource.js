@@ -1,4 +1,4 @@
-/*
+ /*
 	A note about the security model
 
 	Collections must be explicitely designated as "public" in order for database results to return records
@@ -75,8 +75,9 @@ router.post("/exceltojson/*", upload.any(), exceltojson);
 
 router.all("/*/page/:page/id/:id", routeDataSource);
 
+// Order is important here.  
 var specialCases = ["progress", "completed", "sort", "search", "clone", "distinct", "distinctids", "export", "array", "arrayall",
-"arrayrm", "arrayrmall", "arraypatch", "arrayput", "autocomplete", "all", "swap", "aggregate", "account", "dates", "calendar", 
+"arrayrm", "arrayrmall", "arraypatch", "arrayput", "autocomplete", "aggregate", "all", "swap", "account", "dates", "calendar", 
 "key", "owner","getkeys","selected","nextselected","prevselected", "mergefields","emailfields", "count", "bulk", "selectall"]
 
 for(var i = 0; i < specialCases.length; i++){
@@ -114,7 +115,7 @@ function checkDatasource(datasource){
 
 		let updatedSchemas = JSON.stringify(data);
 		fs.writeFileSync(datasource_file, updatedSchemas);	
-		console.log("Datasource not found -- added");
+		//console.log("Datasource not found -- added");
 		registerSchema(datasource);
 	}
 	return voca.capitalize(datasource);
@@ -139,10 +140,10 @@ async function routeDataSource(req, res){
 		for(var i = 0; i < specialCases.length; i++){
 		var bSearch = helpers.getPathTrue(req.params[0], specialCases[i])
 			if(bSearch){
-				console.log(134, bSearch, specialCases[i]);
+				console.log(134, req.params[0], bSearch, specialCases[i]);
 				switch(specialCases[i]){
 					case "progress":
-						console.log(109)
+						//console.log(109)
 						return progress(req, res);
 					case "completed":
 						return completed(req, res);
@@ -186,7 +187,7 @@ async function routeDataSource(req, res){
 						return getselecteddocuments(req, res, next, model);
 					case "all":
 					{
-						console.log(184);
+						//console.log(184);
 						// To Do: Add a layer of security here to ensure the user has permission to access database-wide records
 						// This should only be allowed for site-admin level users, or hard-coded exceptions if there is a need for
 						// non-admin level users to access database-wide data
@@ -220,7 +221,7 @@ async function routeDataSource(req, res){
 		}
 
 	var method = req.method;
-	console.log(210, method)
+	//console.log(210, method)
 	switch(method){
 		case "GET":
 			return get(req, res, next, model);
@@ -253,7 +254,7 @@ function getDataSource(req){
 
 function get(req, res, next, model){
 
-	console.log(204, "here");
+	//console.log(204, "here");
 
 	var xbody = req.headers["x-body"];
 	var keys = req.body
@@ -278,7 +279,7 @@ function get(req, res, next, model){
 
 	var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 
-	console.log(267, req.body, xbody)
+	//console.log(267, req.body, xbody)
 
 	var filterIndex = voca.search(fullUrl, "filter");
 	if(filterIndex != -1){
@@ -291,7 +292,7 @@ function get(req, res, next, model){
 	var jsonBody = filter;
 
 	for (const [key, value] of Object.entries(jsonBody)) {
-	  //console.log(`${key}: ${value}`);
+	  ////console.log(`${key}: ${value}`);
 	  if(voca.includes(key, "_id")){
 	  	jsonBody[key] = mongoose.Types.ObjectId(value)
 	  }
@@ -311,7 +312,7 @@ function get(req, res, next, model){
 		getrecords = 100000
 	}
 	
-	console.log(294, getrecords, filter, keys)
+	//console.log(294, getrecords, filter, keys)
 	
 	try {
 		Pagination.listByPage(req, res, model, getrecords, filter, keys);
@@ -319,7 +320,7 @@ function get(req, res, next, model){
 }
 
 function getmaxrecords(req, res){
-	console.log(197, "get max records called");
+	//console.log(197, "get max records called");
 	var xbody = req.headers["x-body"];
 	var keys = req.body
 	if(typeof xbody != 'undefined'){
@@ -332,14 +333,14 @@ function getmaxrecords(req, res){
 	var max_records = parseInt(req.params.max_records);
 
 	try {
-		console.log(205, "Listing here");
+		//console.log(205, "Listing here");
 		Pagination.listByPage(req, res, model, max_records, {created_by: null}, keys);
 	} catch (err) { }
 }
 
 function getall(req, res, next, model){
 
-	console.log(330, 'get all called', keys);
+	//console.log(330, 'get all called', keys);
 	// Do a security check to ensure the account has permission to do this.
 
 	var xbody = req.headers["x-body"];
@@ -381,8 +382,8 @@ function getall(req, res, next, model){
 	
 	for (const [key, value] of Object.entries(filter)) {
 	  if(voca.includes(key, "_id")){
-	  	console.log(371, typeof value)
-	  	console.log(372, typeof "Test");
+	  	//console.log(371, typeof value)
+	  	//console.log(372, typeof "Test");
 	  	if(typeof value == "string")
 	  		filter[key] = mongoose.Types.ObjectId(value)
 	  }
@@ -391,7 +392,7 @@ function getall(req, res, next, model){
 	function replaceMatchInObject(obj, key, value, search){
     
     if(obj == search){
-      console.log(1966, obj, search)
+      //console.log(1966, obj, search)
       obj = value;
       return value;
     }
@@ -402,16 +403,16 @@ function getall(req, res, next, model){
 
 
     var keys = Object.keys(obj)
-    //console.log(1975, obj, typeof obj[]);
+    ////console.log(1975, obj, typeof obj[]);
     for(var i = 0; i < keys.length; i++){
       if(typeof  obj[keys[i]] == 'object'){
         iterateThroughObj(res, obj[keys[i]])
       } else {
-        //console.log(1982, obj[keys[i]])
+        ////console.log(1982, obj[keys[i]])
         var replace = replaceMatchInObject(obj[keys[i]], keys[i], mongoose.Types.ObjectId(res.locals.user._id), "$res.locals.user._id")
         if(replace != false){
           obj[keys[i]] = replace
-          console.log(860, obj[keys[i]])
+          //console.log(860, obj[keys[i]])
 
         }
       }
@@ -420,7 +421,7 @@ function getall(req, res, next, model){
 
   iterateThroughObj(res, filter);
 
-	console.log(417, filter);
+	//console.log(417, filter);
 	try {
 		Pagination.listByPage(req, res, model, max_records, filter, keys, true);
 	} catch (err) { }
@@ -455,9 +456,9 @@ function getbyaccount(req, res, next, model, filterKey ="owner"){
 	var filterIndex = voca.search(fullUrl, "filter");
 	if(filterIndex != -1){
 		var Filter = helpers.getParameter(fullUrl, "filter");
-		//console.log(246, filter);
+		////console.log(246, filter);
 		var filterStr = base64.decode(Filter);
-		//console.log(248, filterStr);
+		////console.log(248, filterStr);
 		filterStr = voca.replaceAll(filterStr, "'", "\"");
 
 		filter = Object.assign(JSON.parse(filterStr), filter);
@@ -468,7 +469,7 @@ function getbyaccount(req, res, next, model, filterKey ="owner"){
 	var jsonBody = filter;
 
 	for (const [key, value] of Object.entries(jsonBody)) {
-	  //console.log(`${key}: ${value}`);
+	  ////console.log(`${key}: ${value}`);
 	  if(voca.includes(key, "_id")){
 	  	if(typeof value == "string")
 	  		jsonBody[key] = mongoose.Types.ObjectId(value)
@@ -477,8 +478,8 @@ function getbyaccount(req, res, next, model, filterKey ="owner"){
 
 	filter = jsonBody;
 
-	//console.log(386, filter);
-	console.log(452, util.inspect(filter, false, null, true /* enable colors */))
+	////console.log(386, filter);
+	//console.log(452, util.inspect(filter, false, null, true /* enable colors */))
 
 	
 	try {
@@ -497,7 +498,7 @@ async function post(req, res, next, model){
 	var jsonBody = req.body;
 
 	for (const [key, value] of Object.entries(jsonBody)) {
-	  //console.log(`${key}: ${value}`);
+	  ////console.log(`${key}: ${value}`);
 	  if(voca.includes(key, "_id")){
 	  	if(value.length == 24)
 	  		jsonBody[key] = mongoose.Types.ObjectId(value)
@@ -505,7 +506,7 @@ async function post(req, res, next, model){
 	}
 
 	if(Array.isArray(jsonBody)){
-		console.log("We have an array");
+		//console.log("We have an array");
 		for(var i = 0; i < jsonBody.length; i++){
 			var payload = jsonBody[i]
 			var db = new mongo(model, res.locals.user, res);
@@ -516,7 +517,7 @@ async function post(req, res, next, model){
 	  var db = new mongo(model, res.locals.user, res);
 	}
 
-	console.log(339, jsonBody, req.originalUrl)
+	//console.log(339, jsonBody, req.originalUrl)
 	var result = await db.mongoCreate(jsonBody)
 
 	// This could screw up flextable.  Hope not -- please check
@@ -534,9 +535,9 @@ async function put(req, res, next, model){
 	var jsonBody = req.body;
 
 	for (const [key, value] of Object.entries(jsonBody)) {
-	  //console.log(`${key}: ${value}`);
+	  ////console.log(`${key}: ${value}`);
 	  if(voca.includes(key, "_id")){
-	  	console.log(472, key, value)
+	  	//console.log(472, key, value)
 	  	if(value.length == 0)
 	  		continue;
 	  	jsonBody[key] = mongoose.Types.ObjectId(value)
@@ -544,14 +545,14 @@ async function put(req, res, next, model){
 
 	  // This is necessary because the entire object will be replaced.
 	  if(voca.includes(key, "_by")){
-	  	console.log(472, key, value)
+	  	//console.log(472, key, value)
 	  	if(value.length == 0)
 	  		continue;
 	  	jsonBody[key] = mongoose.Types.ObjectId(value)
 	  }
 
 	  if(voca.includes(key, "owner")){
-	  	console.log(472, key, value)
+	  	//console.log(472, key, value)
 	  	if(value.length == 0)
 	  		continue;
 	  	jsonBody[key] = mongoose.Types.ObjectId(value)
@@ -559,13 +560,13 @@ async function put(req, res, next, model){
 
 	}
 
-	console.log(479, jsonBody)
+	//console.log(479, jsonBody)
 
 	var doc = await mongoose.connection.db.collection(model.collection.collectionName).updateOne(
   		{_id: mongoose.Types.ObjectId(id)},
   		{ $set: jsonBody });
 
-	console.log(443, doc.result)
+	//console.log(443, doc.result)
 	// var doc = await model.findById(id);
 	// 	doc.set(key, value);
 	// 	doc.markModified(key);
@@ -592,7 +593,7 @@ async function patch(req, res, next, model){
 
 	var id = helpers.getParameter(req.params[0], "id");
 
-	console.log(389, id);
+	//console.log(389, id);
 	var jsonBody = req.body;
 	var key = jsonBody["key"];
 	var value = jsonBody["value"];
@@ -603,12 +604,12 @@ async function patch(req, res, next, model){
 
 	var updateObj = { }
 	updateObj[key] = value
-	console.log(371, id, updateObj);
+	//console.log(371, id, updateObj);
 	var doc = await mongoose.connection.db.collection(model.collection.collectionName).updateOne(
   		{_id: mongoose.Types.ObjectId(id)},
   		{ $set: updateObj });
 	
-	console.log(385, doc.result);
+	//console.log(385, doc.result);
 	// var doc = await model.findById(id);
 	// 	doc.set(key, value);
 	// 	doc.markModified(key);
@@ -623,14 +624,14 @@ async function del(req, res, next, model){
 	var id = helpers.getParameter(req.params[0], "id");
 	try {
 	  var doc = await model.deleteOne({ _id: mongoose.Types.ObjectId(id) });
-	  console.log("Delete result:", doc);
+	  //console.log("Delete result:", doc);
 	} catch (error) {
 	  console.error("Error:", error);
 	}
 
 	//
 	//var doc = await model.deleteOne({ _id: mongoose.Types.ObjectId(id) });
-	console.log(152, { _id: mongoose.Types.ObjectId(id) }, req.params[0], doc);
+	//console.log(152, { _id: mongoose.Types.ObjectId(id) }, req.params[0], doc);
 	res.locals.response = { "deleted":true }
 	next(req, res);
 }
@@ -667,7 +668,7 @@ async function clone(req, res){
 		created = await db.mongoCreate(doc, newId)
 		while(created == false)
 		{
-			console.log(239, "created is false");
+			//console.log(239, "created is false");
 			newId = createCustomMongoId(newId, 1);
 			created = await db.mongoCreate(doc, newId)	
 			// res.locals.response = created;
@@ -686,7 +687,7 @@ async function swap(req, res){
 }
 
 function error(res, res, next, errno, msg){
-	console.log(errno, msg);
+	//console.log(errno, msg);
 }
 
 async function search(req, res){
@@ -695,11 +696,11 @@ async function search(req, res){
 
 	if(typeof all == 'undefined')
 		all = false;
-	console.log(577, all);
+	//console.log(577, all);
 
 	var searchaggregate = helpers.getParameter(req.params[0], "searchaggregate");
 
-//	console.log(580, typeof aggregate);
+//	//console.log(580, typeof aggregate);
 
 	var searchKey = helpers.getParameter(req.params[0], "search");
 	var searchValue = helpers.getParameter(req.params[0], searchKey);
@@ -729,7 +730,7 @@ async function search(req, res){
 		searchaggregate = aggregate
 	}
 
-	console.log(599, searchaggregate)
+	//console.log(599, searchaggregate)
 
 	var searchResults = await Pagination.searchByPattern(req, res, model, searchKey, searchValue, all, searchaggregate);
 	res.locals.response = searchResults;
@@ -754,7 +755,7 @@ async function autocomplete(req, res){
 		{
 			var result = model[i];
 			response.push(result[searchKey])
-			console.log(258, result);
+			//console.log(258, result);
 		}
 		let unique = [...new Set(response)];
 		res.send(unique)
@@ -763,6 +764,7 @@ async function autocomplete(req, res){
 
 async function distinct(req, res){
 
+	//console.log(766);
 	var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 
 	var filterIndex = voca.search(fullUrl, "all");
@@ -790,7 +792,7 @@ async function distinct(req, res){
 	//filter = jsonBody;
 
 	if((filterIndex == -1) && (filter == null)){
-		getAll = { "created_by":res.locals.user._id }
+		getAll = { "created_by":mongoose.Types.ObjectId(res.locals.user._id) }
 	} else {
 		if(filter != null){
 			getAll = filter;
@@ -798,15 +800,18 @@ async function distinct(req, res){
 	}
 
 	var datasource = getDataSource(req);
-	var modelName = checkDatasource(datasource)
+	
 	res.locals.datasource = datasource;
 	res.locals.response = {};
-	var model = mongoose.model(modelName);
+
 	var key = helpers.getParameter(req.params[0], "distinct")
-	var distinctData = await model.distinct(key, getAll);
+	let collection = mongoose.connection.db.collection(datasource);
+	console.log(808, filter, key);
+	let distinctData = await collection.distinct(key, getAll);
 	res.locals.response = distinctData
 	return next(req, res);
 }
+
 
 async function distinctids(req, res){
 
@@ -852,7 +857,7 @@ async function addToArray(req, res){
 
 	var datasource = getDataSource(req);
 
-	console.log(548, datasource);
+	//console.log(548, datasource);
 	
 	var modelName = checkDatasource(datasource)
 
@@ -879,7 +884,7 @@ async function addToArray(req, res){
 	function replaceMatchInObject(obj, key, value, search){
 		
 		if(obj == search){
-			console.log(1966, obj, search)
+			//console.log(1966, obj, search)
 			obj = value;
 			return value;
 		}
@@ -888,16 +893,16 @@ async function addToArray(req, res){
 
 	function iterateThroughObj(obj){
 		var keys = Object.keys(obj)
-		//console.log(1975, obj, typeof obj[]);
+		////console.log(1975, obj, typeof obj[]);
 		for(var i = 0; i < keys.length; i++){
 			if(typeof  obj[keys[i]] == 'object'){
 				iterateThroughObj(obj[keys[i]])
 			} else {
-				//console.log(1982, obj[keys[i]])
+				////console.log(1982, obj[keys[i]])
 				var replace = replaceMatchInObject(obj[keys[i]], keys[i], mongoose.Types.ObjectId(res.locals.user._id), "$res.locals.user._id")
 				if(replace != false){
 					obj[keys[i]] = replace
-					console.log(860, obj[keys[i]])
+					//console.log(860, obj[keys[i]])
 
 				}
 			}
@@ -906,17 +911,18 @@ async function addToArray(req, res){
 
 	iterateThroughObj(objToPush)
 
-	console.log(888, objToPush);
+	//console.log(888, objToPush);
 
-	console.log(694,  { _id: id }, 
-	    { $push: objToPush })
+	//console.log(694,  { _id: id }, 
+	//    { $push: objToPush })
+
 
 	var result = await model.update(
 	    { _id: id }, 
 	    { $push: objToPush },
 	);
 
-	console.log(701, result);
+	//console.log(701, result);
 	
 	res.locals.datasource = datasource;
 	res.locals.response = {};
@@ -926,7 +932,7 @@ async function addToArray(req, res){
 
 async function addToArrayInAllDocuments(req, res){
 
-	console.log(571)
+	//console.log(571)
 	var datasource = getDataSource(req);
 	var modelName = checkDatasource(datasource)
 
@@ -965,9 +971,9 @@ async function addToArrayInAllDocuments(req, res){
 	    { multi: true}
 	);
 
-	console.log(612, datasource, objToPush);
+	//console.log(612, datasource, objToPush);
 
-	console.log(414, result);
+	//console.log(414, result);
 
 	res.locals.datasource = datasource;
 	res.locals.response = {};
@@ -1001,7 +1007,7 @@ async function removeMatchFromArray(req, res){
 	    { multi: false }
 	);
 
-	console.log(786, result);
+	//console.log(786, result);
 	
 	res.locals.datasource = datasource;
 	res.locals.response = result.result;
@@ -1029,7 +1035,7 @@ async function patchElementMatchInArray(req, res){
 	var objToMatch = {}
 	objToMatch[`${req.body.arrayName}.${req.body.matchKey}`] = req.body.matchValue;
 	objToMatch["_id"] = mongoose.Types.ObjectId(id)
-	console.log(934, objToMatch);
+	//console.log(934, objToMatch);
 
 	var updateValue = req.body.updateValue;
 	if(typeof updateValue == "string"){
@@ -1040,20 +1046,20 @@ async function patchElementMatchInArray(req, res){
 		updateValue = JSON.stringify(updateValue)
 	}
 
-	console.log(942, typeof updateValue)
+	//console.log(942, typeof updateValue)
 	// We need to put quotes around req.body.updateValue if its a string... 
 	var objToUpdate = JSON.parse(`{ "$set": { "${req.body.arrayName}.$.${req.body.updateKey}": ${updateValue} } }`);
 	
 	//objToUpdate[req.body.updateKey] = req.body.updateValue;
 
-	console.log(940, objToMatch, objToUpdate)
+	//console.log(940, objToMatch, objToUpdate)
 	var result = await model.updateOne(
 	    objToMatch,
 	    objToUpdate,
 	    { multi: false }
 	);
 
-	console.log(786, result);
+	//console.log(786, result);
 	
 	res.locals.datasource = datasource;
 	res.locals.response = result.result;
@@ -1066,7 +1072,7 @@ async function patchElementMatchInArray(req, res){
 */
 async function putElementMatchInArray(req, res){
 
-	console.log(974)
+	//console.log(974)
 	var datasource = getDataSource(req);
 	var modelName = checkDatasource(datasource)
 
@@ -1083,29 +1089,29 @@ async function putElementMatchInArray(req, res){
 	var objToMatch = {}
 	objToMatch[`${req.body.arrayName}.${req.body.matchKey}`] = req.body.matchValue;
 	objToMatch["_id"] = mongoose.Types.ObjectId(id)
-	console.log(934, objToMatch);
+	//console.log(934, objToMatch);
 
 	var updateValue = req.body.updateValue;
 	if(typeof updateValue != "object"){
 		// This only works if the update value is an object
 	}
 
-	console.log(942, typeof updateValue)
+	//console.log(942, typeof updateValue)
 	// We need to put quotes around req.body.updateValue if its a string... 
 	var objToUpdate = { "$set": { "parts.$": updateValue[req.body.mergeKey] } }
 
-	console.log(1000, objToUpdate)
+	//console.log(1000, objToUpdate)
 	
 	//objToUpdate[req.body.updateKey] = req.body.updateValue;
 
-	console.log(940, objToMatch, objToUpdate)
+	//console.log(940, objToMatch, objToUpdate)
 	var result = await model.updateOne(
 	    objToMatch,
 	    objToUpdate,
 	    { multi: false }
 	);
 
-	console.log(786, result);
+	//console.log(786, result);
 	
 	res.locals.datasource = datasource;
 	res.locals.response = result.result;
@@ -1243,7 +1249,7 @@ function validateWorksheet(validation, collectionName, excelData, req, res){
 	var bSheetHasValidation = false;
 
 			var sheet = validation
-			console.log(965, sheet, collectionName, sheet.collection_name)
+			//console.log(965, sheet, collectionName, sheet.collection_name)
 
 				if(typeof sheet["required_keys"] != 'undefined'){	
 					if(Array.isArray(sheet["required_keys"]) == true){
@@ -1253,7 +1259,7 @@ function validateWorksheet(validation, collectionName, excelData, req, res){
 				}	
 			bSheetHasValidation = true;
 			
-	console.log(980, bSheetHasValidation);
+	//console.log(980, bSheetHasValidation);
 	// First, check and make sure that if we have any required keys, that they are in the document
 	var keys = Object.keys(excelData[0])
 
@@ -1264,7 +1270,7 @@ function validateWorksheet(validation, collectionName, excelData, req, res){
 		})		
 	}
 
-	console.log(986, keys)
+	//console.log(986, keys)
 	var missing_keys = []
 	//required_keys = harmonize(keys)
 
@@ -1272,16 +1278,16 @@ function validateWorksheet(validation, collectionName, excelData, req, res){
 		for(var i = 0; i < required_keys.length; i++){
 			var required_key = required_keys[i];
 			var index_of_required_key = keys.indexOf(required_key)
-			//console.log(989, required_key, index_of_required_key)
+			////console.log(989, required_key, index_of_required_key)
 			if(index_of_required_key == -1){
-				//console.log(missing_keys)
+				////console.log(missing_keys)
 				missing_keys.push(required_key)
-				//console.log(missing_keys)
+				////console.log(missing_keys)
 			}
 		}
 
 		if(missing_keys.length > 0){
-			console.log(997, "returning false")
+			//console.log(997, "returning false")
 			return excelImportError(req, res, { 
 						"error_no":5,
 						"error_desc":`The sheet titled '${collectionName}' is missing required headers: ${missing_keys.toString()}`
@@ -1289,7 +1295,7 @@ function validateWorksheet(validation, collectionName, excelData, req, res){
 		}
 	}
 
-	console.log(1007);
+	//console.log(1007);
 
 	return true;
 
@@ -1324,7 +1330,7 @@ async function getCollectionNames(filter){
 			//sheetNames = 
 			importData = await ExcelImport.loadWorkbook(false);
 
-			//console.log(803, util.inspect(importData, false, null, true /* enable colors */))
+			////console.log(803, util.inspect(importData, false, null, true /* enable colors */))
 			var keys = Object.keys(importData);
 
 			sheetNames = [];
@@ -1344,7 +1350,7 @@ async function getCollectionNames(filter){
 
 async function getWorkbookData(req, res, filter, fileBuffer, x){
 
-	console.log(1249, "getting workbook data")
+	//console.log(1249, "getting workbook data")
 	var validation = false;
 
 	if(typeof filter.validation != 'undefined'){
@@ -1368,14 +1374,14 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 
 	if(isCsv != -1)
 		type = "csv";
-	//console.log(1065, req.files[x].buffer.compare())
+	////console.log(1065, req.files[x].buffer.compare())
 	var data = req.files[x].buffer
 
-	console.log(1276, "Loading workbook into excel object")
+	//console.log(1276, "Loading workbook into excel object")
 	var ExcelImport = new excel(data, {}, type);
 	var importData = [await ExcelImport.loadWorkbook(bySheets)];
 
-	console.log(1280, "data loaded");
+	//console.log(1280, "data loaded");
 
 	var sheetnames = [];
 	if(bySheets == true)
@@ -1386,13 +1392,13 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 
 	var importDataAsValues = Object.values(importData[0])
 
-	//console.log(1075, filter.validation.sheets);
+	////console.log(1075, filter.validation.sheets);
 
-	//console.log(1289, validation)
+	////console.log(1289, validation)
 
 	var sheets = [];
 	for(var i = 0; i < sheetnames.length; i++){
-		//console.log(1029, sheetnames[i], i);
+		////console.log(1029, sheetnames[i], i);
 		consolidateRows(importDataAsValues[i])
 		var sheet = {
 			"sheetname":sheetnames[i],
@@ -1404,7 +1410,7 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 		if(validation){
 		if(typeof filter.validation.sheets != 'undefined'){
 			if(Array.isArray(filter.validation.sheets)){
-				//console.log(1088, filter.validation.sheets.length)
+				////console.log(1088, filter.validation.sheets.length)
 				for(var x = 0; x < filter.validation.sheets.length; x++){
 					if(typeof filter.validation.sheets[x].sheetname == 'undefined')
 						filter.validation.sheets[x].sheetname = sheetnames[i]
@@ -1412,7 +1418,7 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 						sheet = { ... sheet, ... filter.validation.sheets[x] }
 					}
 					if(filter.validation.sheets[x].default == true){
-						console.log(1335, defaultValidation)
+						//console.log(1335, defaultValidation)
 						defaultValidation = { ... filter.validation.sheets[x] }
 					}
 				}
@@ -1423,15 +1429,15 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 	sheets.push(sheet)
 	}
 
-	//console.log(1346, util.inspect(filter, false, null, true /* enable colors */))
+	////console.log(1346, util.inspect(filter, false, null, true /* enable colors */))
 
-	//console.log(1365, validation);//, util.inspect(filter, false, null, true /* enable colors */))
+	////console.log(1365, validation);//, util.inspect(filter, false, null, true /* enable colors */))
 
 	delete defaultValidation.sheetname;
 	delete defaultValidation.default;
 	// Ensure every sheet has a default validation object if one was provided
 	for(sheet in sheets){
-		//console.log(1346, sheet);
+		////console.log(1346, sheet);
 		if(typeof sheets[sheet].primary_key == 'undefined'){
 			sheets[sheet] = { ... sheets[sheet], ... defaultValidation }
 		}
@@ -1440,12 +1446,12 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 	
 
 	//for(sheet of sheets){
-	//	console.log(1359, filter)
+	//	//console.log(1359, filter)
 	if(validation == true){
 		for(f of filter.validation.sheets){
 			for(s of sheets){
 				if(f.sheetname ==s.sheetname){
-					//console.log(1361, f, 1362, s);	
+					////console.log(1361, f, 1362, s);	
 					if(f.primary_key != s.primary_key){
 						s.primary_key = f.primary_key
 					}
@@ -1454,7 +1460,7 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 		}
 	}
 		
-		//console.log(1346, sheet);
+		////console.log(1346, sheet);
 		//
 		// if(typeof sheet.primary_key == 'undefined'){
 		// 	sheet = { ... sheet, ... defaultValidation }
@@ -1465,7 +1471,7 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 
 	for(var i = 0; i < entireWorkbookRaw.length; i++){
 		var sheetRows = entireWorkbookRaw[i]
-		//console.log(1110, sheetRows.sheetdata);
+		////console.log(1110, sheetRows.sheetdata);
 		for(var y = 0; y < sheetRows.sheetdata.length; y++){
 			var doc = createDocumentFromRow(sheetRows.sheetdata[y]);
 			entireWorkbookRaw[i].sheetdata[y] = doc;
@@ -1486,7 +1492,7 @@ async function getWorkbookData(req, res, filter, fileBuffer, x){
 
 	// The default collection name is based on the name of the tab in the excel spreadsheet
 	// This can be overridden by adding a 
-	//console.log(1134, entireWorkbookRaw[0].collection_name)
+	////console.log(1134, entireWorkbookRaw[0].collection_name)
 
 
 
@@ -1511,7 +1517,7 @@ function validateWorksheet(req, res, sheet, fileIndex){
 	if(typeof sheet.primary_key != 'undefined'){
 		// We defined a primary key...let's make sure it's in the spreadsheet
 		var primary_key = sheet.primary_key
-		console.log(1159, fileIndex, req.files[fileIndex-1])
+		//console.log(1159, fileIndex, req.files[fileIndex-1])
 		if(keys.indexOf(primary_key) == -1){
 			return excelImportError(req, res, { 
 				"error_no":1,
@@ -1540,11 +1546,11 @@ function validateWorksheet(req, res, sheet, fileIndex){
 		});
 	}
 
-	//console.log(1181, keys);
+	////console.log(1181, keys);
 
 	//let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
 	
-	//console.log(1183, findDuplicates(keys));
+	////console.log(1183, findDuplicates(keys));
 
 	return true;
 }
@@ -1557,14 +1563,14 @@ async function exceltojson(req, res){
 
 	//var datasourceFilter = getExcelImportParameters(req, res, req.query.params);
 
-	//console.log(1257, filter);
+	////console.log(1257, filter);
 
 	
 
 	if(!filter)
 		return false;
 
-	//console.log(1210, req.files.length)
+	////console.log(1210, req.files.length)
 
 	var writeResultsAr = [];
 
@@ -1574,7 +1580,7 @@ async function exceltojson(req, res){
 	
 	var entireWorkbook = await getWorkbookData(req, res, filter, fileBuffer, i);
 
-	//console.log(1272, entireWorkbook);
+	////console.log(1272, entireWorkbook);
 
 	// If entireWorkbook is false, there was an error loading the workbook.  An
 	// error has already been returned to the client, so the only thing left to do
@@ -1585,7 +1591,7 @@ async function exceltojson(req, res){
 	}
 	}
 
-	console.log(1507, util.inspect(entireWorkbook, false, null, true /* enable colors */))
+	//console.log(1507, util.inspect(entireWorkbook, false, null, true /* enable colors */))
 	if(errors == 0){
 		res.locals.response = entireWorkbook;
 		next(req, res);
@@ -1606,7 +1612,7 @@ async function importExcel(req, res){
 		bSendResponse = false;
 	}
 
-	console.log(1248, "import excel");
+	//console.log(1248, "import excel");
 
 	var datasource = req.params[0]
 	res.locals.datasource = datasource
@@ -1615,25 +1621,25 @@ async function importExcel(req, res){
 
 	//var datasourceFilter = getExcelImportParameters(req, res, req.query.params);
 
-	//console.log(1257, filter);
+	////console.log(1257, filter);
 
 	
 
 	if(!filter)
 		return false;
 
-	//console.log(1210, req.files.length)
+	////console.log(1210, req.files.length)
 
 	var writeResultsAr = [];
 
 	var errors = 0;
-	console.log(1532, req.files);
+	//console.log(1532, req.files);
 	for(var i = 0; i < req.files.length; i++){
 		var fileBuffer = req.files[i];
 	
 	var entireWorkbook = await getWorkbookData(req, res, filter, fileBuffer, i);
 
-	console.log(1272, "Entire Workbook Loaded");
+	//console.log(1272, "Entire Workbook Loaded");
 
 	// If entireWorkbook is false, there was an error loading the workbook.  An
 	// error has already been returned to the client, so the only thing left to do
@@ -1643,13 +1649,13 @@ async function importExcel(req, res){
 		continue;
 	}
 
-	//console.log(1507, util.inspect(entireWorkbook, false, null, true /* enable colors */))
+	////console.log(1507, util.inspect(entireWorkbook, false, null, true /* enable colors */))
 
 
 	var results = await putWorkbookIntoDatabase(entireWorkbook, user, filter)
 	results[0]["filedata"] = { ... req.files[i] }
 
-	console.log(1251, results);
+	//console.log(1251, results);
 
 	try {
 		delete results[0]["filedata"]["buffer"];
@@ -1659,7 +1665,7 @@ async function importExcel(req, res){
 		delete results[0].writeresults.insertedIds;
 	} catch(err){
 		// We really don't care if it fails
-		//console.log(1218, results[0])
+		////console.log(1218, results[0])
 	}
 		writeResultsAr.push(results);
 	}
@@ -1674,7 +1680,7 @@ async function importExcel(req, res){
 
 async function putWorkbookIntoDatabase(workbook, user, filter){
 	var results = [];
-	console.log(1574, "Putting workbook into database");
+	//console.log(1574, "Putting workbook into database");
 	for(var i = 0; i < workbook.length; i++){
 		var result = await putSheetIntoDatabase(workbook[i], user, filter)
 		results.push(result)
@@ -1685,8 +1691,8 @@ async function putWorkbookIntoDatabase(workbook, user, filter){
 async function putSheetIntoDatabase(sheet, user, filter){
 
 	// Let's check and see if there are any preprocessors
-	console.log(1239, "Putting Sheet into database", filter);
-	console.log(1240, util.inspect(sheet.sheetname, false, null, true /* enable colors */));
+	//console.log(1239, "Putting Sheet into database", filter);
+	//console.log(1240, util.inspect(sheet.sheetname, false, null, true /* enable colors */));
 
 	var secondary_key = null;
 	var exclude_search = null;
@@ -1715,7 +1721,7 @@ async function putSheetIntoDatabase(sheet, user, filter){
 				}
 
 				if(filter.validation.sheets[i].preprocessing == "manual_keyword_upload_for_linkbuilding"){
-					console.log(1296, "preprocessing", filter)
+					//console.log(1296, "preprocessing", filter)
 					sheet.sheetdata = await manual_keyword_upload_for_linkbuilding(sheet.sheetdata, filter, user);
 				}
 			}			
@@ -1724,10 +1730,10 @@ async function putSheetIntoDatabase(sheet, user, filter){
 
 	var filterCpy = { ... filter }
 	delete filterCpy.validation;
-	console.log(1721, filter);
+	//console.log(1721, filter);
 
 	var model = mongoose.model(checkDatasource(sheet.collection_name))
-	console.log(1722, sheet.collection_name, sheet.sheetname);
+	//console.log(1722, sheet.collection_name, sheet.sheetname);
 
 	if(filter.sheetNamesToDatasource == true){
 		model = mongoose.model(checkDatasource(sheet.sheetname))
@@ -1736,7 +1742,7 @@ async function putSheetIntoDatabase(sheet, user, filter){
 	var db = new mongo(model, user)
 	var docs = sheet.sheetdata;
 
-	console.log(1315, "inserting", sheet.method, docs.length, "records");
+	//console.log(1315, "inserting", sheet.method, docs.length, "records");
 
 	if(typeof sheet.method == 'undefined'){
 		sheet.method = "update"
@@ -1744,11 +1750,11 @@ async function putSheetIntoDatabase(sheet, user, filter){
 
 	if(sheet.method == "update"){
 		var results = await db.mongoCreateManyOnDuplicateKeyUpdate(docs, filterCpy, sheet.primary_key, secondary_key, exclude_search, exclude_update);
-		console.log(1729, sheet.sheetname)
+		//console.log(1729, sheet.sheetname)
 		return { 'sheet': sheet.sheetname, 'writeresults': results };
 	}
 	if(sheet.method == "insert"){
-		console.log(1737, sheet.sheetname)
+		//console.log(1737, sheet.sheetname)
 		var results = await db.mongoCreateMany(docs, filterCpy, sheet.primary_key);
 		return { 'sheet': sheet.sheetname, 'writeresults': results };
 		return results;
@@ -1758,7 +1764,7 @@ async function putSheetIntoDatabase(sheet, user, filter){
 
 async function manual_keyword_upload_for_linkbuilding(sheet, filter, user){
 
-	console.log(1321, filter);
+	//console.log(1321, filter);
 
 	var model = mongoose.model("Bounty")
 	var db = new mongo(model, user)
@@ -1844,7 +1850,7 @@ function extractdomains(sheet){
 		}
 		rowData["downloads"] = 0
 	}
-	//console.log(1295, util.inspect(sheet, false, null, true /* enable colors */))
+	////console.log(1295, util.inspect(sheet, false, null, true /* enable colors */))
 	return sheet;
 
 }
@@ -1856,7 +1862,7 @@ function createDocumentFromRow(doc){
 
 			var value = doc[docKeys[y]];
 
-			//console.log(1746, util.inspect(value, false, null, true /* enable colors */))
+			////console.log(1746, util.inspect(value, false, null, true /* enable colors */))
 			// Links are very common -- Excel automatically created objects
 			if(typeof value == 'object'){
 				if(typeof value.hyperlink != 'undefined'){
@@ -1867,7 +1873,7 @@ function createDocumentFromRow(doc){
 				}
 			}
 
-			//console.log(1757, util.inspect(value, false, null, true /* enable colors */))
+			////console.log(1757, util.inspect(value, false, null, true /* enable colors */))
 
 			if(Array.isArray(value))
 			{
@@ -1875,25 +1881,25 @@ function createDocumentFromRow(doc){
 				continue;
 			}
 			value = voca.replaceAll(value, `\/,`, "%*%")
-			//console.log(974, value);
+			////console.log(974, value);
 			// Look for " ,", and if present, convert to array
 			if(voca.includes(value, "||")){
 
 				doc[docKeys[y]] = voca.split(value, "||");
-				//console.log(978, doc[docKeys[y]]);
+				////console.log(978, doc[docKeys[y]]);
 				for(var t = 0; t < doc[docKeys[y]].length; t++){
 					if(!isNaN(doc[docKeys[y]][t]))
 						doc[docKeys[y]][t] = Number(doc[docKeys[y]][t])
 				}
 			} else
 				doc[docKeys[y]] = voca.replaceAll(doc[docKeys[y]], "/,", ",")
-			//console.log(697, value, Number.isNaN(parseInt(value)))
+			////console.log(697, value, Number.isNaN(parseInt(value)))
 			if(!Number.isNaN(parseInt(value))){
 				if(voca.isDigit(value))
 					doc[docKeys[y]] = parseInt(value);
 			}
 			
-			//console.log(1783, doc[docKeys[y]], value)
+			////console.log(1783, doc[docKeys[y]], value)
 
 			if(doc[docKeys[y]] == "[object Object]"){
 				doc[docKeys[y]] = value;
@@ -1906,14 +1912,14 @@ function createDocumentFromRow(doc){
 		}
 
 
-		//console.log(1757, util.inspect(doc, false, null, true /* enable colors */))
+		////console.log(1757, util.inspect(doc, false, null, true /* enable colors */))
 
 		return doc;
 	}
 
 	function consolidateRows(excelImportData){
 
-		//console.log(1276, "Consolidating rows", excelI);
+		////console.log(1276, "Consolidating rows", excelI);
 
 		var headerColumn = 0;
 
@@ -1960,7 +1966,7 @@ function createDocumentFromRow(doc){
 			for(var i = 0; i < rowToReceiveValues.length; i++){
 				var rowToReceiveValue = rowToReceiveValues[i];
 				var rowToGiveValue = rowToGiveValues[i]
-				//console.log(1045, rowToGiveValue)
+				////console.log(1045, rowToGiveValue)
 				if(typeof rowToGiveValue == 'undefined')
 					continue;
 				if(rowToGiveValue == '')
@@ -1979,7 +1985,7 @@ function createDocumentFromRow(doc){
 			return rowToReceive
 			}
 	
-		//console.log(1344, util.inspect(excelImportData, false, null, true /* enable colors */))
+		////console.log(1344, util.inspect(excelImportData, false, null, true /* enable colors */))
 	}
 
 function getExcelImportParameters(req, res, params){
@@ -1994,7 +2000,7 @@ function getExcelImportParameters(req, res, params){
 
 	filterStr = voca.replaceAll(filterStr, "'", "\"");
 	var bMergeFilter = false;
-	//console.log(1140, filterStr);
+	////console.log(1140, filterStr);
 
 	try {
 		var filter = JSON.parse(filterStr);
@@ -2012,13 +2018,13 @@ function getExcelImportParameters(req, res, params){
 	  }
 	}
 
-	//console.log(1151, filter);
+	////console.log(1151, filter);
 	return filter;
 }
 
 function excelImportError(req, res, error){
 
-	console.log(1521, error);
+	//console.log(1521, error);
 
    var defaultErrorResponse = helpers.defaultErrorResponseObject();
   defaultErrorResponse.error = error.err_no;
@@ -2155,23 +2161,55 @@ async function exportExcel(req, res, next, model){
 */
 
 
-async function getAggregateCount(aggregate, modelName, model){
+async function getAggregateCount(aggregate, modelName, model, req, res){
 
 
-	console.log(1939, util.inspect(aggregate, false, null, true /* enable colors */))
+	//console.log(1939, util.inspect(aggregate, false, null, true /* enable colors */))
 	aggregate.push({ $group: { _id: null, n: { $sum: 1 } } })
 
 	//aggregate.splice(3, 1)
 
-	console.log(2053, util.inspect(aggregate, false, null, true /* enable colors */))
+	//console.log(2053, util.inspect(aggregate, false, null, true /* enable colors */))
+  var bAccountScope = helpers.getPathTrue(req.params[0], "account");
+  var bAllScope = helpers.getPathTrue(req.params[0], "all");
+  var bUserScope = true;
+
+  let scope = 'user';
+	if(bAccountScope){
+		bUserScope = false;
+		bAllScope = false;
+		scope = 'account';
+	} else {
+		if (bAllScope){
+			bUserScope = false;
+			bAccountScope = false;
+			scope = 'all';
+		}
+	}
+
+	if(scope == 'user'){
+		//aggregate.unshift( { '$match' : { created_by: res.locals.user._id } } )
+	}
+
+
+	if(scope == 'account'){
+		//aggregate.unshift( { '$match' : { owner: res.locals.user.accountId } } )
+	}
+
+	if(scope == 'all'){
+		// We don't add a $match stage here, this will have the effect of returning all records in the collection,
+		// regardless of ownership.
+	}
+
+	console.log(2204, aggregate);
 
 	try {
 		var count = await model.aggregate(aggregate);
 	} catch(err){
-		console.log(2058, count);
+		//console.log(2058, count);
 	}
 
-	console.log(2061, count);
+	//console.log(2061, count);
 
 	if(Array.isArray(count)){
 		if(count.length == 0)
@@ -2180,7 +2218,7 @@ async function getAggregateCount(aggregate, modelName, model){
 			return count.length;
 		}
 		
-		console.log(1718, count[0]['n']);
+		//console.log(1718, count[0]['n']);
 
 		return count[0]['n']
 	} else
@@ -2193,7 +2231,7 @@ async function aggregateCount(req, res){
 
 async function aggregate(req, res, count =false){
 
-	console.log(2070);
+	//console.log(2070);
 	var xbody = req.headers["x-body"];
 	var keys = req.body
 	if(typeof xbody != 'undefined'){
@@ -2209,7 +2247,7 @@ async function aggregate(req, res, count =false){
 	aggregateStr = voca.replaceAll(aggregateStr, "$res.locals.user.accountId", JSON.stringify(res.locals.user.accountId));
 	//aggregateStr = voca.replaceAll(aggregateStr, "$res.locals.user._id", JSON.stringify(res.locals.user.skill));
 
-	//console.log(1840, util.inspect(aggregateStr, false, null, true /* enable colors */))
+	console.log(1840, util.inspect(aggregateStr, false, null, true /* enable colors */))
 
 	var aggregate = eval(aggregateStr);
 
@@ -2218,10 +2256,10 @@ async function aggregate(req, res, count =false){
 			return;
 		}
 
-		console.log(2091, obj);
+		////console.log(2091, obj);
 		for (const [key, value] of Object.entries(obj)) {
 
-			//console.log(1845, typeof(value), value, key)
+			////console.log(1845, typeof(value), value, key)
 
 			if(typeof(value) == "object"){
 				iterateThroughObject(value, key)
@@ -2230,18 +2268,18 @@ async function aggregate(req, res, count =false){
 				if(voca.indexOf(value, "$") == -1){
 				if(value != "$_id"){
 				if(voca.includes(key, "_id")){
-					console.log(2141, key, value)
+					//console.log(2141, key, value)
 					if(value !== 1){
 				  		obj[key] = mongoose.Types.ObjectId(value);
 				  	}
-				  	console.log(2142, obj[key]);
+				  	//console.log(2142, obj[key]);
 				  }
  				if(voca.includes(key, "_by")){
-					console.log(2151, key, value)
+					//console.log(2151, key, value)
 					if(value !== 1){
 				  		obj[key] = mongoose.Types.ObjectId(value);
 				  	}
-				  	console.log(2142, obj[key]);
+				  	//console.log(2142, obj[key]);
 				  }	
 				  if(voca.includes(key, "inhouse")){
 				  	obj[key] = mongoose.Types.ObjectId(value)
@@ -2251,17 +2289,17 @@ async function aggregate(req, res, count =false){
 			}
 
 			if(parentKey == "owner"){
-				console.log(1867, parentKey,value)
+				//console.log(1867, parentKey,value)
 				if(value.length == 24){
-				  		console.log(1862, key, value)
+				  		//console.log(1862, key, value)
 				  		obj[key] = mongoose.Types.ObjectId(value)
 				  	}
 			}
 
 			if(parentKey == "process.pipeline"){
-				  	//console.log(1860, key, value)
+				  	////console.log(1860, key, value)
 				  	if(value.length == 24){
-				  		console.log(1862, key, value)
+				  		//console.log(1862, key, value)
 				  		obj[key] = mongoose.Types.ObjectId(value)
 				  	}
 				  }
@@ -2275,7 +2313,7 @@ async function aggregate(req, res, count =false){
 		}
 	}
 
-	//console.log(1731, util.inspect(aggregate, false, null, true /* enable colors */))
+	////console.log(1731, util.inspect(aggregate, false, null, true /* enable colors */))
 
 	// This function is intended to ensure the string will only return results for the account
 	//aggregate = reduceResultsByPermissions(aggregateStr)
@@ -2306,26 +2344,65 @@ async function aggregate(req, res, count =false){
 	var aggregateClone2 = Array.from(aggregate)
 
 	// We need to look for a /page/ and /id in the URL
-	//console.log(2051, page, req.params);
+	////console.log(2051, page, req.params);
 
 	if(typeof page != 'undefined'){
 		// We've got a paginated request...
 		page = parseInt(page)
 		var startingId = req.params["id"];
-		//console.log(2056, startingId);
+		////console.log(2056, startingId);
 		aggregate.unshift({ '$match' : { '_id': {'$gte': mongoose.Types.ObjectId(startingId) } } } )
 	} else {
 		// Adding this resolved a serious pagination bug.  This fixes the issue
 		aggregate.unshift({ '$match' : { '_id': {'$gte': mongoose.Types.ObjectId("000000000000000000000001") } } } )
 		page = 1;
 	}
+
+	// Enforce displaying only the data that belongs to the user
+	// The default scope is user.
 	
-	console.log(2180, util.inspect(aggregate, false, null, true /* enable colors */))
+	
+
+  var bAccountScope = helpers.getPathTrue(req.params[0], "account");
+  var bAllScope = helpers.getPathTrue(req.params[0], "all");
+  var bUserScope = true;
+
+  let scope = 'user';
+	if(bAccountScope){
+		bUserScope = false;
+		bAllScope = false;
+		scope = 'account';
+	} else {
+		if (bAllScope){
+			bUserScope = false;
+			bAccountScope = false;
+			scope = 'all';
+		}
+	}
+
+	if(scope == 'user'){
+		aggregate.unshift( { '$match' : { created_by: res.locals.user._id } } )
+	}
+
+
+	if(scope == 'account'){
+		aggregate.unshift( { '$match' : { owner: res.locals.user.accountId } } )
+	}
+
+	if(scope == 'all'){
+		// We don't add a $match stage here, this will have the effect of returning all records in the collection,
+		// regardless of ownership.
+	}
+
+	var all = helpers.getPathTrue(req.params[0], "all")
+
+	console.log(2353, scope);
+	console.log(2180, scope, util.inspect(aggregate, false, null, true /* enable colors */))
 
 	try {
 		res.locals.response = await model.aggregate(aggregate).limit(max_records);
 	} catch(err){
-		console.log(1312, err);
+		//console.log(1312, err);
 	}
 
 	console.log(2074, util.inspect(res.locals.response, false, null, true /* enable colors */))
@@ -2347,7 +2424,7 @@ async function aggregate(req, res, count =false){
 		defaultResponseObject["addDataForm"] = []
 	}
 
-	//console.log(2096, util.inspect(aggregateClone, false, null, true /* enable colors */))
+	////console.log(2096, util.inspect(aggregateClone, false, null, true /* enable colors */))
 
 	if(res.locals.response.length == 0){
 			res.status(200);
@@ -2361,7 +2438,7 @@ async function aggregate(req, res, count =false){
 	const maxObjectId = mongoose.Types.ObjectId('ffffffffffffffffffffffff');
 	const minObjectId = mongoose.Types.ObjectId.createFromHexString('000000000000000000000001');
 
-	console.log(2219, firstId, res.locals.response);
+	//console.log(2219, firstId, res.locals.response);
 	try { var testMinId = mongoose.Types.ObjectId(firstId); } catch(err){ }
 	try { var testMaxId = mongoose.Types.ObjectId(lastId); } catch(err){ }
 
@@ -2373,11 +2450,11 @@ async function aggregate(req, res, count =false){
 		lastId = maxObjectId
 	}
 
-	console.log(2329, defaultResponseObject[datasource])
+	//console.log(2329, defaultResponseObject[datasource])
 	for(let myItem of defaultResponseObject[datasource]){
-		console.log(2331, myItem);
+		//console.log(2331, myItem);
 		myItem['requested_by'] = res.locals.user._id;
-		console.log(2332, myItem['requested_by'], res.locals.user._id)
+		//console.log(2332, myItem['requested_by'], res.locals.user._id)
 	}
 
 	// If this is the inital page load, do this.
@@ -2394,15 +2471,15 @@ async function aggregate(req, res, count =false){
 async function calculateSubsequentAggregationPages(aggregate, limit, modelName, model, req, res, firstId, lastId, page){
 
 	var origPage = page;
-	console.log(2118, page, lastId);
+	//console.log(2118, page, lastId);
   	var origAggregate = [ ... aggregate ];//JSON.parse(JSON.stringify(aggregate));
 
-  	console.log(2257, util.inspect(aggregate, false, null, true /* enable colors */))
+  	//console.log(2257, util.inspect(aggregate, false, null, true /* enable colors */))
 
   	var origAr = Array.from(aggregate);
   	var origAr2 = [ ... aggregate ]
 
-	var count = await getAggregateCount(aggregate, modelName, model);
+	var count = await getAggregateCount(aggregate, modelName, model, req, res);
 
 	var pages = Math.ceil(count / limit)
 
@@ -2418,9 +2495,9 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 
 	var prevPagesAr = await getReverseAggregateIds(origAr2, limit, pages, firstId, modelName, model, page, `${req.protocol}://${req.get("host")}` + process.env.API_VERSION + route + "/page/{page_num}/id/{_id}")
 
-	//console.log(2130, util.inspect(prevIds, false, null, true /* enable colors */))
+	////console.log(2130, util.inspect(prevIds, false, null, true /* enable colors */))
 
-	//console.log(2138, page);
+	////console.log(2138, page);
 
 	var currentPage = page;
 
@@ -2446,7 +2523,7 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 	
 
 	var spliceEnd = 6;//page - 5;
-	//console.log(2166, startingPage, spliceEnd)
+	////console.log(2166, startingPage, spliceEnd)
 
 	//prevIds.reverse()
 	//prevIds.splice(0, 6)
@@ -2460,8 +2537,8 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 	var allPages = [ ... prevPagesAr, ... nextPagesAr ]
 
 
-	//console.log(2165, startingPage, prevPagesAr);
-//console.log(2136, allPages);
+	////console.log(2165, startingPage, prevPagesAr);
+////console.log(2136, allPages);
 
 
 	if((allPages.length > 10)&&(currentPage <= 5)){
@@ -2470,7 +2547,7 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 
 	if((allPages.length > 10)&&(currentPage > 5)){
 
-		console.log(2169, page);
+		//console.log(2169, page);
 
 		// Find the array index of the page
 		var pageIndex = 0;
@@ -2480,14 +2557,14 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 			}
 		}
 
-		console.log(2179, pageIndex, allPages[pageIndex])
+		//console.log(2179, pageIndex, allPages[pageIndex])
 		// Get rid of pageIndex - 5
 
 		// This ensure we only have five pages after the current page
 		if(pageIndex+5 > allPages.length)
 			allPages.splice(pageIndex+5, allPages.length - 5);
 
-		console.log(2209, allPages.length, pageIndex)
+		//console.log(2209, allPages.length, pageIndex)
 
 		// if(page > 10){
 		
@@ -2499,12 +2576,12 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 				allPages.splice(0, pageIndex - 5)
 			} else {
 				//allPages.splice(pageIndex + 5, allPages.length)
-				console.log(2221, allPages.length, pageIndex)
+				//console.log(2221, allPages.length, pageIndex)
 				allPages.splice(0, allPages.length - 10)
 			}
 		}
 
-		console.log(2220, allPages.length, pageIndex)
+		//console.log(2220, allPages.length, pageIndex)
 
 	}
 
@@ -2525,7 +2602,7 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 function generatePrevPageArray(idsAr, nextPageTemplateStr, startingPage){
 
 
-	console.log(2228, idsAr, startingPage)
+	//console.log(2228, idsAr, startingPage)
 
 	var pageAr = [];
 
@@ -2536,12 +2613,12 @@ function generatePrevPageArray(idsAr, nextPageTemplateStr, startingPage){
 			"page_endpoint": voca.replace(voca.replace(nextPageTemplateStr, "{page_num}", String(startingPage-i)), "{_id}", idsAr[i]["_id"])
 		}
 		pageAr.push(page);
-		console.log(2238, i, page)
+		//console.log(2238, i, page)
 	}
 
     
     for(var i = startingPage-1; i < idsAr.length; i++){
-    	//console.log(2230, i, startingPage, startingPage+i);
+    	////console.log(2230, i, startingPage, startingPage+i);
     	var pageNum = startingPage+i;//startingPage + i;
     	// pageAr.push({
     	// 	"_id": idsAr[i]["_id"],
@@ -2561,13 +2638,13 @@ async function calculateInitialAggregationPages(aggregate, limit, modelName, mod
 	
 	const copied = [ ... aggregate ]
 
-	var count = await getAggregateCount(copied, modelName, model);
+	var count = await getAggregateCount(copied, modelName, model, req, res);
 
-	console.log(2423, count, limit);
+	//console.log(2423, count, limit);
 
 	var pages = Math.ceil(count / limit)
 
-	  	console.log(2257, util.inspect(aggregate, false, null, true /* enable colors */))
+	  	//console.log(2257, util.inspect(aggregate, false, null, true /* enable colors */))
 
 
 	var ids = await getAggregateIds(origAggregate, limit, pages, firstId, modelName, model)
@@ -2617,12 +2694,12 @@ async function calculateInitialAggregationPages(aggregate, limit, modelName, mod
 async function getAggregateIds(agr, max_records, numPages, firstId, modelName, model){
 
 	const aggregate = [ ... agr ]
-	//console.log(2219, firstId)
+	////console.log(2219, firstId)
 	if(numPages > 10){
 		numPages = 10;
 	}
 	// Add a match stage:
-	console.log(2455, firstId);
+	//console.log(2455, firstId);
 
 	var filter = {
 		"$match": { "_id": { "$gte": mongoose.Types.ObjectId(firstId) } },
@@ -2644,14 +2721,14 @@ async function getAggregateIds(agr, max_records, numPages, firstId, modelName, m
 	aggregate.push(newRoot)
 	aggregate.push({ "$limit": max_records*numPages } );
 	
-	console.log(2475, aggregate);
+	//console.log(2475, aggregate);
 	var ids = await model.aggregate(aggregate);
 
 	var pageIds = everyNthElement(ids, max_records);
 
 	return pageIds;
 
-	//console.log(2228, pageIds);
+	////console.log(2228, pageIds);
 
 }
 
@@ -2660,9 +2737,9 @@ async function getReverseAggregateIds(aggregate, max_records, numPages, firstId,
 
 	const agr = Array.from(aggregate)
 
-	//console.log(2269, util.inspect(aggregate, false, null, true /* enable colors */))
+	////console.log(2269, util.inspect(aggregate, false, null, true /* enable colors */))
 
-	//console.log(2219, firstId)
+	////console.log(2219, firstId)
 	if(numPages > 10){
 		numPages = 10;
 	}
@@ -2690,10 +2767,10 @@ async function getReverseAggregateIds(aggregate, max_records, numPages, firstId,
 
 	agr.push({ "$limit": recordCount } );
 
-	console.log(2521);
+	//console.log(2521);
 	var ids = await model.aggregate(agr);
 
-	//console.log(2298, util.inspect(ids, false, null, true /* enable colors */))
+	////console.log(2298, util.inspect(ids, false, null, true /* enable colors */))
 
 	var pageIds = everyNthElement(ids, max_records);
 
@@ -2708,10 +2785,10 @@ async function getReverseAggregateIds(aggregate, max_records, numPages, firstId,
     		"page_endpoint": voca.replace(voca.replace(prevPageTemplateStr, "{page_num}", String(i)), "{_id}", pageId["_id"])
     	})
 
-			//console.log(2401, "page_num", i, pageId);
+			////console.log(2401, "page_num", i, pageId);
 		}
 	}
-	//console.log(2281, pageNum, ids.length);
+	////console.log(2281, pageNum, ids.length);
 
 
 
@@ -2728,7 +2805,7 @@ function generatePageArray(idsAr, nextPageTemplateStr, startingPage){
             },
     */
 
-    //console.log(2292, startingPage, typeof startingPage)
+    ////console.log(2292, startingPage, typeof startingPage)
 
     var pageAr = [];
     for(var i = 0; i < idsAr.length; i++){
@@ -2767,7 +2844,7 @@ function everyNthElement(arr, n){
 
 async function progress(req, res){
 
-	console.log(1278)
+	//console.log(1278)
 	var xbody = req.headers["x-body"];
 	var keys = req.body
 	if(typeof xbody != 'undefined'){
@@ -2780,19 +2857,19 @@ async function progress(req, res){
 	try {
 		var aggregateStr = base64.decode(req.body.aggregate)
 	} catch(err){
-		console.log(1291, req.body.aggregate)
+		//console.log(1291, req.body.aggregate)
 		aggregateStr = "";
 		// I need to handle this error...
 	}
-	//console.log(800, aggregateStr);
-	//console.log(801, res.locals.user.toObject().skill);
+	////console.log(800, aggregateStr);
+	////console.log(801, res.locals.user.toObject().skill);
 	var aggregate = eval(aggregateStr);//JSON.parse(aggregateStr);
 
 	// Object needs to be a reference and not a copy, this not requiring a return value
 	function replaceMatchInObject(obj, key, value, search){
 		
 		if(obj == search){
-			console.log(1966, obj, search)
+			//console.log(1966, obj, search)
 			obj = value;
 			return value;
 		}
@@ -2801,16 +2878,16 @@ async function progress(req, res){
 
 	function iterateThroughObj(obj){
 		var keys = Object.keys(obj)
-		//console.log(1975, obj, typeof obj[]);
+		////console.log(1975, obj, typeof obj[]);
 		for(var i = 0; i < keys.length; i++){
 			if(typeof  obj[keys[i]] == 'object'){
 				iterateThroughObj(obj[keys[i]])
 			} else {
-				//console.log(1982, obj[keys[i]])
+				////console.log(1982, obj[keys[i]])
 				var replace = replaceMatchInObject(obj[keys[i]], "process.pipeline", mongoose.Types.ObjectId(res.locals.user._id), "$res.locals.user._id")
 				if(replace != false){
 					obj[keys[i]] = replace
-					console.log(1985, obj[keys[i]])
+					//console.log(1985, obj[keys[i]])
 
 				}
 			}
@@ -2824,20 +2901,20 @@ async function progress(req, res){
     //       top:
     //       for(var i = 0; i < aggregate.length; i++){
     //         var aggregateStage = aggregate[i];
-    //         console.log(1968, aggregateStage);
+    //         //console.log(1968, aggregateStage);
     //         var keys = Object.keys(aggregateStage);
     //         for(var x = 0; x < keys.length; x++){
-    //         	console.log(1971, keys[x])
+    //         	//console.log(1971, keys[x])
     //         	if(keys[x] == '$project'){
 
     //         		var projectKeys = Object.values(aggregateStage[keys[x]])
-    //         		console.log(1974, projectKeys)
+    //         		//console.log(1974, projectKeys)
     //         		for(var y = 0; y < projectKeys.length; y++){
     //         			var projectKey = projectKeys[y];
     //         			var projectValue = projectKey
 
     //         			if(projectValue == '$res.locals.user._id'){
-    //         				console.log(1977, projectValue)
+    //         				//console.log(1977, projectValue)
 
     //         			}
     //         		}
@@ -2851,16 +2928,16 @@ async function progress(req, res){
 
 	//aggregate[2]["$match"]["$and"][1]["process.pipeline"] = mongoose.Types.ObjectId(res.locals.user._id);
 	
-	//console.log(866, aggregate[2]["$match"]["$and"][1]["process.pipeline"]);
-	//console.log(803, util.inspect(aggregate, false, null, true /* enable colors */))
+	////console.log(866, aggregate[2]["$match"]["$and"][1]["process.pipeline"]);
+	////console.log(803, util.inspect(aggregate, false, null, true /* enable colors */))
 
 	var datasource = getDataSource(req);
 	var modelName = checkDatasource(datasource)
 	var model = mongoose.model(modelName);
 
 
-	console.log(2690);
-	//console.log(865, util.inspect(aggregate, false, null, true /* enable colors */))
+	//console.log(2690);
+	////console.log(865, util.inspect(aggregate, false, null, true /* enable colors */))
 	res.locals.response = await model.aggregate(aggregate);
 	if(res.locals.response.length > 0){
 		var definitions = await Paginationv2.getDisplayHeaders(keys,res.locals.response);
@@ -2872,9 +2949,9 @@ async function progress(req, res){
 	}
 	for(object in res.locals.response){
 		var data = res.locals.response[object]
-		//console.log(1319, data);
+		////console.log(1319, data);
 		for(key in data){
-			//console.log(1322, key, data[key])
+			////console.log(1322, key, data[key])
 			if(data[key] == null)
 				data[key] = "";
 		}
@@ -2898,7 +2975,7 @@ async function progress(req, res){
 	res.status(200);
 	res.json(defaultResponseObject);
 
-	//console.log(827, defaultResponseObject)
+	////console.log(827, defaultResponseObject)
 	//Paginationv2.listByPage(req, res, model, max_records, filter, keys, account, sort, key);
 
 	//return next(req, res);
@@ -2916,19 +2993,19 @@ async function completed(req, res){
 		keys = [];
 
 	var aggregateStr = base64.decode(req.body.aggregate)
-	//console.log(800, aggregateStr);
-	//console.log(801, res.locals.user.toObject().skill);
+	////console.log(800, aggregateStr);
+	////console.log(801, res.locals.user.toObject().skill);
 	var aggregate = eval(aggregateStr);//JSON.parse(aggregateStr);
 	aggregate[2]["$match"]["$and"][1]["process.pipeline"] = mongoose.Types.ObjectId(res.locals.user._id);
 	
-	// console.log(866, aggregate[2]["$match"]["$and"][1]["process.pipeline"]);
-	// console.log(803, util.inspect(aggregate, false, null, true /* enable colors */))
+	// //console.log(866, aggregate[2]["$match"]["$and"][1]["process.pipeline"]);
+	// //console.log(803, util.inspect(aggregate, false, null, true /* enable colors */))
 
 	var datasource = getDataSource(req);
 	var modelName = checkDatasource(datasource)
 	var model = mongoose.model(modelName);
 
-	console.log(2759);
+	//console.log(2759);
 	res.locals.response = await model.aggregate(aggregate);
 
 	var definitions = null;
@@ -2959,7 +3036,7 @@ async function completed(req, res){
 	res.status(200);
 	res.json(defaultResponseObject);
 
-	//console.log(827, defaultResponseObject)
+	////console.log(827, defaultResponseObject)
 	//Paginationv2.listByPage(req, res, model, max_records, filter, keys, account, sort, key);
 
 	//return next(req, res);
@@ -2984,9 +3061,9 @@ function getFilter(req){
 	var filterIndex = voca.search(fullUrl, "filter");
 	if(filterIndex != -1){
 		var filter = helpers.getParameter(fullUrl, "filter");
-		//console.log(246, filter);
+		////console.log(246, filter);
 		var filterStr = base64.decode(filter);
-		//console.log(248, filterStr);
+		////console.log(248, filterStr);
 		filterStr = voca.replaceAll(filterStr, "'", "\"");
 		
 		filter = JSON.parse(filterStr);
@@ -3001,9 +3078,9 @@ function getSort(req){
 	var filterIndex = voca.search(fullUrl, "sort");
 	if(filterIndex != -1){
 		var sortStr = helpers.getParameter(fullUrl, "sort");
-		//console.log(246, sortStr);
+		////console.log(246, sortStr);
 		var filterStr = base64.decode(sortStr);
-		//console.log(248, filterStr);
+		////console.log(248, filterStr);
 		filterStr = voca.replaceAll(filterStr, "'", "\"");
 		
 		sort = JSON.parse(filterStr);
@@ -3036,7 +3113,7 @@ function getId(req){
 
 function getWithSort(req, res, next, model)
 {
-	console.log(2913, "getWithSort");
+	//console.log(2913, "getWithSort");
 	var xbody = req.headers["x-body"];
 	var keys = req.body
 	if(typeof xbody != 'undefined'){
@@ -3095,7 +3172,7 @@ async function datesbetween(req, res, next, model){
 	}
 	*/
 
-	console.log(2806, "Dates Between Start")
+	//console.log(2806, "Dates Between Start")
 	var startDate = req.body.startDate;
 	var endDate = req.body.endDate;
 	var _dateKey = req.body._dateKey;
@@ -3136,10 +3213,10 @@ async function datesbetween(req, res, next, model){
 	searchKeys = {}
 	//searchKeys[_dateKey] = 1
 
-	console.log(2806, "Performing Find", searchQuery)
+	//console.log(2806, "Performing Find", searchQuery)
 	res.locals.response = await model.find(searchQuery, searchKeys);
 
-	console.log(2806, "Dates Between End")
+	//console.log(2806, "Dates Between End")
 	return next(req, res);
 }
 
@@ -3304,13 +3381,13 @@ async function getSelectedMergeFields(req, res, next, model){
 // 	var jsonBody = req.body;
 
 // 	for (const [key, value] of Object.entries(jsonBody)) {
-// 	  //console.log(`${key}: ${value}`);
+// 	  ////console.log(`${key}: ${value}`);
 // 	  if(voca.includes(key, "_id")){
 // 	  	jsonBody[key] = mongoose.Types.ObjectId(value)
 // 	  }
 // 	}
 
-// 	console.log(443, jsonBody)
+// 	//console.log(443, jsonBody)
 
 // 	var doc = await mongoose.connection.db.collection(model.collection.collectionName).updateOne(
 //   		{_id: mongoose.Types.ObjectId(id)},
@@ -3327,7 +3404,7 @@ async function getSelectedMergeFields(req, res, next, model){
 
 async function bulkInsert(req, res, next, model){
 
-	console.log(2428, req.body);
+	//console.log(2428, req.body);
 
 	if(!Array.isArray(req.body)){
 		// This needs to be an array
@@ -3338,7 +3415,7 @@ async function bulkInsert(req, res, next, model){
 
 	for(var i = 0; i < jsonBody.length; i++){
 		for (const [key, value] of Object.entries(jsonBody[i])) {
-		  //console.log(`${key}: ${value}`);
+		  ////console.log(`${key}: ${value}`);
 		  if(voca.includes(key, "_id")){
 		  	if(value.length == 0){
 		  		continue;
@@ -3366,7 +3443,7 @@ async function bulkUpdate(req, res, next, model){
 
 	for(var i = 0; i < jsonBody.length; i++){
 		for (const [key, value] of Object.entries(jsonBody[i])) {
-		  //console.log(`${key}: ${value}`);
+		  ////console.log(`${key}: ${value}`);
 		  if(voca.includes(key, "_id")){
 		  	jsonBody[i][key] = mongoose.Types.ObjectId(value)
 		  } else {
@@ -3389,9 +3466,9 @@ async function bulkUpdate(req, res, next, model){
     ));
 
     var res = await model.bulkWrite(bulkData);
-    console.log(2439, res);
+    //console.log(2439, res);
 
-	console.log(1691, util.inspect(bulkData, false, null, true));
+	//console.log(1691, util.inspect(bulkData, false, null, true));
 
  	res.locals.response = { "bulk_write":"worked" }
  	next(req, res);
@@ -3411,7 +3488,7 @@ async function getDocumentById(req, res, next, model){
 
 function defaultError(req, res, error){
 
-	console.log(1521, error);
+	//console.log(1521, error);
 
    var defaultErrorResponse = helpers.defaultErrorResponseObject();
   defaultErrorResponse.error = error.err_no;
@@ -3426,7 +3503,7 @@ function defaultError(req, res, error){
 async function selectall(req, res, model){
 
 	scope = { created_by: res.locals.user._id }
-	console.log(3300, scope);
+	//console.log(3300, scope);
 
 	// Determine our scope
 	if(req.body.scope == "all"){
@@ -3467,15 +3544,15 @@ async function selectall(req, res, model){
 	}
 
 	let filter = req.body.filter;
-	console.log(3305, filter);
+	//console.log(3305, filter);
 	filter = { ... scope }
 	
 	try {
 		var result = await model.updateMany(filter, { selected: true });
 	} catch(err){
-		console.log(3331, err);
+		//console.log(3331, err);
 	}
-	console.log(result);
+	//console.log(result);
 	res.locals.response = { "selectall":"true" }
 	next(req, res);
 }

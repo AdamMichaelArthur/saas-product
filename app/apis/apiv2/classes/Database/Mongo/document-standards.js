@@ -17,7 +17,7 @@ export default class DocumentStandards {
 			this.user = user;
 			this.userInfo["created_by"] = user._id;
 			this.userInfo["modified_by"] = user._id;
-			this.userInfo["created_at"] = new Date().toISOString(),
+			this.userInfo["created_at"] = new Date().toISOString();
 			this.userInfo["owner"] = user.accountId;
 		}
 		if(target !== null){
