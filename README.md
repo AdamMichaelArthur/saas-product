@@ -26,3 +26,4 @@ Out of the box, you get:
 - Manual installation required for: nginx, mongodb, node 20, pm2, openssl, certbot.
 
 ## Clone the newly-cloned project to your local machine for development
+

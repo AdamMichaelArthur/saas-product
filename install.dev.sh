@@ -439,8 +439,8 @@ DB_NAME="${DB_NAME}"
 AUTH_DB="${AUTH_DB}"
 DB_REPLICASET = "rs0"
 directConnection = "true"
-socketTimeoutMS="360"
-connectTimeoutMS="360"
+socketTimeoutMS="10000"
+connectTimeoutMS="10000"
 DB="mongo" # currently unused, but the roadmap includes a plan to support sql, which will require a database provider
 
 # For Affiliate Cookies
