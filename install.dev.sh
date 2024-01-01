@@ -8,7 +8,7 @@ chmod 777 . || { echo "Failed to change permissions"; exit 1; }
 
 # MongoDB connection details with defaults
 DB_DOMAIN="127.0.0.1"
-DB_PORT="27017"
+DB_PORT="54231"
 DB_USERNAME="admin"  # Set to empty initially
 DB_PASSWORD="admin"  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
@@ -48,8 +48,8 @@ ask_details() {
         DB_DOMAIN="$inputDomain"
     fi
 
-    #echo "Enter MongoDB Port (default: 27017):" read inputPort
-    read -p "Enter MongoDB Port (default: 27017):" inputPort
+    #echo "Enter MongoDB Port (default: 54231):" read inputPort
+    read -p "Enter MongoDB Port (default: 54231):" inputPort
     if [ ! -z "$inputPort" ]; then
         DB_PORT="$inputPort"
     fi
@@ -83,7 +83,7 @@ ask_details() {
 
     DB_REPLICASET="rs0"
     directConnection="true"
-    socketTimeoutMS="360"
+    socketTimeoutMS="10000"
     connectTimeoutMS="360"
 
     # Backup the dataabse, if it exists

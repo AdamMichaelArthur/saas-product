@@ -23,7 +23,7 @@ if(process.env.NODE_ENV == "production"){
 	
 }
 
-//mongodb://localhost:27017,127.0.0.1:27018/?replicaSet=rs0
+//mongodb://localhost:54231,127.0.0.1:27018/?replicaSet=rs0
 
 var dbURI = 'mongodb://'+username+':'+password+'@'+domain+':'+port+'/'+dbname + '?authSource=admin' + '&socketTimeoutMS=3600&connectTimeoutMS=3600';// + '&' + 'replicaSet' + '=' + replicaSet;
 
