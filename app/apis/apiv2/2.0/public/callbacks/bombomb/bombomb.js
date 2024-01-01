@@ -334,9 +334,9 @@ export default class BombBomb extends Base {
 
 }
 
-var tokenRefresh = new BombBomb();
-var database = new mngo();
-tokenRefresh.database = database;
-setInterval( () => {
-  tokenRefresh.getFreshToken();
-}, 3500000);
+// var tokenRefresh = new BombBomb();
+// var database = new mngo();
+// tokenRefresh.database = database;
+// setInterval( () => {
+//   tokenRefresh.getFreshToken();
+// }, 3500000);

@@ -572,6 +572,8 @@ export class BaseService {
       api_url = api_url + "/filter/" + btoa(JSON.stringify(filter))
     }
 
+    this.httpOptions.headers = this.httpOptions.headers.delete('x-body');
+
     return this.http.get(api_url, this.httpOptions).pipe(
       map(response => {
         console.log(213, response["datasource"]);

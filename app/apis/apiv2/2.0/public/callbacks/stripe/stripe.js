@@ -124,7 +124,7 @@ async event() {
 
     // Finally, drop the data into the "stripe_events" collection
     this.database.mongo.collection = "stripe_events";
-    this.database.mongo.insertOne(doc);
+    await this.database.mongo.insertOne(doc);
 
     // Send a reply to the client.  Generally with webhooks as long as a status: 200 is sent, it's considered a successful request
     this.response.reply("ok");
