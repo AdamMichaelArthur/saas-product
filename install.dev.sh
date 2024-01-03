@@ -12,7 +12,8 @@ DB_PORT="54231"
 DB_USERNAME="admin"  # Set to empty initially
 DB_PASSWORD="admin"  # Set to empty initially
 AUTH_DB="admin"  # Default auth db
-
+PATH=""
+INSTALL_WP=true
 # Some defaults
 SOCKET_IO_PATH="/socket.io/"
 
@@ -42,6 +43,17 @@ find_available_port_range() {
 
 ask_details() {
     # Prompt user for optional overrides
+
+    # read -p "Do you want to install a Wordpress companion site? (default: ${INSTALL_WP}):" input
+    # if [ ! -z "$input" ]; then
+    #     INSTALL_WP="$inputDomain"
+    # fi
+
+    read -p "What path do you want to install on? (default: /):" inputDomain
+    if [ ! -z "$inputDomain" ]; then
+        PATH="$inputDomain"
+    fi
+
     #echo "Enter MongoDB Domain (default: 127.0.0.1):" read inputDomain
     read -p "Enter MongoDB Domain (default: 127.0.0.1):" inputDomain
     if [ ! -z "$inputDomain" ]; then
