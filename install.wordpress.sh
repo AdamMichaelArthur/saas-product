@@ -1,9 +1,13 @@
 #!/bin/bash
 
 WORDPRESSDIR="/mnt/volume_sfo2_01/wordpress-sites"
-PROJECT_NAME="testsite"
+PROJECT_NAME="test-1"
 PROJECT_DIR="${WORDPRESSDIR}/${PROJECT_NAME}"
 DOMAIN="${PROJECT_NAME}.saas-product.com"
+
+read -p "Enter the name of the project: " PROJECT_NAME
+
+echo PROJECT_NAME
 
 # Check if Nginx is installed
 if ! which nginx > /dev/null; then
@@ -43,16 +47,18 @@ read -sp "Enter password: " password
 echo
 
 # Login to MySQL and create a user with the provided credentials
-mysql -u root -p -e "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';"
+mysql -u wpuser -pAmos3rowe@ -e "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';"
+
+# Grant user access only to the specified database
+read -p "Enter the name of the database: " dbname
+mysql -u wpuser -pAmos3rowe@ -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$username'@'localhost';"
 
 # Flush privileges
-mysql -u root -p -e "FLUSH PRIVILEGES;"
-
-# Prompt user for database name
-read -p "Enter the name of the database: " dbname
+mysql -u wpuser -pAmos3rowe@ -e "FLUSH PRIVILEGES;"
 
 # Create database
-mysql -u root -p -e "CREATE DATABASE $dbname;"
+mysql -u wpuser -pAmos3rowe@ -e "CREATE DATABASE $dbname;"
+
 
 # Download and unzip WordPress
 wget https://wordpress.org/latest.zip
@@ -60,6 +66,9 @@ unzip latest.zip
 
 # Move WordPress files to current working directory
 mv wordpress/* .
+
+# Create the uploads directory, so we can set its permissions as needed
+mkdir -p $PROJECT_DIR/wp-content/uploads
 
 # Set permissions for WordPress directories
 sudo chown -R www-data:www-data $PROJECT_DIR
@@ -70,7 +79,9 @@ sudo chmod 775 $PROJECT_DIR/wp-content/uploads
 sudo chmod 775 $PROJECT_DIR/wp-content/plugins
 sudo chmod 775 $PROJECT_DIR/wp-content/themes
 
-sudo tee "${PROJECT_DIR}.conf" >/dev/null <<EOF
+echo "${PROJECT_DIR}/${PROJECT_NAME}.conf"
+
+sudo tee "${PROJECT_DIR}/${PROJECT_NAME}.conf" >/dev/null <<EOF
 server {
 	root ${PROJECT_DIR};
 	index index.php index.html;
@@ -110,7 +121,9 @@ server {
 }
 EOF
 
-cp "${PROJECT_DIR}.conf" "/etc/nginx/sites-enabled${PROJECT_DIR}.conf"
+echo $pwd
+
+cp "${PROJECT_NAME}.conf" "${PROJECT_DIR}/${PROJECT_NAME}.conf"
 
 sudo certbot --nginx -d $DOMAIN
 
