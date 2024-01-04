@@ -1,9 +1,10 @@
 #!/bin/bash
 
 WORDPRESSDIR="/mnt/volume_sfo2_01/wordpress-sites"
-PROJECT_NAME="test-1"
+PROJECT_NAME="plugin-dev"
 PROJECT_DIR="${WORDPRESSDIR}/${PROJECT_NAME}"
 DOMAIN="${PROJECT_NAME}.saas-product.com"
+SITES_ENABLED=/etc/nginx/sites-enabled
 
 read -p "Enter the name of the project: " PROJECT_NAME
 
@@ -21,6 +22,8 @@ if ! which mysql > /dev/null; then
     sudo apt install -y mariadb-server
 else
     echo "MariaDB is already installed."
+    read -p "Enter root database username: " db_root_username
+    read -sp "Enter root database password: " db_root_password
 fi
 
 # Install PM2
@@ -37,9 +40,10 @@ else
     echo "Certbot is already installed."
 fi
 
+cd $WORDPRESSDIR
 # Create directory and change directory into it
-sudo mkdir -p "${WORDPRESSDIR}/${PROJECT_NAME}"
-cd "${WORDPRESSDIR}/${PROJECT_NAME}"
+sudo mkdir -p $PROJECT_NAME
+cd $PROJECT_NAME
 
 # Prompt user for username and password
 read -p "Enter username: " username
@@ -47,18 +51,18 @@ read -sp "Enter password: " password
 echo
 
 # Login to MySQL and create a user with the provided credentials
-mysql -u wpuser -pAmos3rowe@ -e "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';"
+mysql -u $db_root_username -p$db_root_password -e "CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';"
 
 # Grant user access only to the specified database
 read -p "Enter the name of the database: " dbname
-mysql -u wpuser -pAmos3rowe@ -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$username'@'localhost';"
-
-# Flush privileges
-mysql -u wpuser -pAmos3rowe@ -e "FLUSH PRIVILEGES;"
 
 # Create database
-mysql -u wpuser -pAmos3rowe@ -e "CREATE DATABASE $dbname;"
+mysql -u $db_root_username -p$db_root_password -e "CREATE DATABASE $dbname;"
 
+mysql -u $db_root_username -p$db_root_password -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$username'@'localhost';"
+
+# Flush privileges
+mysql -u $db_root_username -p$db_root_password -e "FLUSH PRIVILEGES;"
 
 # Download and unzip WordPress
 wget https://wordpress.org/latest.zip
@@ -68,7 +72,7 @@ unzip latest.zip
 mv wordpress/* .
 
 # Create the uploads directory, so we can set its permissions as needed
-mkdir -p $PROJECT_DIR/wp-content/uploads
+mkdir -p wp-content/uploads
 
 # Set permissions for WordPress directories
 sudo chown -R www-data:www-data $PROJECT_DIR
@@ -81,7 +85,7 @@ sudo chmod 775 $PROJECT_DIR/wp-content/themes
 
 echo "${PROJECT_DIR}/${PROJECT_NAME}.conf"
 
-sudo tee "${PROJECT_DIR}/${PROJECT_NAME}.conf" >/dev/null <<EOF
+sudo tee $PROJECT_NAME.conf >/dev/null <<EOF
 server {
 	root ${PROJECT_DIR};
 	index index.php index.html;
@@ -123,7 +127,7 @@ EOF
 
 echo $pwd
 
-cp "${PROJECT_NAME}.conf" "${PROJECT_DIR}/${PROJECT_NAME}.conf"
+cp $PROJECT_NAME.conf" $SITES_ENABLED/$PROJECT_NAME.conf"
 
 sudo certbot --nginx -d $DOMAIN
 
