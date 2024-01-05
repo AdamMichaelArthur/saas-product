@@ -3,7 +3,7 @@
 </div>
 &nbsp;
 <div class="network-button">
-<network-request-button #login icon="chat_bubble" (result)="gmailAuthorizationUrl($event)" customClasses="slack-button" [request]="linkGmailEndpoint" verb="GET">Link Slack</network-request-button>
+<network-request-button #login icon="chat_bubble" (result)="slackAuthorizationUrl($event)" customClasses="slack-button" [request]="linkSlackEndpoint" verb="GET">Link Slack</network-request-button>
 </div>
 
 <div class="network-button">

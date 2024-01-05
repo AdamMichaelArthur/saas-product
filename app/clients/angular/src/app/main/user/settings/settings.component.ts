@@ -25,6 +25,7 @@ export class SettingsComponent implements OnInit {
 
 	/* Google Services */
 	linkGmailEndpoint = 'https://easy-oauth.saas-product.com/api/public/callbacks/google/gmail/getAuthorizationUrl';
+	linkSlackEndpoint = 'https://easy-oauth.saas-product.com/api/public/callbacks/slack/getAuthorizationUrl';
 	linkDocsEndpoint = '/api/google/docs/getAuthorizationUrl'					// Requests scopes for docs, sheets, drive, presentations
 	linkAnalyticsEndpoint = '/api/google/analytics/getAuthorizationUrl'		
 	searchConsoleEndpoint = '/api/google/search/getAuthorizationUrl'
@@ -33,6 +34,14 @@ export class SettingsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.getOpenAIAPIKey();
+		this.linkSlackEndpoint = this.linkSlackEndpoint + "?webhookUrl=" + this.getProtocolAndDomain();
+	}
+
+	getProtocolAndDomain() {
+	  const url = window.location.href;
+	  const protocol = document.location.protocol;
+	  const hostname = document.location.hostname;
+	  return `${protocol}//${hostname}/api/public/callbacks/slack/event`;
 	}
 
   /*	In a production app, you'll likely want to setup your own google api projects.
@@ -78,6 +87,45 @@ export class SettingsComponent implements OnInit {
 	    }, 1500);
 	}
 
+  async slackAuthorizationUrl($event){
+			console.log(19, this.getProtocolAndDomain());
+
+	    window.open($event.redirect_uri, '_blank');
+	    clearTimeout(this.interval);
+
+	    	this.interval = setInterval( async () => {
+	    	// Check to see if we've got a token yet
+	    	let request = `https://easy-oauth.saas-product.com/api/public/callbacks/slack/retrieveToken`
+	    	let payload = {
+	    		retrievalKey: $event["retrievalKey"]
+	    	}
+
+	    	console.log(94, payload);
+
+	    	var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
+	    	console.log(54, response);
+
+	    	if ("token" in response) {
+				    console.log("The 'tokens' key exists in the response.");
+
+				    clearTimeout(this.interval);
+				    let request = `api/slack/saveToken`
+				    let payload = {
+				    	"token": response.token
+				    }
+
+						var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
+						alert("Slack Linked");
+
+				} else {
+				    console.log("The 'tokens' key does not exist in the response.");
+				}
+
+
+
+	    }, 1500);
+
+  }
 
 	docsAuthorizationUrl($event){
 		window.location = $event.redirect_uri;
