@@ -31,7 +31,7 @@ export default class ChatWatcher {
   		return;
   	}
 
-  	//console.log("Chat Service Started");
+  	console.log("Chat Service Started");
 
   	let chat = global.db.collection("chats");
 
@@ -109,10 +109,25 @@ export default class ChatWatcher {
 
   async notifySlack(fullDocument, ts =null){
 
+  	console.log(112, "notifySlack called");
+  	// As of now, this feature is limited to sending messages to the support channel.
+  	// So first, we find the first "administrator" account that is subscribed to "#support"
+  	// By convention
+
+  	let usersCollection = global.db.collection("users");
+  	let slackToken = await usersCollection.findOne( { "role":"administrator", "slack.token.incoming_webhook.channel": "support" }, { "projection": { "slack.token" : 1 } } );
+
+  	// Handle error condition
+
+  	let channel = slackToken.slack.token.incoming_webhook.channel_id;
+  	let auth = slackToken.slack.token.access_token;
+
   	let payload = {
-	    "channel":"C03DZ9M97NC",
+	    "channel":channel,
 	    "text":fullDocument.chatMessage
   	}
+
+  	console.log(119, payload);
 
   	if(ts !== null){
   		payload['thread_ts'] = ts;
@@ -124,11 +139,12 @@ export default class ChatWatcher {
 	  method: 'post',
 	  url: 'https://slack.com/api/chat.postMessage',
 	  headers: { 
-	    'Authorization': 'Bearer xoxb-121866172544-3451545358562-S5kVx1OlE5s5PgSi9LEnCepq', 
+	    'Authorization': `Bearer ${auth}`, 
 	    'Content-Type': 'application/json'
 	  },
 	  data: JSON.stringify(payload)
 	};
+
 
 	try {
   		var data = await axios.request(config);
@@ -136,6 +152,7 @@ export default class ChatWatcher {
   		console.log(76, err);
   	}
 
+  	console.log(149, data.data);
   	let query = { _id: fullDocument._id }
   	let update = { $set: { ... data.data } }
 
