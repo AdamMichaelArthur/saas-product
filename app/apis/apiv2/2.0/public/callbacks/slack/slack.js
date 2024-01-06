@@ -66,7 +66,7 @@ export default class Slack extends Base {
   	}
   	
   	let slackIntegrationCollection = this.database.db.collection("slack_events");
-	let insertResult = await slackIntegrationCollection.insertOne( this.body );
+	  let insertResult = await slackIntegrationCollection.insertOne( this.body );
 
   }
   
