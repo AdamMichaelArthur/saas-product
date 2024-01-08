@@ -41,6 +41,13 @@ app.yml
 
 ecosystem.saas-product.config.js
 
+# Large Files that might sneak in
+*.zip
+*.mp4
+*.mkv
+*.mov
+# Add other large file extensions as needed
+
 # Dependency directories
 **/node_modules/
 
