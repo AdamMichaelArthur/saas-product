@@ -36,6 +36,8 @@ import { FormsModule } from "@angular/forms"
 /* Admin */
 import { PlanComponent } from './main/content/sysadmin/planmanagement/plan/plan.component';
 import { QualityCheckComponent } from './main/content/sysadmin/quality-check/quality-check.component';
+import { TestclocksComponent } from './main/content/sysadmin/testclocks/testclocks.component';
+import { DataImportComponent } from './main/content/sysadmin/data-import/data-import.component'; 
 
 /* Affiliate */
 import { CookiesComponent } from './main/content/affiliate/cookies2/cookies2.component'
@@ -151,12 +153,14 @@ const routes: Routes = [
       { path: 'sysadmin/subscriptions', component: SubscriptionsComponent },
       { path: 'sysadmin/apikeys', component: ApikeysComponent },
       { path: 'sysadmin/planmanagement', component: PlanmanagementComponent },
+      { path: 'sysadmin/testclocks', component: TestclocksComponent },
       { path: 'sysadmin/planmanagement/plan/id/:id', component: PlanComponent },
       { path: 'sysadmin/reports', component: ReportsComponent },
       { path: 'sysadmin/transactions', component: TransactionsComponent },
       { path: 'sysadmin/prompts', component: PromptsComponent },
       { path: 'sysadmin/prompts/id/:id', component: PromptPlaygroundComponent },
       { path: 'sysadmin/quality', component: QualityCheckComponent },
+      { path: 'sysadmin/data-import', component: DataImportComponent },
 
       /* Affiliate Routes */
       { path: 'affiliate/cookies', component: CookiesComponent },

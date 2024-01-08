@@ -68,13 +68,14 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   lastChatHistory = [];
+  
   async getChatMessages(){
 
     console.log(74, this.baseUrl);
 
     console.log(766, environment.v1)
 
-    var api_url = environment.v1 + '/datasource/chats/max_records/-1'
+    var api_url = environment.v1 + '/datasource/chats/max_records/1000'
     let messages = await this.http.get(api_url).toPromise();
     console.log(78, api_url, messages);
     if(Array.isArray(messages['chats']))

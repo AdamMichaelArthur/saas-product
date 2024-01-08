@@ -123,7 +123,7 @@ function checkDatasource(datasource){
 
 async function routeDataSource(req, res){
 
-	console.log(126, "Routing Datasource");
+
 	// Check and see if we have to get all records
 	var getAllRecordsByAccount = false;
 	var getAllRecords = false;
@@ -2188,12 +2188,12 @@ async function getAggregateCount(aggregate, modelName, model, req, res){
 	}
 
 	if(scope == 'user'){
-		aggregate.unshift( { '$match' : { created_by: res.locals.user._id } } )
+		//aggregate.unshift( { '$match' : { created_by: res.locals.user._id } } )
 	}
 
 
 	if(scope == 'account'){
-		aggregate.unshift( { '$match' : { owner: res.locals.user.accountId } } )
+		//aggregate.unshift( { '$match' : { owner: res.locals.user.accountId } } )
 	}
 
 	if(scope == 'all'){
@@ -2231,7 +2231,7 @@ async function aggregateCount(req, res){
 
 async function aggregate(req, res, count =false){
 
-	console.log(2234, "aggregate called");
+	//console.log(2070);
 	var xbody = req.headers["x-body"];
 	var keys = req.body
 	if(typeof xbody != 'undefined'){
@@ -2485,7 +2485,7 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 
 
 
-	var ids = await getAggregateIds(origAr, limit, pages, firstId, modelName, model, req, res)
+	var ids = await getAggregateIds(origAr, limit, pages, firstId, modelName, model)
 
 	  var route = req.originalUrl;
 
@@ -2493,7 +2493,7 @@ async function calculateSubsequentAggregationPages(aggregate, limit, modelName, 
 	  var routePagePos = voca.indexOf(route, "/page/");
 	  route = voca.substr(route, 0, routePagePos);
 
-	var prevPagesAr = await getReverseAggregateIds(origAr2, limit, pages, firstId, modelName, model, page, `${req.protocol}://${req.get("host")}` + process.env.API_VERSION + route + "/page/{page_num}/id/{_id}", req, res)
+	var prevPagesAr = await getReverseAggregateIds(origAr2, limit, pages, firstId, modelName, model, page, `${req.protocol}://${req.get("host")}` + process.env.API_VERSION + route + "/page/{page_num}/id/{_id}")
 
 	////console.log(2130, util.inspect(prevIds, false, null, true /* enable colors */))
 
@@ -2647,7 +2647,7 @@ async function calculateInitialAggregationPages(aggregate, limit, modelName, mod
 	  	//console.log(2257, util.inspect(aggregate, false, null, true /* enable colors */))
 
 
-	var ids = await getAggregateIds(origAggregate, limit, pages, firstId, modelName, model, req, res)
+	var ids = await getAggregateIds(origAggregate, limit, pages, firstId, modelName, model)
 
 	  var queryParams = req.originalUrl.lastIndexOf("?");
 	  if (queryParams != -1) {
@@ -2691,7 +2691,7 @@ async function calculateInitialAggregationPages(aggregate, limit, modelName, mod
 	}
 }
 
-async function getAggregateIds(agr, max_records, numPages, firstId, modelName, model, req, res){
+async function getAggregateIds(agr, max_records, numPages, firstId, modelName, model){
 
 	const aggregate = [ ... agr ]
 	////console.log(2219, firstId)
@@ -2709,36 +2709,7 @@ async function getAggregateIds(agr, max_records, numPages, firstId, modelName, m
 
 	aggregate.unshift(filter);
 
-  var bAccountScope = helpers.getPathTrue(req.params[0], "account");
-  var bAllScope = helpers.getPathTrue(req.params[0], "all");
-  var bUserScope = true;
 
-  let scope = 'user';
-	if(bAccountScope){
-		bUserScope = false;
-		bAllScope = false;
-		scope = 'account';
-	} else {
-		if (bAllScope){
-			bUserScope = false;
-			bAccountScope = false;
-			scope = 'all';
-		}
-	}
-
-	if(scope == 'user'){
-		aggregate.unshift( { '$match' : { created_by: res.locals.user._id } } )
-	}
-
-
-	if(scope == 'account'){
-		aggregate.unshift( { '$match' : { owner: res.locals.user.accountId } } )
-	}
-
-	if(scope == 'all'){
-		// We don't add a $match stage here, this will have the effect of returning all records in the collection,
-		// regardless of ownership.
-	}
 
 	var newRoot = {
 	    '$replaceRoot': {
@@ -2762,9 +2733,11 @@ async function getAggregateIds(agr, max_records, numPages, firstId, modelName, m
 }
 
 // here we want to take the firstId and get all of the ids less than it
-async function getReverseAggregateIds(aggregate, max_records, numPages, firstId, modelName, model, pageNum, prevPageTemplateStr, req, res){
+async function getReverseAggregateIds(aggregate, max_records, numPages, firstId, modelName, model, pageNum, prevPageTemplateStr){
 
 	const agr = Array.from(aggregate)
+
+	////console.log(2269, util.inspect(aggregate, false, null, true /* enable colors */))
 
 	////console.log(2219, firstId)
 	if(numPages > 10){
@@ -2775,40 +2748,6 @@ async function getReverseAggregateIds(aggregate, max_records, numPages, firstId,
 		"$match": { "_id": { "$lte": mongoose.Types.ObjectId(firstId) } },
 		//"$limit": 10//(max_records*numPages)
 	}
-
-  var bAccountScope = helpers.getPathTrue(req.params[0], "account");
-  var bAllScope = helpers.getPathTrue(req.params[0], "all");
-  var bUserScope = true;
-
-  let scope = 'user';
-	if(bAccountScope){
-		bUserScope = false;
-		bAllScope = false;
-		scope = 'account';
-	} else {
-		if (bAllScope){
-			bUserScope = false;
-			bAccountScope = false;
-			scope = 'all';
-		}
-	}
-
-	console.log(2767, scope, bAccountScope, bAllScope)
-
-	if(scope == 'user'){
-		agr.unshift( { '$match' : { created_by: res.locals.user._id } } )
-	}
-
-
-	if(scope == 'account'){
-		agr.unshift( { '$match' : { owner: res.locals.user.accountId } } )
-	}
-
-	if(scope == 'all'){
-		// We don't add a $match stage here, this will have the effect of returning all records in the collection,
-		// regardless of ownership.
-	}
-
 
 	agr.unshift({ "$sort" : { "_id": 1 } } )
 	//agr.unshift(filter);

@@ -273,17 +273,15 @@ export default class PublicRoutes extends Base {
             body = {}
         }
 
-        var functionParams = this.getFunctionParameters(functionName);
-        var parameterStr = this.getParameterStr(body, functionParams);
-
-        res.locals.parameterStr = parameterStr
-
-
         obj.body = {
             ... vars,
             ... req.query,
             ... body
         }
+
+        var functionParams = this.getFunctionParameters(functionName);
+        var parameterStr = this.getParameterStr(obj.body, functionParams);
+        res.locals.parameterStr = parameterStr;
 
         next();
     });

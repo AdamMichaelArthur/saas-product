@@ -23,13 +23,11 @@ export default class DatabaseConnection {
 		if(global.isDatabaseConnected == false){
 			this.callback = callback;
 			this.connection_uri = 'mongodb://'+this.username+':'+ this.password+'@'+ this.domain+':'+ this.port+'/'+ this.dbname + '?authSource=admin' + '&socketTimeoutMS=' + 
-			this.socketTimeout + '&connectTimeoutMS=' + this.connectionTimeout + 'replicaSet=rs0' + '&directConnection=' + this.directConnection + '&appName=google-maps-crm';
+			this.socketTimeout + '&connectTimeoutMS=' + this.connectionTimeout + 'replicaSet=rs0' + '&directConnection=' + this.directConnection;
 			console.log(this.connection_uri);
 			this.client = new MongoClient(this.connection_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 			this.websocketCallback = altCallback
 			this.connect();
-			// Set up event listeners
-
 		} else {
 			this.callback = callback;
 			this.connection_uri = global.databaseConnection.connection_uri;
@@ -42,8 +40,6 @@ export default class DatabaseConnection {
 		}
 	}
 
-
-
 	async connect() {
 		try {
 		    this.activeConnection = await this.client.connect();
@@ -53,9 +49,6 @@ export default class DatabaseConnection {
 		    global.isDatabaseConnected = true;
 		    global.databaseConnection = this;
 		    this.websocketCallback(this.db);
-		    this.eventDisconnected();
-            //this.eventReconnected();
-            //this.eventConnectionReady();
 		} catch (error) {
 		    this.handleException(error);
 		}
@@ -67,58 +60,22 @@ export default class DatabaseConnection {
 
 	// Handle Database Events
 
-	eventConnectionReady() {
-		console.log("Setting up connection ready event");
-        this.client.on("connectionReady", () => {
-            console.warn("MongoDB connection ready");
-        });
+	// Disconnected from the database.  Reconnect!
+	eventDisconnected(){
+		this.activeConnection.on("close", () => {
+			console.warn("MongoDB connection closed, attempting to reconnect");
+		});
+	}
 
-        this.activeConnection.on("connectionReadt", () => {
-            console.warn("MongoDB connection ready");
-        });
-    }
+	// Connected to the database.
+	async eventConnected(){
 
-	eventDisconnected() {
-		console.log("Setting up disconnect event");
-        this.client.on("connectionClosed", () => {
-            console.warn("a MongoDB connection closed, attempting to reconnect");
-            // Implement reconnection logic here
-            this.reconnect();
-        });
+	}
 
-    }
+	// The database was reconnected
+	async eventReconnected(){
 
-    eventReconnected() {
-        this.activeConnection.on("reconnect", () => {
-            console.log("MongoDB reconnected");
-            // Handle reconnection event
-        });
-    }
-
-    async reconnect() {
-        const maxAttempts = 5;
-        let attempts = 0;
-        const delay = 10000; // Delay in milliseconds
-
-        while (attempts < maxAttempts) {
-            try {
-                await this.client.connect();
-                console.log("Reconnected to MongoDB");
-                this.db = this.client.db();
-                // Notify successful reconnection
-                break;
-            } catch (error) {
-                attempts++;
-                console.error(`Reconnection attempt ${attempts} failed:`, error);
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-
-        if (attempts === maxAttempts) {
-            console.error("Failed to reconnect to MongoDB after maximum attempts");
-            // Handle failed reconnection scenario
-        }
-    }
+	}
 
 	// Timeout event
 	async eventTimeout(){

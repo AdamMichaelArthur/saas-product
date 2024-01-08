@@ -105,12 +105,6 @@ exports.listByPage = async function(
       ...searchModifier
     };
 
-    console.log("pagination.js", 108, defaultLimit, count, searchObj, Limit);
-
-
-
-
-
     var results = await mongooseModel
       .find(searchObj, { _id: 1 })
       .select("_id")
@@ -164,7 +158,6 @@ exports.listByPage = async function(
     process.env.API_VERSION +
     req.originalUrl;
 
-    console.log(165, lastItemId);
   var result = {
     number_of_pages: Math.ceil(count / Limit),
     current_page: currentPage,
@@ -468,8 +461,6 @@ exports.listPaginatedResponse = function(
       req,
       maxrecords
     );
-
-    console.log(476, lastItemId);
 
     var paginatedResponse = {
       number_of_pages: numPages,

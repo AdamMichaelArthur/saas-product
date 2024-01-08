@@ -58,6 +58,7 @@ export default class Slack extends Base {
     
   }
 
+
   async event(){
   	console.log(this.body);
   	if(this.body['type'] == 'url_verification'){

@@ -6,28 +6,24 @@ import dayjs from 'dayjs';
 
 export default class Slack extends Base {
 
+	required_scopes = ['incoming-webhook','commands','chat:write','channels:history','groups:history','im:history','mpim:history','incoming-webhook'];
+
   constructor(){
     super();
   }
 
-  async authorized(){
+  async authorized(state ='', code =''){
+
+  	console.log(17, state, code);
+
   	this.response.reply("ok");
-
-  	var code = this.req.query["code"];
-    var stateInfo = this.req.query["state"];
-
-    let accountCollection = this.database.db.collection('accounts');
-    let accountInfo = await accountCollection.findOne( { owner: new ObjectId(stateInfo) } );
-
-    // I'm using integrationsslacks for backwards compatability with Mongoose, which is not used in the 2.0 API.  I've come to really dislike mongoose
-    //
     
-	let data = qs.stringify({
-	  'code': code,
-	  'redirect_uri': 'https://app.saas-product.com/v2.0/public/callbacks/slack/authorized',
-	  'client_id': '121866172544.3448643611589',
-	  'client_secret': '41169d6a78b50a3b80a365d54ef98c2b' 
-	});
+  	let data = qs.stringify({
+		  'code': code,
+		  'redirect_uri': 'https://easy-oauth.saas-product.com/api/public/callbacks/slack/authorized',
+		  'client_id': process.env.SLACK_APP_CLIENT_ID,
+		  'client_secret': process.env.SLACK_APP_CLIENT_SECRET
+	  });
 
 	let config = {
 	  method: 'post',
@@ -45,16 +41,19 @@ export default class Slack extends Base {
 		var response = await axios.request(config);
 	} catch(err){
 		this.response.reply("Not bueno");
-		return true;
+		//return true;
 	}
 
 	if(response.data["ok"] === true){
 		console.log(51, "We've got a working code.");
-		let slackIntegrationCollection = this.database.db.collection("integrationsslacks");
-		let insertResult = await slackIntegrationCollection.insertOne( { ... response.data, ... response.data['incoming_webhook'], ... response.data['team'],
-		... { created_by: new ObjectId(stateInfo), owner: accountInfo["_id"], "createdAt" : dayjs().toISOString(), "modifiedAt" : dayjs().toISOString() } } );
-		console.log(55, insertResult);
+		let slackAuths = this.database.db.collection("slack_auths");
+		await slackAuths.updateOne( { "_id": new ObjectId(state) }, { $set: { token: response.data} } );
+	} else {
+		this.response.reply("No bueno");
+		//return true;		
 	}
+
+	this.res.redirect('https://easy-oauth.saas-product.com/assets/statichtml/success.html');
     
   }
 
@@ -69,5 +68,21 @@ export default class Slack extends Base {
 	let insertResult = await slackIntegrationCollection.insertOne( this.body );
 
   }
+
+  async getAuthorizationUrl(state ="", successRedirect ="", errorRedirect =""){
+
+    let collection = this.database.db.collection("slack_auths");
+    let result = await collection.insertOne( { "state": state, "successRedirect": successRedirect, "errorRedirect": errorRedirect } );
+    let insertedId = result["insertedId"];
+
+    let authorizeUrl = `https://slack.com/oauth/v2/authorize?state=${insertedId}&redirect_uri=https://easy-oauth.saas-product.com/api/public/callbacks/slack/authorized&scope=${this.required_scopes.toString()}&client_id=${process.env.SLACK_APP_CLIENT_ID}`;
+  	this.response.reply( { "redirect_uri": authorizeUrl, "retrievalKey": insertedId });
+  }
   
+  async retrieveToken(){
+    let collection = this.database.db.collection("slack_auths");
+    let result = await collection.findOne( { _id: new ObjectId(this.body.retrievalKey) } );
+    this.response.reply( result );       
+  }
+
 }

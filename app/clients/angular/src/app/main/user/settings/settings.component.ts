@@ -115,7 +115,7 @@ export class SettingsComponent implements OnInit {
 				    }
 
 						var response: any = await this.http.post(request, payload).pipe(timeout(5000)).toPromise();
-						alert("Slack Linked");
+						alert("Slack Linked.  You must manually invite the bot to the channel.  In the target channel, type /invite @Content Bounty to receive messaged in the support channel");
 
 				} else {
 				    console.log("The 'tokens' key does not exist in the response.");

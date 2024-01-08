@@ -118,7 +118,9 @@ import { HowtouseComponent } from './main/content/help/howtouse/howtouse.compone
 import { WebsiteComponent } from './website/website.component';
 import { PreregisterComponent } from './website/preregister/preregister.component';
 import { LinkAlgorithmComponent } from './website/link-algorithm/link-algorithm.component';
-import { YourfullschoolComponent } from './website/yourfullschool/yourfullschool.component'
+import { YourfullschoolComponent } from './website/yourfullschool/yourfullschool.component';
+import { TestclocksComponent } from './main/content/sysadmin/testclocks/testclocks.component';
+import { DataImportComponent } from './main/content/sysadmin/data-import/data-import.component'
 
 @NgModule({
   declarations: [
@@ -216,7 +218,9 @@ import { YourfullschoolComponent } from './website/yourfullschool/yourfullschool
     WebsiteComponent,
     PreregisterComponent,
     LinkAlgorithmComponent,
-    YourfullschoolComponent
+    YourfullschoolComponent,
+    TestclocksComponent,
+    DataImportComponent
   ],
   imports: [
     BrowserModule,

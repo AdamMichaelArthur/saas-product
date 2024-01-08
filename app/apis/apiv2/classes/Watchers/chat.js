@@ -110,20 +110,20 @@ export default class ChatWatcher {
   async notifySlack(fullDocument, ts =null){
 
   	console.log(112, "notifySlack called");
-  	// When the user links the primary administration account with slack, we expect, by convention
-  	// that this is the intended support channel.
-  	// Inside the target slack channel, a member of the channel must /invite @Content Bounty in order 
-  	// for the bot to be able to send and receive messages to that channel.
+  	// As of now, this feature is limited to sending messages to the support channel.
+  	// So first, we find the first "administrator" account that is subscribed to "#support"
+  	// By convention
 
   	let usersCollection = global.db.collection("users");
     let slackToken = await usersCollection.findOne( { "role":"administrator", "slack.token.incoming_webhook.channel": { $exists: true } }, { "projection": { "slack.token" : 1 } } );
 
-		// Handle error condition
-    console.log(slackToken);
 
-    if(slackToken === null){
-			return;
-    }
+        // Handle error condition
+        console.log(slackToken);
+
+        if(slackToken === null){
+                return;
+        }
 
   	let channel = slackToken.slack.token.incoming_webhook.channel_id;
   	let auth = slackToken.slack.token.access_token;

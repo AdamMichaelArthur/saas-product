@@ -43,6 +43,16 @@ export default class Sysadmin extends Enterprise {
 				limit: 9999999
 			},
 			{
+				title: "Test Clocks",
+				route: "/sysadmin/testclocks",
+				permissions: "sysadmin",
+				path: "",
+				icon: "subscriptions",
+				collapse: "autobot", 
+   			 	priority: 11,
+				limit: 9999999
+			},
+			{
 				title: "API Keys",
 				route: "/sysadmin/apikeys",
 				permissions: "sysadmin",
@@ -94,7 +104,7 @@ export default class Sysadmin extends Enterprise {
 			},
 			{
 				title: "Data Import",
-				route: "/sysadmin/import",
+				route: "/sysadmin/data-import",
 				permissions: "sysadmin",
 				path: "",
 				icon: "cloud_upload",
